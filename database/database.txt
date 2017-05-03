@@ -1,0 +1,1 @@
+Everything related to MSSQL can be found in this directory.
