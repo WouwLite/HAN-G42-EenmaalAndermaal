@@ -90,13 +90,10 @@ Views / pages are found in:
 ```    
     /resources
     /resources/views
-    /resources/IT (CRUD IT manager)
-    /resources/admin (admin pages)
-    /resources/auth (login and registration pages)
-    /resources/clients (CRUD client manager)
-    /resources/debug (only for debugging purposes)
-    /resources/mealmanager (all mealmanager pages)
-    /resources/pages (generic pages)
+    /resources/views/dashboard
+    /resources/views/registration
+    /resources/views/login
+    /resources/views/account
 ```
 
 ## Configuration
