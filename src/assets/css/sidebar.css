@@ -38,13 +38,21 @@ body {
     text-decoration: none;
 }
 
-#sidebar ul li span {
+#sidebar-span {
     height: 1px;
     background: #bdc3c7;
     margin-left: 15px;
     margin-right: 15px;
     display: block;
 }
+
+/*#sidebar ul li span {*/
+    /*height: 1px;*/
+    /*background: #bdc3c7;*/
+    /*margin-left: 15px;*/
+    /*margin-right: 15px;*/
+    /*display: block;*/
+/*}*/
 
 #sidebar ul li strong {
     color: #34495e;

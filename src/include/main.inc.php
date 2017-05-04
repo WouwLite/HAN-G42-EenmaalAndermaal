@@ -52,8 +52,9 @@ $title = "EenmaalAndermaal";
             <!-- mr-auto >> margin right auto, aligns the div to left -->
             <!-- ml-auto >> margin left auto, aligns the div to right -->
         <ul class="navbar-nav ml-auto" style="color: #ffffff;">
+            <!-- ADD IF STATEMENT TO SHOW ADD-NEW BUTTON. ELSE HIDE -->
             <li class="nav-item">
-                <a class="nav-link" href="#new-add"><i class="fa fa-plus fa-2x fa-inverse" aria-hidden="true"></i></a>
+                <a class="nav-link" href="#new-add"><i class="fa fa-plus fa-2x text-success" aria-hidden="true"></i></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#account"><i class="fa fa-user fa-2x fa-inverse" aria-hidden="true"></i></a>
@@ -73,16 +74,16 @@ $title = "EenmaalAndermaal";
             <li class="nav-item">
                 <a class="nav-link" href="#"><i class="fa fa-star" aria-hidden="true"></i> Populair</a>
             </li>
-            <li><span></span></li>
+            <li><span class="sidebar-span"></span></li>
             <li><strong>Account</strong></li>
             <li class="nav-item">
-                <a class="nav-link" href="#"><i class="fa fa-gavel" aria-hidden="true"></i> Mijn biedingen</a>
+                <a class="nav-link" href="#"><i class="fa fa-gavel" aria-hidden="true"></i> Mijn biedingen <span class="badge badge-info">3</span></a>
             </li>
             <!-- Create IF statement. If user is merchant, show this link, else hide -->
             <li class="nav-item">
-                <a class="nav-link disabled" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Mijn advertenties</a>
+                <a class="nav-link disabled" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Mijn advertenties <span class="badge badge-info">1</span></a>
             </li>
-            <li><span></span></li>
+            <li><span class="sidebar-span"></span></li>
             <li><strong>Rubrieken</strong></li>
             <!-- Create FOREACH with categories from DB -->
             <li class="nav-item">
@@ -114,6 +115,20 @@ $title = "EenmaalAndermaal";
             });
         });
     </script>
+
+<br><br>THIS IS THE BODY WHERE THE CONTENT GOES! DO NOT EDIT THIS TEMPLATE TO ADD CONTENT, USE THE INCLUDE / REQUIRE FUNCTION!!!!
+
+    <a class="btn btn-default" href="path/to/settings" aria-label="Settings">
+        <i class="fa fa-cog" aria-hidden="true"></i>
+    </a>
+
+    <a class="btn btn-danger" href="path/to/settings" aria-label="Delete">
+        <i class="fa fa-trash-o" aria-hidden="true"></i>
+    </a>
+
+    <a class="btn btn-primary" href="#navigation-main" aria-label="Skip to main navigation">
+        <i class="fa fa-bars" aria-hidden="true"></i>
+    </a>
 
 </body>
 </html>
