@@ -1,12 +1,17 @@
 <!-- /resources/include/main.inc.php -->
 <?php
-session_start();
-include_once ($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
-$rootpath = $_SERVER['SERVER_NAME'];
-$css = "/resources/assets/css";
-$views = "/resources/views";
+//session_start();
+//include_once ($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
 
 $title = "EenmaalAndermaal";
+
+// Check if in production phase or live. Change file-routes
+if ($live == 0) {
+    $stylepath = '../';
+} else {
+    $stylepath = '//cdn.wouwlite.eu/icasites.nl/';
+}
 ?>
 
 <!DOCTYPE html>
@@ -21,13 +26,13 @@ $title = "EenmaalAndermaal";
 
     <!-- /resources/include/styles.inc.php -->
     <!-- Local Stylesheets -->
-    <link type="text/css" rel="stylesheet" href="//<?php echo $_SERVER['SERVER_NAME'] ?>/assets/css/main.css">
-    <link type="text/css" rel="stylesheet" href="//<?php echo $_SERVER['SERVER_NAME'] ?>/assets/css/bootstrap.css">
-    <link type="text/css" rel="stylesheet" href="//<?php echo $_SERVER['SERVER_NAME'] ?>/assets/css/search.css">
-    <link type="text/css" rel="stylesheet" href="//<?php echo $_SERVER['SERVER_NAME'] ?>/assets/css/sidebar.css">
-    <link type="text/css" rel="stylesheet" href="//<?php echo $_SERVER['SERVER_NAME'] ?>/assets/css/footer.css">
 
     <!-- External Stylesheets -->
+    <link type="text/css" rel="stylesheet" href="<?=$stylepath?>assets/css/main.css">
+    <link type="text/css" rel="stylesheet" href="//cdn.wouwlite.eu/icasites.nl/assets/css/vendor/bootstrap.css">
+    <link type="text/css" rel="stylesheet" href="<?=$stylepath?>assets/css/search.css">
+    <link type="text/css" rel="stylesheet" href="<?=$stylepath?>assets/css/sidebar.css">
+    <link type="text/css" rel="stylesheet" href="<?=$stylepath?>assets/css/footer.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/68afb4fb20.css">
 
     <!-- External Fonts -->
@@ -36,7 +41,9 @@ $title = "EenmaalAndermaal";
 </head>
 
 <body>
-    <!-- Navigation -->
+    <!-- ************************* -->
+    <!--  TOP / HORIZONTAL NAVBAR  -->
+    <!-- ************************* -->
     <nav class="navbar navbar-toggleable-md navbar-light bg-faded" style="background-color: #5484A4;">
         <!-- Logo -->
 
@@ -48,6 +55,19 @@ $title = "EenmaalAndermaal";
         <form>
             <input class="form-control sm-2" type="search" id="search" name="Search" placeholder="Zoek naar veiling..."/>
         </form>
+        <div class="col-sm-1"></div>
+        <!-- Add warning indicator for developmentpurposes -->
+        <?php
+            if ($dev_visible == 1) {
+                if ($live == 1) {
+                    $status = "Production";
+                    echo 'Status: <span class="badge badge-success">' . $status . '</span> Path: ' . $stylepath;
+                } else {
+                    $status = "Development";
+                    echo 'Status: <span class="badge badge-danger">' . $status . '</span> Path: ' . $stylepath;
+                }
+            }
+        ?>
         <!-- Links -->
             <!-- mr-auto >> margin right auto, aligns the div to left -->
             <!-- ml-auto >> margin left auto, aligns the div to right -->
@@ -64,6 +84,26 @@ $title = "EenmaalAndermaal";
             </li>
         </ul>
     </nav>
+
+    <!-- **************************************** -->
+    <!--  HERE STARTS THE MAIN CONTENT-CONTAINER  -->
+    <!-- **************************************** -->
+
+    <div id="content">
+        <ol class="breadcrumb">
+            <?php
+                foreach ($breadcrumbs as $bc) {
+                    echo "<li class='breadcrumb-item'><a href='#'>" . $bc . "</a></li>";
+                }
+                echo "<li class='breadcrumb-item active'>" . $breadcrumb_active . "</li>";
+            ?>
+        </ol>
+        <?=$getContent?>
+    </div>
+
+    <!-- *********************************** -->
+    <!--  END OF THE MAIN CONTENT-CONTAINER  -->
+    <!-- *********************************** -->
 
     <div id="sidebar">
         <ul>
@@ -107,28 +147,21 @@ $title = "EenmaalAndermaal";
         </div>
     </div>
 
-    <script src="http://localhost/assets/js/vendor/jquery-1.11.2.min.js"></script>
+    <!-- FOOTER WERKT NIET, IVM CONTAINEROVERLAY OP VERKEERD NIVEAU. -->
+    <footer>
+        <p>Hello world!</p>
+    </footer>
+
+    <!--    <script src="http://cdn.wouwlite.eu/han/src/assets/js/vendor/jquery-1.11.2.min.js"></script>-->
+    <script src="../assets/js/vendor/jquery-1.11.2.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#sidebar-hamburger').click(function () {
                 $('#sidebar').toggleClass('visible');
+                $('#content').toggleClass('visible');
             });
         });
     </script>
-
-<br><br>THIS IS THE BODY WHERE THE CONTENT GOES! DO NOT EDIT THIS TEMPLATE TO ADD CONTENT, USE THE INCLUDE / REQUIRE FUNCTION!!!!
-
-    <a class="btn btn-default" href="path/to/settings" aria-label="Settings">
-        <i class="fa fa-cog" aria-hidden="true"></i>
-    </a>
-
-    <a class="btn btn-danger" href="path/to/settings" aria-label="Delete">
-        <i class="fa fa-trash-o" aria-hidden="true"></i>
-    </a>
-
-    <a class="btn btn-primary" href="#navigation-main" aria-label="Skip to main navigation">
-        <i class="fa fa-bars" aria-hidden="true"></i>
-    </a>
 
 </body>
 </html>

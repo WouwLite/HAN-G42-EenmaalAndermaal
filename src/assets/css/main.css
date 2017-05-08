@@ -1,0 +1,39 @@
+/*-----------------------*/
+/* Define the body style */
+/*-----------------------*/
+
+/* Add global values to the body-tag */
+body {
+    background-color: #263238;
+    color: #222;
+    /*font-family: 'Comfortaa', cursive;*/
+    font-family: 'Nunito', sans-serif;
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+}
+
+/* Set fallback colour on footer-tag */
+footer {
+    color: #FFF;
+}
+
+#content {
+    background: #FFF;
+    width: calc(100% - 250px);
+    height: 100%;
+    display: block;
+    position: absolute;
+    padding: 50px 10px 10px 10px;
+    left: 250px;
+    right: -250px;
+    top: 70px;
+    transition: left 0.4s linear;
+}
+
+#content.visible {
+    left: 0;
+    width: 100%;
+    transition: left 0.4s linear;
+}
