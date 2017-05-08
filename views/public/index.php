@@ -1,13 +1,4 @@
-<!-- /src/views/content-template.php -->
-
-<!-- **************************************************************** -->
-<!-- * Welkom bij de Content Template                               * -->
-<!-- * Graag deze pagina niet aanpassen                             * -->
-<!-- * Kopieer onderstaande code naar je eigen document en          * -->
-<!-- * bouw daar verder                                             * -->
-<!-- * Check de documentatie van PHP over Heredoc als je            * -->
-<!-- * PHP variables wilt toevoegen. Gebruik {} -brackets voor PHP  * -->
-<!-- **************************************************************** -->
+<!-- /views/public/index.php -->
 
 <?php
 /*
@@ -31,7 +22,8 @@ $getContent = <<<EOD
     
     <h1>Laatste biedingen</h1>
     <p>
-        Welkom op EenmaalAndermaal! Dit is dummydata van functions.dev.php: <strong>{$testName}</strong>
+        Welkom op EenmaalAndermaal! Dit is dummydata van functions.dev.php: <strong>{$testName}</strong><br>
+        IK WIL EEN BACK-END FRAMEWORK!!!! <-- Dat waren de frustraties, ééééén door! :-).
     </p>
     
     <!-- *********************************** -->

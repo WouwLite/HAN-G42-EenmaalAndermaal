@@ -1,14 +1,12 @@
 <!-- /resources/include/main.inc.php -->
 <?php
-$live = '0'; // Set 'Production' or 'Development' mode. 0 = 'Development', 1 = 'Production'
 //session_start();
 //include_once ($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
 
-$title = "EenmaalAndermaal";
-
 // Check if in production phase or live. Change file-routes
-if ($live == 0) {
+if ($debug == true) {
     $stylepath = '//localhost/';
 } else {
     $stylepath = '//cdn.wouwlite.eu/icasites.nl/';
@@ -57,18 +55,6 @@ if ($live == 0) {
             <input class="form-control sm-2" type="search" id="search" name="Search" placeholder="Zoek naar veiling..."/>
         </form>
         <div class="col-sm-1"></div>
-        <!-- Add warning indicator for developmentpurposes -->
-        <?php
-            if ($dev_visible == 1) {
-                if ($live == 1) {
-                    $status = "Production";
-                    echo 'Status: <span class="badge badge-success">' . $status . '</span> Path: ' . $stylepath;
-                } else {
-                    $status = "Development";
-                    echo 'Status: <span class="badge badge-danger">' . $status . '</span> Path: ' . $stylepath;
-                }
-            }
-        ?>
         <!-- Links -->
             <!-- mr-auto >> margin right auto, aligns the div to left -->
             <!-- ml-auto >> margin left auto, aligns the div to right -->
@@ -118,11 +104,11 @@ if ($live == 0) {
             <li><span class="sidebar-span"></span></li>
             <li><strong>Account</strong></li>
             <li class="nav-item">
-                <a class="nav-link" href="#"><i class="fa fa-gavel" aria-hidden="true"></i> Mijn biedingen <span class="badge badge-info">3</span></a>
+                <a class="nav-link" href="#"><i class="fa fa-gavel" aria-hidden="true"></i> Mijn biedingen <span class="badge badge-info"><?=$testBiedingNo?></span></a>
             </li>
             <!-- Create IF statement. If user is merchant, show this link, else hide -->
             <li class="nav-item">
-                <a class="nav-link disabled" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Mijn advertenties <span class="badge badge-info">1</span></a>
+                <a class="nav-link disabled" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Mijn advertenties <span class="badge badge-info"><?=$testAdvertNo?></span></a>
             </li>
             <li><span class="sidebar-span"></span></li>
             <li><strong>Rubrieken</strong></li>
@@ -146,9 +132,23 @@ if ($live == 0) {
             <span></span>
             <span></span>
         </div>
+
+        <!-- Only visible when in 'development' mode -->
+        <?php
+        if ($environment == 'Development' && $debug == true) {
+            $status = "Development";
+            echo ' Development status: <span class="badge badge-warning">' . $status . '</span>';
+        } elseif ($environment == 'Productions' && $debug == true) {
+            $status = "Production";
+            echo ' Development status: <span class="badge badge-success">' . $status . '</span>';
+        } else {
+            $status = "ERROR!";
+            echo ' Development status: <span class="badge badge-danger">' . $status . '</span>';
+        }
+        ?>
     </div>
 
-    <!-- FOOTER WERKT NIET, IVM CONTAINEROVERLAY OP VERKEERD NIVEAU. -->
+    <!-- FOOTER WERKT NOG NIET, IVM CONTAINEROVERLAY OP VERKEERD NIVEAU. -->
     <footer>
         <p>Hello world!</p>
     </footer>

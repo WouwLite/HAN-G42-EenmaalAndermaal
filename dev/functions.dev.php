@@ -8,4 +8,6 @@ $stylepath      = '../';
 
 // Dummy data
 $testName       = 'Billy the Kid';
+$testBiedingNo  = '4';
+$testAdvertNo   = '2';
 ?>
