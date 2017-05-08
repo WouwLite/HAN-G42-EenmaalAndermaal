@@ -18,8 +18,8 @@
 include($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
 
 // Voeg breadcrumbs toe (https://v4-alpha.getbootstrap.com/components/breadcrumb/)
-$breadcrumbs        = array("Thuis", "Mijn biedingen");
-$breadcrumb_active  = "Overzicht";
+$breadcrumbs = array("Thuis", "Mijn Account");
+$breadcrumb_active = "Overzicht";
 
 /*
  * Einde PHP variable-area
@@ -30,9 +30,11 @@ $getContent = <<<EOD
     <!--  HERE STARTS THE MAIN CONTENT-CONTAINER  -->
     <!-- **************************************** -->
     
-    <h1>Pagina titel</h1>
+    <h1>Mijn account</h1>
     <p>
-        Hello world! This is dummy-data from 'functions.dev.php': {$testName}
+        Hello world! My name is {$testName}.<br>
+        Docpath = {$_SERVER['DOCUMENT_ROOT']}<br>
+        Fixed it!
     </p>
     
     <!-- *********************************** -->

@@ -1,5 +1,6 @@
 <!-- /resources/include/main.inc.php -->
 <?php
+$live = '0'; // Set 'Production' or 'Development' mode. 0 = 'Development', 1 = 'Production'
 //session_start();
 //include_once ($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
@@ -8,7 +9,7 @@ $title = "EenmaalAndermaal";
 
 // Check if in production phase or live. Change file-routes
 if ($live == 0) {
-    $stylepath = '../';
+    $stylepath = '//localhost/';
 } else {
     $stylepath = '//cdn.wouwlite.eu/icasites.nl/';
 }
@@ -77,7 +78,7 @@ if ($live == 0) {
                 <a class="nav-link" href="#new-add"><i class="fa fa-plus fa-2x text-success" aria-hidden="true"></i></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#account"><i class="fa fa-user fa-2x fa-inverse" aria-hidden="true"></i></a>
+                <a class="nav-link" href="//localhost/views/account"><i class="fa fa-user fa-2x fa-inverse" aria-hidden="true"></i></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#logout"><i class="fa fa-power-off fa-2x fa-inverse" aria-hidden="true"></i></a>
@@ -153,7 +154,7 @@ if ($live == 0) {
     </footer>
 
     <!--    <script src="http://cdn.wouwlite.eu/han/src/assets/js/vendor/jquery-1.11.2.min.js"></script>-->
-    <script src="../assets/js/vendor/jquery-1.11.2.min.js"></script>
+    <script src="//localhost/assets/js/vendor/jquery-1.11.2.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#sidebar-hamburger').click(function () {
