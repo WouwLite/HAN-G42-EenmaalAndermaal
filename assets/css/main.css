@@ -16,13 +16,17 @@ body {
 
 /* Set fallback colour on footer-tag */
 footer {
-    color: #FFF;
+    background: #FFF;
 }
 
+/*----------------------*/
+/* Content area styling */
+/*----------------------*/
+
 #content {
-    background: #FFF;
+    background: white;
     width: calc(100% - 250px);
-    height: 100%;
+    /*height: 100%;*/
     display: block;
     position: absolute;
     padding: 50px 10px 10px 10px;
@@ -36,4 +40,24 @@ footer {
     left: 0;
     width: 100%;
     transition: left 0.4s linear;
+}
+
+/*-----------------*/
+/* Specific styles */
+/*-----------------*/
+
+#text-white {
+    color: white;
+}
+
+#devRed {
+    background: red;
+}
+
+#devBlue {
+    background: blue;
+}
+
+#devGreen {
+    background: green;
 }

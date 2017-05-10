@@ -4,10 +4,10 @@ $dev_visible    = '1'; // Is the dev-data visible on the pages. 0 = no, 1 = yes
 
 // Do not change this variable
 $status         = '';
-$stylepath      = '../';
 
 // Dummy data
 $testName       = 'Billy the Kid';
 $testBiedingNo  = '4';
 $testAdvertNo   = '2';
+
 ?>
