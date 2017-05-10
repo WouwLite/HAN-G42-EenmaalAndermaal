@@ -60,20 +60,13 @@ class Account {
 
     public function showHistory() {
         return $accountArray = array(
-            array('201710001', '201710010', '201710100', '20171000'),
-            array('01-01-2016', '10-02-2017', '12-03-2017', '10-05-2017'),
-            array('17,50', '66,60', '120,00', '12,50'),
-            array('actief', 'actief', 'verloren', 'gewonnen')
-//            1 = actief, 4 = verloren, 5 = gewonnen
+            0 => array(
+                'id'        => '20171001',
+                'date'      => '01-01-2017',
+                'price'     => '66,60',
+                'status'    => 'fap'
+            )
         );
-    }
-
-    public function foreachHistory() {
-        foreach(showHistory() as $history)
-            echo "<td>" . $history[0] . "</td>";
-            echo "<td>" . $history[1] . "</td>";
-            echo "<td>" . $history[2] . "</td>";
-            echo "<td><span class=\"badge badge-default\">" . $history[3] . "</span></td>";
     }
 }
 
@@ -81,6 +74,11 @@ class Account {
  * Einde PHP variable-area
  */
 ?>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?=$app_url?>">Thuis</a></li>
+    <li class="breadcrumb-item"><a href="#">Developer</a></li>
+    <li class="breadcrumb-item active">Template</li>
+</ol>
 <div class="row">
     <div class="col-md-4">
         <h1>Mijn account</h1>
@@ -111,23 +109,14 @@ class Account {
                 <th>Status</th>
             </thead>
             <tbody>
-                <tr>
-                    <?php foreach($accountInfo->showHistory() as $history)
-                        echo "<td>" . $history[0] . "</td>";
-                        echo "<td>" . $history[1] . "</td>";
-                        echo "<td>" . $history[2] . "</td>";
-//                        if($history[3] == 1) {
-//                            echo '<td><span class="badge badge-default">Actief</span></td>';
-//                        } elseif($history[3] == 4) {
-//                            echo "4";
-//                        }
-                        echo "<td><span class=\"badge badge-default\">" . $history[3] . "</span></td>";
-                    ?>
-<!--                    <td>20170001</td>-->
-<!--                    <td>10-05-2017</td>-->
-<!--                    <td>€12,50</td>-->
-<!--                    <td><span class="badge badge-default">Actief</span></td>-->
-                </tr>
+                <?php foreach($accountInfo->showHistory() as $key => $value)
+                    echo "<tr>";
+                        echo "<td>" . $value[1] . "</td>";
+                        echo "<td>" . $history[0][1] . "</td>";
+                        echo "<td>" . $history[0][2] . "</td>";
+                        echo "<td><span class=\"badge badge-default\">" . $history[0][3] . "</span></td>";
+                    echo "</tr>"
+                ?>
                 <tr>
                     <td>20170603</td>
                     <td>10-03-2017</td>

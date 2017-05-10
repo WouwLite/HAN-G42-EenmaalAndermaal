@@ -65,5 +65,4 @@ include($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
     <!-- **************************************** -->
 
     <div id="content">
-        <?=$showBreadcrumbs?>
 
