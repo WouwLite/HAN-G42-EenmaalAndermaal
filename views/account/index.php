@@ -74,28 +74,64 @@ class Account {
  * Einde PHP variable-area
  */
 ?>
+
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="<?=$app_url?>">Thuis</a></li>
-    <li class="breadcrumb-item"><a href="#">Developer</a></li>
-    <li class="breadcrumb-item active">Template</li>
+    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+    <li class="breadcrumb-item active">Mijn Account</li>
 </ol>
+
 <div class="row">
     <div class="col-md-4">
         <h1>Mijn account</h1>
-        <h3>Gegevens</h3>
-        <ul>
-            <?php foreach($accountInfo->showBasicInfo() as $key => $value)
-                echo "<li>" . ucwords($key) . ": " . $value . "</li>";
-            ?>
-        </ul>
-        <br><br>
-        <h3>Adresgegevens</h3>
-        <ul>
-            <?php foreach($accountInfo->showAddress() as $key => $value)
-                echo "<li>" . ucwords($key) . ": " . $value . "</li>";
-            ?>
-        </ul>
-<!--        --><?//=$accountInfo->showBasicInfo($accountArray)?>
+        <div class="card" style="width: 20rem;">
+            <div class="card-block">
+                <h4 class="card-title">Gegevens</h4>
+                <p class="card-text">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?php foreach($accountInfo->showBasicInfo() as $key => $value) {
+                            echo ucwords($key) . ": <br>";
+                        } ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?php foreach($accountInfo->showBasicInfo() as $key => $value) {
+                            echo $value . "<br>";
+                        } ?>
+                    </div>
+
+
+                </div>
+                </p>
+                <a href="<?=$app_url?>/views/account/<?=$id?>/edit" class="btn btn-default"><i class="fa fa-wrench" aria-hidden="true"></i> Gegevens wijzigen</a>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="card" style="width: 20rem;">
+            <div class="card-block">
+                <h4 class="card-title">Adres</h4>
+                <p class="card-text">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?php foreach($accountInfo->showAddress() as $key => $value) {
+                            echo ucwords($key) . ": <br>";
+                        } ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?php foreach($accountInfo->showAddress() as $key => $value) {
+                            echo $value . "<br>";
+                        } ?>
+                    </div>
+
+
+                </div>
+                </p>
+                <a href="<?=$app_url?>/views/account/<?=$id?>/edit" class="btn btn-default"><i class="fa fa-wrench" aria-hidden="true"></i> Adres wijzigen</a>
+            </div>
+        </div>
+
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-6">
