@@ -70,10 +70,9 @@ function sendmail()
     $secretCode = uniqid();
     $subject = "Eenmaal Andermaal email activatie code";
     $message = "Je geheime code is: " . $secretCode;
-    $headers = 'From: noreply@EenmaalAndermaal.nl';
+    $headers = 'From: noreply@iproject42.icasites.nl';
     mail($email, $subject, $message, $headers);
     $_SESSION['secretCode'] = password_hash($secretCode, PASSWORD_DEFAULT);
-    echo $secretCode;
 }
 
 
