@@ -25,7 +25,7 @@
     | 'localhost'. Don't forget the first two slashes (or http://).
     */
 
-    $app_url                      = '//localhost';
+    $app_url                      = '//iproject42.icasites.nl';
 
     /*
     |--------------------------------------------------------------------------

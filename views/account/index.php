@@ -1,39 +1,12 @@
 <!-- /views/account/index.php -->
 
 <?php
+require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
+
 /*
  * Voer hieronder eventuele extra PHP variables toe
  */
-
-// Voeg developmentfuncties toe, svp niet verwijderen
-require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
-//include($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
-include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
-
-// Voeg breadcrumbs toe (https://v4-alpha.getbootstrap.com/components/breadcrumb/)
-$breadcrumbs = array("Thuis", "Mijn Account");
-$breadcrumb_active = "Overzicht";
-
-// Classes and functions
-//$info = array('name' => 'Henk', 'age' => '32', 'gender' => 'Male',);
-//$accountClass = new AccountClass();
-//class AccountClass {
-//    public function showAllUsers(array $info) {
-//        echo "<ul>";
-//        foreach ($info as $key => $value) {
-//            echo "<li>" . ucwords($key) . ": " . $value . "</li>";
-//        }
-//        echo "</ul>";
-//    }
-//}
-//
-//$classTest = new Test();
-//
-//class Test {
-//    public function showTest(string $num) {
-//        return $num;
-//    }
-//}
 
 $accountInfo = new Account();
 $merchantStatus = true;
