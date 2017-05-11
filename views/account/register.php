@@ -1,5 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . "/include/style.inc.php";
+include($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
 session_start();
 
 $vars = array();
@@ -393,5 +394,6 @@ function checkNoErrors()
             </div>
         </div>
     </form>
+</div>
 </body>
 </html>
