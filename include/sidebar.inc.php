@@ -16,11 +16,11 @@
         <li><span class="sidebar-span"></span></li>
         <li><strong>Account</strong></li>
         <li class="nav-item">
-            <a class="nav-link" href="#"><i class="fa fa-gavel" aria-hidden="true"></i> Mijn biedingen <span class="badge badge-info"><?=$testBiedingNo?></span></a>
+            <a class="nav-link" href="#"><i class="fa fa-gavel" aria-hidden="true"></i> Mijn biedingen <span class="badge badge-default"><?=$testBiedingNo?></span></a>
         </li>
         <!-- Create IF statement. If user is merchant, show this link, else hide -->
         <li class="nav-item">
-            <a class="nav-link disabled" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Mijn advertenties <span class="badge badge-info"><?=$testAdvertNo?></span></a>
+            <a class="nav-link disabled" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Mijn advertenties <span class="badge badge-default"><?=$testAdvertNo?></span></a>
         </li>
         <li><span class="sidebar-span"></span></li>
         <li><strong>Rubrieken</strong></li>

@@ -79,4 +79,4 @@
 
     include($_SERVER['DOCUMENT_ROOT'] . '/config/mail.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/config/cdn.php');
-include($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
+//    include($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
