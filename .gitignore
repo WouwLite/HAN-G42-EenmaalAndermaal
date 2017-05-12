@@ -63,3 +63,8 @@ fabric.properties
 .idea/sonarlint
 
 # End of https://www.gitignore.io/api/phpstorm
+
+# Oh, so you wanna ignore me?
+dev/
+# Yep, I just ignored a part of you, you stupid application!
+# Don't hate ;-).
