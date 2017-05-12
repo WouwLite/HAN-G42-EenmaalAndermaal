@@ -25,7 +25,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
     <!-- ************************* -->
     <!--  TOP / HORIZONTAL NAVBAR  -->
     <!-- ************************* -->
-    <nav class="navbar navbar-toggleable-md navbar-light bg-faded" style="background-color: #5484A4;">
+    <nav class="navbar fixed-top navbar-toggleable-md navbar-light bg-faded" style="background-color: #5484A4;">
         <!-- Logo -->
 
         <a class="navbar-brand" href="/views/public/">
