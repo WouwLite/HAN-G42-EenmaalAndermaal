@@ -51,8 +51,6 @@
     <p>Hello world!</p>
 </footer>
 
-<!--    <script src="http://cdn.wouwlite.eu/han/src/assets/js/vendor/jquery-1.11.2.min.js"></script>-->
-<script src="//localhost/assets/js/vendor/jquery-1.11.2.min.js"></script>
 <script>
     $(document).ready(function () {
         $('#sidebar-hamburger').click(function () {

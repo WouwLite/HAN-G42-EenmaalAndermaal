@@ -9,5 +9,8 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 <!--    <link type="text/css" rel="stylesheet" href="--><?//=$cdn_url?><!--assets/css/footer.css">-->
 <link rel="stylesheet" href="https://use.fontawesome.com/68afb4fb20.css">
 
+<!-- Scripts -->
+<script src="<?=$app_url?>/assets/js/vendor/jquery-1.11.2.min.js"></script>
+
 <!-- External Fonts -->
 <link href="https://fonts.googleapis.com/css?family=Nunito|Nunito+Sans|Comfortaa" rel="stylesheet">
