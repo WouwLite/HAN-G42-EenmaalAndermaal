@@ -67,12 +67,12 @@ function checkEmptyFields()
 
 function sendmail()
 {
-    global $email;
+    global $vars;
     $secretCode = uniqid();
     $subject = "Eenmaal Andermaal email activatie code";
     $message = "Je geheime code is: " . $secretCode;
     $headers = 'From: noreply@iproject42.icasites.nl';
-    mail($email, $subject, $message, $headers);
+    $mailstatus = mail($vars['email'], $subject, $message, $headers);
     $_SESSION['secretCode'] = password_hash($secretCode, PASSWORD_DEFAULT);
 }
 
