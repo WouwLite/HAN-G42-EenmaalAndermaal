@@ -25,7 +25,7 @@
     | 'localhost'. Don't forget the first two slashes (or http://).
     */
 
-    $app_url                      = '//iproject42.icasites.nl';
+    $app_url                      = '//localhost';
 
     /*
     |--------------------------------------------------------------------------
@@ -79,4 +79,4 @@
 
     include($_SERVER['DOCUMENT_ROOT'] . '/config/mail.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/config/cdn.php');
-//    include($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
+    include($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');

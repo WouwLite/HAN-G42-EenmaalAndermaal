@@ -1,19 +1,12 @@
-<!-- Modal -->
-<!-- Include this file in a page where you want to be able to delete a product -->
-
-<!-- copy the button below to activate the modal on your page -->
-<!-- <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-ad="<AD_ID HERE>"><BUTTON TEXT></button> -->
+<!-- /include/delete-modal.php -->
 
 <?php
-require_once "../dev/functions.dev.php";
-require_once "../config/database.php";
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $vars = getRealPOST();
     $sql = <<<SQL
-SELECT email FROM Users 
-WHERE ( SELECT Seller FROM Object 
-        WHERE productid = ?
-)
+SELECT email FROM Users WHERE ( SELECT Seller FROM Object WHERE productid = ?)
 SQL;
 
     $stmt = $pdo->prepare($sql);
