@@ -1,4 +1,12 @@
-<!--<!-- /include/footer.inc.php -->-->
+<!-- /include/footer.inc.php -->
+
+<div class="container-fluid">
+    Hello world!
+</div>
+ggg
+
+
+
 <?php //include($_SERVER['DOCUMENT_ROOT'] . '/include/style.inc.php') ?>
 <!--<link rel="stylesheet" href="../assets/css/footer.css">-->
 <!--<footer>-->

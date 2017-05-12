@@ -54,7 +54,7 @@ class Account {
  * Einde PHP variable-area
  */
 ?>
-<div class="container">
+<div class="container-float">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?=$app_url?>">Thuis</a></li>
         <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
@@ -62,7 +62,7 @@ class Account {
     </ol>
 </div>
 
-<div class="container"><h1>Mijn account</h1>
+<div class="container-float"><h1>Mijn account</h1>
     <div class="row">
         <div class="col-md-4">
             <div class="card">
@@ -152,7 +152,7 @@ class Account {
     </div>
 </div>
 
-<div class="container"><h1>Veilingen</h1>
+<div class="container-float"><h1>Veilingen</h1>
     <div class="row">
         <div class="col-md-6">
             <h3>Laatste biedingen</h3>
