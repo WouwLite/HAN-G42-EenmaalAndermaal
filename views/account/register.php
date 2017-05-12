@@ -1,6 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . "/include/style.inc.php";
-include($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
+require($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
 session_start();
 
 $vars = array();
@@ -72,7 +72,7 @@ function sendmail()
     $subject = "Eenmaal Andermaal email activatie code";
     $message = "Je geheime code is: " . $secretCode;
     $headers = 'From: noreply@iproject42.icasites.nl';
-    $mailstatus = mail($vars['email'], $subject, $message, $headers);
+    mail($vars['email'], $subject, $message, $headers);
     $_SESSION['secretCode'] = password_hash($secretCode, PASSWORD_DEFAULT);
 }
 
