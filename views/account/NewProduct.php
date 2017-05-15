@@ -66,7 +66,7 @@ function saveProductData()
         $duration = $vars['duration'];
         $durationbeginDay = date("Y-m-d");
         $durationbeginTime = date("h:i:sa");
-        $shippingCosts = 999; //vervangen!!!
+        $shippingCosts = $vars['shippingcosts']; //vervangen!!!
         $shippingInstructions = "niks"; //vervangen!!!
         $days = $duration;
         $durationendDay = date('Y-m-d', strtotime('+' . $days . 'days'));
