@@ -2,7 +2,7 @@
 session_start();
 $_SESSION['amount'] = 00.01;
 $_SESSION['orderNumber'] = 12345;
-require_once('C:/Users/Caspar/PhpstormProjects/HAN-G42-EenmaalAndermaal/app/Mollie/API/Autoloader.php');
+require_once('/app/Mollie/API/Autoloader.php');
 $mollie = new Mollie_API_Client;
 $mollie->setApiKey('test_a27kq9WerzGjJNSCMfaPe73TTmzqD4');
 
