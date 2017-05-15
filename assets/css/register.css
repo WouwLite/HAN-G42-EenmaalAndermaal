@@ -1,5 +1,6 @@
 body {
-    background-image: url("../../storage/images/aaron-burden-1080px.jpg");
+    background-color: ecf0f1;
+    /*background-image: url("../../storage/images/aaron-burden-1080px.jpg");*/
     background-size: cover;
 }
 
@@ -15,7 +16,7 @@ body {
 .title {
     padding: 40px;
     text-align: center;
-    color: white;
+    color: #34495e;
 }
 
 .sign-in-form {
@@ -29,7 +30,7 @@ body {
 }
 
 .text-muted {
-    color: white !important;
+    color: #34495e !important;
 }
 
 .footer {

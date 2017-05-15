@@ -47,7 +47,7 @@
         if($categories->parent == -1) {
             foreach($categories as $category) {
                 echo "<li class='nav-item'>";
-                    echo "<a class='nav-link' href='#'>" . $category->name . "</a>";
+                    echo "<a class='nav-link' href='" . $app_url . "/views/categories/" . $category->name . "'>" . $category->name . "</a>";
                 echo "</li>";
             }
         }

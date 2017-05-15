@@ -176,7 +176,7 @@ function checkNoErrors()
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
-    <title>Registratie</title>
+    <title><?=$title?></title>
     <link rel="stylesheet" href="<?=$app_url?>/assets/css/register.css">
 
 </head>
@@ -184,7 +184,7 @@ function checkNoErrors()
 <div class="container">
     <form class="form-horizontal sign-up-form" method="post" action="#">
         <div class="title">
-            <h1><?=$title?></h1>
+            <img src="/storage/images/logo/logo-ea-groot-donker.png" style="max-height: 70px" alt="EenmaalAndermaal Logo">
         </div>
 
         <div <?php print((!empty($errors['username'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?> >
