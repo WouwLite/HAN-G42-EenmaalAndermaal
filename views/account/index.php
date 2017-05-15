@@ -14,47 +14,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
  * Voer hieronder eventuele extra PHP variables toe
  */
 
-$accountInfo = new Account();
 $merchantStatus = false;
-
-class Account {
-    public function showBasicInfo() {
-        return $accountArray = array(
-            'firstname'     => 'Henk',
-            'lastname'      => 'Stieltjes',
-            'phone'         => '06-123456789',
-            'email'         => 'henk@stieltjes.nl',
-            'birthday'      => '01-01-1975',
-        );
-    }
-
-    public function showAddress() {
-        return $accountArray = array(
-            'street'        => 'Postubs 150',
-            'PC'            => '6500 AD',
-            'city'          => 'Nijmegen',
-            'county'        => 'Gelderland',
-            'country'       => 'Netherlands',
-        );
-    }
-
-    public function showHistory() {
-        return $accountArray = array(
-            0 => array(
-                'id'        => '20171001',
-                'date'      => '01-01-2017',
-                'price'     => '66,60',
-                'status'    => 'fap'
-            )
-        );
-    }
-
-    public function showAccountStatus() {
-        return $accountStatus = array(
-            'status'        => 'Verkoper',
-        );
-    }
-}
 
 /*
  * Einde PHP variable-area
@@ -77,14 +37,10 @@ class Account {
                     <p class="card-text">
                     <div class="row">
                         <div class="col-md-6">
-<!--                            --><?php //foreach($accountInfo->showBasicInfo() as $key => $value) {
-//                                echo ucwords($key) . ": <br>";
-//                            } ?>
+
                         </div>
                         <div class="col-md-6">
-<!--                            --><?php //foreach($accountInfo->showBasicInfo() as $key => $value) {
-//                                echo $value . "<br>";
-//                            } ?>
+
                         </div>
 
 
@@ -102,14 +58,10 @@ class Account {
                     <p class="card-text">
                     <div class="row">
                         <div class="col-md-6">
-<!--                            --><?php //foreach($accountInfo->showAddress() as $key => $value) {
-//                                echo ucwords($key) . ": <br>";
-//                            } ?>
+
                         </div>
                         <div class="col-md-6">
-<!--                            --><?php //foreach($accountInfo->showAddress() as $key => $value) {
-//                                echo $value . "<br>";
-//                            } ?>
+
                         </div>
 
 
@@ -127,17 +79,13 @@ class Account {
                     <p class="card-text">
                     <div class="row">
                         <div class="col-md-6">
-<!--                            --><?php //foreach($accountInfo->showAccountStatus() as $key => $value) {
-//                                echo ucwords($key) . ": <br>";
-//                            } ?>
+
                             Status: <br>
                             Soort rekening: <br>
                             Rekeningnummer: <br>
                         </div>
                         <div class="col-md-6">
-    <!--                        --><?php //foreach($accountInfo->showAccountStatus() as $key => $value) {
-    //                            echo "<span class=\"badge badge-pill badge-primary\">" . $value . "</span><br>";
-    //                        } ?>
+
                             <span class="badge badge-pill badge-primary">Gebruiker</span><br>
                             Creditcard<br>
                             1234567890<br>
