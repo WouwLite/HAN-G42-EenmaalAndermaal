@@ -214,6 +214,8 @@ class Account {
                         <td><span class="badge badge-success">Actief</span></td>
                         <td>
                             <a class="btn btn-default btn-sm" href="#"><i class="fa fa-wrench" style="width: 12px"></i></a>
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                    data-target="#deleteModal" data-ad="1"><i class="fa fa-trash-o fa-sm"></i></button>
                         </td>
                     </tr>
                     <tr>
@@ -231,6 +233,8 @@ class Account {
     </div>
 </div>
 <?php
+include($_SERVER['DOCUMENT_ROOT'] . '/include/delete-modal.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
+
 ?>

@@ -11,6 +11,8 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 
 <!-- Scripts -->
 <script src="<?=$app_url?>/assets/js/vendor/jquery-1.11.2.min.js"></script>
+<script src="http://www.atlasestateagents.co.uk/javascript/tether.min.js"></script>
+<script src="<?= $app_url ?>/assets/js/vendor/bootstrap.min.js"></script>
 
 <!-- External Fonts -->
 <link href="https://fonts.googleapis.com/css?family=Nunito|Nunito+Sans|Comfortaa" rel="stylesheet">

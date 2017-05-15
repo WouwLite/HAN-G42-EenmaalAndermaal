@@ -6,7 +6,7 @@ require_once ($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $vars = getRealPOST();
     $sql = <<<SQL
-SELECT email FROM Users WHERE ( SELECT Seller FROM Object WHERE productid = ?)
+SELECT email FROM Users WHERE username = ( SELECT Seller FROM Object WHERE productid = ?)
 SQL;
 
     $stmt = $pdo->prepare($sql);
@@ -23,7 +23,7 @@ DELETE FROM Object
 WHERE productid = ?
 SQL;
     $delstmt = $pdo->prepare($delsql);
-    $stmt->execute($vars['ad-id']);
+    $stmt->execute([$vars['ad-id']]);
 }
 ?>
 
@@ -67,7 +67,7 @@ SQL;
         var button = $(event.relatedTarget);
         var ad = button.data('ad');
         var modal = $(this);
-        modal.find('.ad-number').text(ad);
+        modal.find('.ad-id').text(ad);
         $('#deleteButton').val(ad);
     })
 </script>
