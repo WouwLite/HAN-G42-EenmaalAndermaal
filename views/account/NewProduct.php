@@ -76,7 +76,6 @@ function saveProductData()
         $foto3 = $vars['foto3'] ?? null;
         $foto4 = $vars['foto4'] ?? null;
         $categorieName = $vars['categorie'];
-        var_dump($vars);
         global $pdo;
         $stmt = "INSERT INTO Object(productid, title, description, startprice, paymentmethodNumber, paymentinstruction, 
               city, country, duration, durationbeginDay, durationbeginTime, shippingcosts, shippinginstructions, seller,
@@ -129,7 +128,6 @@ function getCategories(){
 
 <div class="container main-part">
     <form action="#" method="post">
-
         <div class="form-group row">
             <label class="col-2 col-form-label"></label>
             <div class="col-8">
