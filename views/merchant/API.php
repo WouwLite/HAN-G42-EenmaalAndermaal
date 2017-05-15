@@ -10,7 +10,9 @@ $mollie->setApiKey('test_a27kq9WerzGjJNSCMfaPe73TTmzqD4');
 function updateData()
 {
     global $vars, $pdo;
-    $stmt = "UPDATE Users set merchant = 1 where username = " . $vars['username'];
+    $stmt = "UPDATE Users set merchant = 1 where username = " . $_SESSION['username'];
+    $process = $pdo->prepare($stmt);
+    $process->execute();
 }
 try {
     updateData();
