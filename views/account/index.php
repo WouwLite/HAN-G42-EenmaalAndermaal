@@ -1,10 +1,19 @@
 <!-- /views/account/index.php -->
 
 <?php
+
+
+$hostname = "mssql2.iproject.icasites.nl"; //Naam van de Server
+$dbname = "iproject42";    //Naam van de Database
+$username = "iproject42";      //Inlognaam
+$pw = "7MqNNSxC";      //Password
+
+$pdo = new PDO ("sqlsrv:Server=$hostname;Database=$dbname;ConnectionPooling=0","$username","$pw");
+
 require($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 
 if ($debug == false) {
-session_start();
+//session_start();
 include_once ($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
 }
 
@@ -15,6 +24,26 @@ include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
  */
 
 $merchantStatus = false;
+
+session_start();
+if(isset($_SESSION['username'])){
+    $user = $_SESSION['username'];
+    $stmt = $pdo->prepare("SELECT * FROM Users WHERE username = ?");
+    $stmt->execute([$user]);
+    $data = $stmt->fetch(PDO::FETCH_ASSOC);
+    $_SESSION['firstname'] = $data['firstname'];
+    $_SESSION['lastname'] = $data['lastname'];
+    $_SESSION['address1'] = $data['address1'];
+    $_SESSION['zipcode'] = $data['zipcode'];
+    $_SESSION['city'] = $data['city'];
+    $_SESSION['country'] = $data['country'];
+    $_SESSION['birthday'] = $data['birthday'];
+    $_SESSION['email'] = $data['email'];
+    $_SESSION['questionnumber'] = $data['questionnumber'];
+    $_SESSION['answer'] = $data['answer'];
+    $_SESSION['merchant'] = $data['merchant'];
+
+}
 
 
 /*
@@ -38,10 +67,19 @@ $merchantStatus = false;
                     <p class="card-text">
                     <div class="row">
                         <div class="col-md-6">
-
+                            Gebruikersnaam: <br>
+                            Voornaam: <br>
+                            Achternaam: <br>
+                            Email adres: <br>
+                            Geboortedatum: <br>
                         </div>
                         <div class="col-md-6">
-
+                            <?php echo $_SESSION['username']; ?> <br> <?php
+                                  echo $_SESSION['firstname']; ?> <br> <?php
+                                  echo $_SESSION['lastname']; ?> <br> <?php
+                                  echo $_SESSION['email']; ?> <br> <?php
+                                  echo $_SESSION['birthday']; ?> <br> <?php
+                            ?>
                         </div>
 
 
@@ -59,10 +97,15 @@ $merchantStatus = false;
                     <p class="card-text">
                     <div class="row">
                         <div class="col-md-6">
-
+                            Straat: <br>
+                            Postcode: <br>
+                            Plaats: <br>
                         </div>
                         <div class="col-md-6">
-
+                            <?php echo $_SESSION['address1']; ?> <br> <?php
+                                  echo $_SESSION['zipcode']; ?> <br> <?php
+                                  echo $_SESSION['city']; ?> <br> <?php
+                            ?>
                         </div>
 
 
@@ -86,16 +129,24 @@ $merchantStatus = false;
                             Rekeningnummer: <br>
                         </div>
                         <div class="col-md-6">
+                            <?php if($_SESSION['merchant'] == 1) {
+                                ?>
+                                <span class="badge badge-pill badge-info">Verkoper</span><br>
 
-                            <span class="badge badge-pill badge-primary">Gebruiker</span><br>
+                                <?php
+                            } else {
+                                ?>
+                                <span class="badge badge-pill badge-primary">Gebruiker</span><br>
+                            <?php
+                            }
+                            ?>
+
                             Creditcard<br>
                             1234567890<br>
                         </div>
-
-
                     </div>
                     </p>
-                    <?php if($merchantStatus) {
+                    <?php if($_SESSION['merchant'] == 1) {
                         echo "<a href='" . $app_url . "/views/account/" . $id . "/edit' class='btn btn-default'><i class='fa fa-wrench' aria-hidden='true'></i> Gegevens wijzigen</a>";
                     } else {
                         echo "<a href='" . $app_url . "/views/account/" . $id . "/edit' class='btn btn-success'>Upgraden</a>";
