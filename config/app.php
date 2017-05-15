@@ -23,6 +23,7 @@
     | This value determines the URL of the application. This is needed
     | for several functions within the application. Default value is
     | 'localhost'. Don't forget the first two slashes (or http://).
+    | //G42-EenmaalAndermaal.dev - //localhost
     */
 
     $app_url                      = '//localhost';
@@ -37,8 +38,8 @@
     | different types of environment are: 'Development' and 'Production'
     */
 
-    $debug                      = true;
-    $environment                = 'Development';
+    $debug                      = false;
+    $environment                = 'Production';
 
     /*
     |--------------------------------------------------------------------------

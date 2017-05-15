@@ -1,7 +1,13 @@
 <!-- /views/account/index.php -->
 
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
+require($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
+
+if ($debug == false) {
+session_start();
+include_once ($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
+}
+
 include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
 /*

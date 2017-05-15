@@ -43,36 +43,7 @@ Closed source sumting - add later !!
 
 ## Installation (through Command Line Interface)
 
-1. Clone the Git repository:
-
-    ```
-    git clone https://github.com/komcommy/HAN-G42-EenmaalAndermaal.git
-    ```
-
-2. Create a database in `MySQL`:
-
-    ```
-    Host: localhost
-    Database: 4dkm_db
-    Username: 4dkm_user
-    Password: p@ssw0rd
-    ```
-
-3. Create database migration:
-
-    ```
-    php artisan migrate
-    ```
-    
-4. Create useraccount and grand admin rights:
-
-    Go to http://localhost/register
-    After registration, change database values for your account
-    ```
-    Function: "beheerder"
-    Admin: "1"
-    ```
-    This feature will soon be integrated within the code to simplify actions. But for now, change the database data to become an awesome and sexy admin ;-).
+//
 
 ## Updating
 
@@ -88,12 +59,14 @@ If you have any issues, run the following command in the Command Line Interface:
 
 Views / pages are found in:
 ```    
-    /resources
-    /resources/views
-    /resources/views/dashboard
-    /resources/views/registration
-    /resources/views/login
-    /resources/views/account
+    
+    /views
+    /views/account/index.php
+    /views/account/login.php
+    /views/account/logout.php
+    /views/account/register.php
+    /views/public/index.php
+    
 ```
 
 ## Configuration

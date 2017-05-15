@@ -1,7 +1,5 @@
 <!-- /resources/include/main.inc.php -->
 <?php
-//session_start();
-//include_once ($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/style.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
@@ -29,13 +27,8 @@ include($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
         <!-- Logo -->
 
         <a class="navbar-brand" href="/views/public/">
-            <img src="//securehub.eu/dl/EA-LogoV3.svg" height="70px" style="margin-top: -12px; margin-bottom: -12px" alt="">
+            <img src="/storage/images/logo/logo-ea-groot-licht.png" style="max-height: 70px" alt="EenmaalAndermaal Logo">
         </a>
-        <!-- Searchform -->
-        <div class="col-sm-1"></div>
-        <form>
-            <input class="form-control sm-2" type="search" id="search" name="Search" placeholder="Zoek naar veiling..."/>
-        </form>
         <div class="col-sm-1"></div>
         <!-- Links -->
             <!-- mr-auto >> margin right auto, aligns the div to left -->

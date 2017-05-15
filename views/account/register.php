@@ -1,5 +1,6 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . "/include/style.inc.php";
+require($_SERVER['DOCUMENT_ROOT'] . "/config/app.php");
+require_once ($_SERVER['DOCUMENT_ROOT'] . "/include/style.inc.php");
 require($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . '/app/getpost.php');
 session_start();
@@ -176,14 +177,14 @@ function checkNoErrors()
 <head>
     <meta charset="UTF-8">
     <title>Registratie</title>
-    <link rel="stylesheet" href="../../assets/css/register.css">
+    <link rel="stylesheet" href="<?=$app_url?>/assets/css/register.css">
 
 </head>
 <body>
 <div class="container">
     <form class="form-horizontal sign-up-form" method="post" action="#">
         <div class="title">
-            <h1>Eenmaal Andermaal</h1>
+            <h1><?=$title?></h1>
         </div>
 
         <div <?php print((!empty($errors['username'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?> >
@@ -227,7 +228,7 @@ function checkNoErrors()
                     <?php print("value=\"$GLOBALS[email]\"") ?> required>
                 <span class="input-group-button">
                     <button type="submit" name="email-submit" id="email-submit"
-                            class="btn btn-secondary">Stuur Code</button>
+                            class="btn btn-default">Stuur Code</button>
                 </span>
             </div>
             <div class="form-control-feedback"><?php global $errors;
@@ -323,6 +324,7 @@ function checkNoErrors()
                     $stmt = $pdo->prepare("SELECT * FROM Country");
                     $stmt->execute();
                     $data = $stmt->fetchAll();
+                    echo "<option>Netherlands</option>";
                     foreach ($data as $row) { ?>
                         <option><?php echo $row['countryname'] ?></option>
                         <?php
@@ -338,8 +340,7 @@ function checkNoErrors()
         <div <?php print((!empty($errors['birthday'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
             <div class="input-group inputform row">
                 <span class="input-group-addon fa fa-calendar" id="basicaddon1"></span>
-                <input type="date" id="birthday" class="form-control" name="birthday"
-                    <?php print("value=\"$GLOBALS[birthday]\"") ?>>
+                <input type="date" placeholder="Wat is uw geboortedatum" name="birthday" value="<?php if(isset($_POST['birthday'])){ echo $_POST['birthday'];}?>" required>
             </div>
             <div class="form-control-feedback"><?php global $errors;
                 echo $errors['birthday'] ?></div>
@@ -379,6 +380,7 @@ function checkNoErrors()
                 <button type="submit" class="btn btn-primary" id="final-submit" name="final-submit"
                         value="finished">Registreer
                 </button>
+                <a href="<?=$app_url?>/views/account/login.php" class="btn btn-success" role="button" aria-pressed="true">Aanmelden</a>
             </div>
         </div>
     </form>

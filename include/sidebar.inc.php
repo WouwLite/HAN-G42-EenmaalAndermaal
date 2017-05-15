@@ -3,9 +3,15 @@
 <!-- *********************************** -->
 </div>
 
+<?php //require($_SERVER['DOCUMENT_ROOT'] . '/config/database.php'); ?>
 <!-- Add sidebarmenu -->
 <div id="sidebar">
     <ul>
+        <li>
+            <form>
+                <input class="form-control sm-2" type="search" id="search" name="Search" placeholder="Zoek naar veiling..."/>
+            </form>
+        </li>
         <li><strong>Dashboard</strong></li>
         <li class="nav-item">
             <a class="nav-link active" href="/views/public/"><i class="fa fa-home" aria-hidden="true"></i> Thuis</a>
@@ -37,6 +43,15 @@
         <li class="nav-item">
             <a class="nav-link" href="#">Games</a>
         </li>
+        <?php
+        if($categories->parent == -1) {
+            foreach($categories as $category) {
+                echo "<li class='nav-item'>";
+                    echo "<a class='nav-link' href='#'>" . $category->name . "</a>";
+                echo "</li>";
+            }
+        }
+        ?>
     </ul>
 
     <div id="sidebar-hamburger">

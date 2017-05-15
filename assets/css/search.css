@@ -16,6 +16,7 @@ input::-webkit-search-cancel-button {
 input[type=search] {
     background: #ededed url(http:////cdn.wouwlite.eu/icasites.nl/storage/images/elements/magnifier.svg) no-repeat 8px center;
     border: solid 1px #ccc;
+    margin-top: 10px;
     padding: 8px 8px 8px 32px;
     width: 80%;
 

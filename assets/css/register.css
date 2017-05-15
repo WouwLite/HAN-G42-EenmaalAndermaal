@@ -3,12 +3,13 @@ body {
     background-size: cover;
 }
 
-.form-group .button {
-    background-color: transparent;
+.row {
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
 
-.inputform {
-    padding: 5px;
+.form-group .button {
+    background-color: transparent;
 }
 
 .title {
