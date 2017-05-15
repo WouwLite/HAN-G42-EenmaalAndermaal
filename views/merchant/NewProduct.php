@@ -1,5 +1,9 @@
 <?php
+require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
+
+session_start();
+
 saveProductData();
 function getHighestId()
 {
@@ -235,7 +239,8 @@ function getCategories(){
         </div>
         <div class="form-group row">
             <div class="col-10 ">
-                <button class="btn btn-primary" type="submit">Doorgaan</button>
+                <button class="btn btn-success" type="submit">Doorgaan</button>
+                <a href="<?=$app_url?>" class="btn btn-info" role="button" aria-pressed="true">Terug</a>
             </div>
         </div>
     </form>

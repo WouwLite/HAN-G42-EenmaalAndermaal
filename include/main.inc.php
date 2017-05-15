@@ -4,9 +4,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/style.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
 
-if ($debug == false) {
-    session_start();
-}
+session_start();
 
 ?>
 
@@ -32,7 +30,7 @@ if ($debug == false) {
         <!-- Logo -->
 
         <a class="navbar-brand" href="/views/public/">
-            <img src="/storage/images/logo/logo-ea-groot-licht.png" style="max-height: 70px" alt="EenmaalAndermaal Logo">
+            <img src="<?=$cdn_url?>/storage/images/logo/logo-ea-groot-licht.png" style="max-height: 70px" alt="EenmaalAndermaal Logo">
         </a>
         <div class="col-sm-1"></div>
         <!-- Links -->
@@ -40,22 +38,22 @@ if ($debug == false) {
             <!-- ml-auto >> margin left auto, aligns the div to right -->
         <ul class="navbar-nav ml-auto">
             <!-- ADD IF STATEMENT TO SHOW ADD-NEW BUTTON. ELSE HIDE -->
-                <?php if (!empty($users) || $debug): ?>
+                <?php if (!empty($_SESSION['username']) || $debug): ?>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#new-add"><i class="fa fa-plus fa-inverse" aria-hidden="true"></i> Nieuw</a>
+                        <a class="nav-link text-white" href="<?=$app_url?>/views/merchant/NewProduct.php"><i class="fa fa-plus fa-inverse" aria-hidden="true"></i> Nieuw</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link text-white" href="<?=$cdn_url?>/views/account"><i class="fa fa-user fa-inverse" aria-hidden="true"></i> Account</a>
+                    <a class="nav-link text-white" href="<?=$app_url?>/views/account"><i class="fa fa-user fa-inverse" aria-hidden="true"></i> Account</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?=$cdn_url?>/views/account/logout.php"><i class="fa fa-power-off fa-inverse" aria-hidden="true"></i> Afmelden</a>
+                        <a class="nav-link text-white" href="<?=$app_url?>/views/account/logout.php"><i class="fa fa-power-off fa-inverse" aria-hidden="true"></i> Afmelden</a>
                     </li>
                 <?php else: ?>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?=$cdn_url?>/views/account/register.php"><i class="fa fa-user-plus fa-inverse" aria-hidden="true"></i> Registreren</a>
+                        <a class="nav-link text-white" href="<?=$app_url?>/views/account/register.php"><i class="fa fa-user-plus fa-inverse" aria-hidden="true"></i> Registreren</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?=$cdn_url?>/views/account/login.php"><i class="fa fa-user fa-inverse" aria-hidden="true"></i> Aanmelden</a>
+                        <a class="nav-link text-white" href="<?=$app_url?>/views/account/login.php"><i class="fa fa-user fa-inverse" aria-hidden="true"></i> Aanmelden</a>
                     </li>
                 <?php endif; ?>
         </ul>
