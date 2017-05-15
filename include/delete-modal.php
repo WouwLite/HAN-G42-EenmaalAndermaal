@@ -1,7 +1,7 @@
 <!-- /include/delete-modal.php -->
 
 <?php
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/app/getpost.php');
 require_once ($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $vars = getRealPOST();

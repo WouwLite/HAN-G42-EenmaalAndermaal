@@ -1,6 +1,7 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . "/include/style.inc.php";
 require($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/app/getpost.php');
 session_start();
 
 $vars = array();
@@ -18,19 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             saveData();
         }
     }
-}
-
-function getRealPOST()
-{
-    $pairs = explode("&", file_get_contents("php://input"));
-    $vars = array();
-    foreach ($pairs as $pair) {
-        $nv = explode("=", $pair);
-        $name = urldecode($nv[0]);
-        $value = urldecode($nv[1]);
-        $vars[$name] = $value;
-    }
-    return $vars;
 }
 
 $username = $vars['username'] ?? "";
