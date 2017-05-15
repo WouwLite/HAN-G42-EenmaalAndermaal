@@ -3,6 +3,11 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/style.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
+
+if ($debug == false) {
+    session_start();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -35,10 +40,10 @@ include($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
             <!-- ml-auto >> margin left auto, aligns the div to right -->
         <ul class="navbar-nav ml-auto">
             <!-- ADD IF STATEMENT TO SHOW ADD-NEW BUTTON. ELSE HIDE -->
-            <li class="nav-item">
-                <a class="nav-link text-white" href="#new-add"><i class="fa fa-plus fa-inverse" aria-hidden="true"></i> Nieuw</a>
-            </li>
                 <?php if (!empty($users) || $debug): ?>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#new-add"><i class="fa fa-plus fa-inverse" aria-hidden="true"></i> Nieuw</a>
+                    </li>
                     <li class="nav-item">
                     <a class="nav-link text-white" href="<?=$cdn_url?>/views/account"><i class="fa fa-user fa-inverse" aria-hidden="true"></i> Account</a>
                     </li>
@@ -48,6 +53,9 @@ include($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
                 <?php else: ?>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="<?=$cdn_url?>/views/account/register.php"><i class="fa fa-user-plus fa-inverse" aria-hidden="true"></i> Registreren</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="<?=$cdn_url?>/views/account/login.php"><i class="fa fa-user fa-inverse" aria-hidden="true"></i> Aanmelden</a>
                     </li>
                 <?php endif; ?>
         </ul>

@@ -77,14 +77,14 @@ class Account {
                     <p class="card-text">
                     <div class="row">
                         <div class="col-md-6">
-                            <?php foreach($accountInfo->showBasicInfo() as $key => $value) {
-                                echo ucwords($key) . ": <br>";
-                            } ?>
+<!--                            --><?php //foreach($accountInfo->showBasicInfo() as $key => $value) {
+//                                echo ucwords($key) . ": <br>";
+//                            } ?>
                         </div>
                         <div class="col-md-6">
-                            <?php foreach($accountInfo->showBasicInfo() as $key => $value) {
-                                echo $value . "<br>";
-                            } ?>
+<!--                            --><?php //foreach($accountInfo->showBasicInfo() as $key => $value) {
+//                                echo $value . "<br>";
+//                            } ?>
                         </div>
 
 
@@ -102,14 +102,14 @@ class Account {
                     <p class="card-text">
                     <div class="row">
                         <div class="col-md-6">
-                            <?php foreach($accountInfo->showAddress() as $key => $value) {
-                                echo ucwords($key) . ": <br>";
-                            } ?>
+<!--                            --><?php //foreach($accountInfo->showAddress() as $key => $value) {
+//                                echo ucwords($key) . ": <br>";
+//                            } ?>
                         </div>
                         <div class="col-md-6">
-                            <?php foreach($accountInfo->showAddress() as $key => $value) {
-                                echo $value . "<br>";
-                            } ?>
+<!--                            --><?php //foreach($accountInfo->showAddress() as $key => $value) {
+//                                echo $value . "<br>";
+//                            } ?>
                         </div>
 
 
@@ -127,9 +127,9 @@ class Account {
                     <p class="card-text">
                     <div class="row">
                         <div class="col-md-6">
-    <!--                        --><?php //foreach($accountInfo->showAccountStatus() as $key => $value) {
-    //                            echo ucwords($key) . ": <br>";
-    //                        } ?>
+<!--                            --><?php //foreach($accountInfo->showAccountStatus() as $key => $value) {
+//                                echo ucwords($key) . ": <br>";
+//                            } ?>
                             Status: <br>
                             Soort rekening: <br>
                             Rekeningnummer: <br>

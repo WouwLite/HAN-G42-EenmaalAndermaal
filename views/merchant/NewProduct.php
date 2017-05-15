@@ -1,10 +1,5 @@
 <?php
-$hostname = "mssql2.iproject.icasites.nl"; //Naam van de Server
-$dbname = "iproject42";    //Naam van de Database
-$username = "iproject42";      //Inlognaam
-$pw = "7MqNNSxC";      //Password
-
-$pdo = new PDO ("sqlsrv:Server=$hostname;Database=$dbname;ConnectionPooling=0", "$username", "$pw");
+require_once($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
 saveProductData();
 function getHighestId()
 {
