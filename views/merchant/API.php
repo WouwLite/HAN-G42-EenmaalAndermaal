@@ -1,18 +1,22 @@
 <?php
-
 session_start();
 $_SESSION['amount'] = 00.01;
 $_SESSION['orderNumber'] = 12345;
-require_once 'Mollie/API/Autoloader.php';
-
+require_once('C:/Users/Caspar/PhpstormProjects/HAN-G42-EenmaalAndermaal/app/Mollie/API/Autoloader.php');
 $mollie = new Mollie_API_Client;
 $mollie->setApiKey('test_a27kq9WerzGjJNSCMfaPe73TTmzqD4');
 
+function updateData()
+{
+    global $vars, $pdo;
+    $stmt = "UPDATE Users set merchant = 1 where username = " . $vars['username'];
+}
 try {
+    updateData();
     $payment = $mollie->payments->create(
         array(
             'amount' => $_SESSION['amount'],
-            'description' => 'Upgrate naar verkoper',
+            'description' => 'Upgrade naar verkoper',
             'redirectUrl' => 'https://webshop.example.org/order/'.$_SESSION['orderNumber'].'/',
             'metadata' => array(
                 'order_id' => ''.$_SESSION['orderNumber'].'',
