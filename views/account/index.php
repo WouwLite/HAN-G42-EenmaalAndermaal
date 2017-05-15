@@ -16,6 +16,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
 $merchantStatus = false;
 
+
 /*
  * Einde PHP variable-area
  */
