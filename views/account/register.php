@@ -156,6 +156,7 @@ function saveData()
         $vars['birthday'], $vars['email'], $vars['hashedpassword'], $vars['sequrityquestion'],
         $vars['secretanswer']])
     ) {
+        header('location: http://iproject42.icasites.nl/views/account/login.php');
     } else {
         print_r($processRegistration->errorInfo());
     }
