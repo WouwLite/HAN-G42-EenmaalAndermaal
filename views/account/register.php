@@ -340,7 +340,7 @@ function checkNoErrors()
         <div <?php print((!empty($errors['birthday'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
             <div class="input-group inputform row">
                 <span class="input-group-addon fa fa-calendar" id="basicaddon1"></span>
-                <input type="date" placeholder="Wat is uw geboortedatum" name="birthday" value="<?php if(isset($_POST['birthday'])){ echo $_POST['birthday'];}?>" required>
+                <input type="date" placeholder="Wat is uw geboortedatum" name="birthday" value="<?php if(isset($_POST['birthday'])){ echo $_POST['birthday'];}?>">
             </div>
             <div class="form-control-feedback"><?php global $errors;
                 echo $errors['birthday'] ?></div>
