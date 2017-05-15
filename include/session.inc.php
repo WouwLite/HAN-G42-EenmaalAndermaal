@@ -5,9 +5,9 @@ require_once ($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
 
 
 // Check if user is logged on.
-if (isset($_SESSION['user_id'])) {
-    $records = $connection->prepare('SELECT * FROM users WHERE id = :id');
-    $records->bindParam(':id', $_SESSION['user_id']);
+if (isset($_SESSION['user_username'])) {
+    $records = $pdo->prepare('SELECT * FROM users WHERE username = :username');
+    $records->bindParam(':username', $_SESSION['user_username']);
     $records->execute();
     $results = $records->fetch(PDO::FETCH_ASSOC);
 
