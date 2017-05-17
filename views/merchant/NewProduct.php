@@ -3,8 +3,26 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
 
 session_start();
-
 saveProductData();
+
+function getMerchant()
+{
+    global $pdo;
+    $user = $_SESSION['username'];
+    $stmt = $pdo->query("select merchant from Users where username = '$user'");
+    $data = $stmt->fetchColumn();
+    return $data;
+}
+
+function goToMain()
+{
+    header('Location: http://iproject42.icasites.nl/views/account/index.php#');
+}
+
+if (getMerchant() == 0) {
+    goToMain();
+}
+
 function getHighestId()
 {
     global $pdo;
@@ -77,12 +95,12 @@ function saveProductData()
         $categorieName = $vars['categorie'];
         global $pdo;
         $stmt = "INSERT INTO Object(productid, title, description, startprice, paymentmethodNumber, paymentinstruction,
-                  city, country, duration, durationbeginDay, durationbeginTime, shippingcosts, shippinginstructions, seller,
-                  durationendDay, durationendTime, auctionclosed)
-                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
+city, country, duration, durationbeginDay, durationbeginTime, shippingcosts, shippinginstructions, seller,
+durationendDay, durationendTime, auctionclosed)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
 
         $stmt2 = "INSERT INTO productphoto(productid, filename)
-                 VALUES (?, ?)";
+VALUES (?, ?)";
         $adInfo = $pdo->prepare($stmt);
         $photoInfo = $pdo->prepare($stmt2);
         if ($foto1) $photoInfo->execute(array($productid, $foto1));
@@ -95,6 +113,7 @@ function saveProductData()
         print_r($photoInfo->errorInfo());
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -133,7 +152,7 @@ function saveProductData()
                     $stmt->execute();
                     $data = $stmt->fetchAll();
                     foreach ($data as $row) { ?>
-                        <option><?php echo $row['Name']?></option>
+                        <option><?php echo $row['Name'] ?></option>
                         <?php
                     }
                     ?>
@@ -234,7 +253,7 @@ function saveProductData()
         <div class="form-group row">
             <div class="col-10 ">
                 <button class="btn btn-success" type="submit">Doorgaan</button>
-                <a href="<?=$app_url?>" class="btn btn-info" role="button" aria-pressed="true">Terug</a>
+                <a href="<?= $app_url ?>" class="btn btn-info" role="button" aria-pressed="true">Terug</a>
             </div>
         </div>
     </form>
@@ -251,4 +270,11 @@ function saveProductData()
         document.getElementById("radio1").checked = false;
         document.getElementById("minimum-bid-price").value = "€ 0,00";
     }
+    function Popup() {
+        alert("U bent nog geen verkoper");
+        if (confirm("U bent nog geen verkoper")) {
+            return true;
+        }
+    }
+
 </script>
