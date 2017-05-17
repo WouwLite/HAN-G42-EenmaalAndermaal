@@ -76,33 +76,24 @@ function saveProductData()
         $foto4 = $vars['foto4'] ?? null;
         $categorieName = $vars['categorie'];
         global $pdo;
-        $stmt = "INSERT INTO Object(productid, title, description, startprice, paymentmethodNumber, paymentinstruction, 
-              city, country, duration, durationbeginDay, durationbeginTime, shippingcosts, shippinginstructions, seller,
-              durationendDay, durationendTime, auctionclosed, Categories)
-    VALUES (?, ?, ?, ?, ?, ?, 'Nijmegen', 'nederland', ?, ?, ?, ?, ?, 'JE MOEDER', ?, ?, 1,?)";
-//        $stmt2 = "INSERT INTO productphoto(productid, filename)
-//    VALUES (?, ?)";
-        $processRegistration = $pdo->prepare($stmt);
-        //$processRegistration2 = $pdo->prepare($stmt2);
-//        if($foto1)$processRegistration2->execute(array($productid, $foto1));
-//        if($foto2)$processRegistration2->execute(array($productid, $foto2));
-//        if($foto3)$processRegistration2->execute(array($productid, $foto3));
-//        if($foto4)$processRegistration2->execute(array($productid, $foto4));
-        $processRegistration->execute(array($productid, $title, $description, (float)$startprice, (int)$paymentmethod, (int)$paymentinstruction,
-            (int)$duration, $durationbeginDay, $durationbeginTime, (float)$shippingCosts, $shippingInstructions, $durationendDay, $durationendTime, $categorieName));
+        $stmt = "INSERT INTO Object(productid, title, description, startprice, paymentmethodNumber, paymentinstruction,
+                  city, country, duration, durationbeginDay, durationbeginTime, shippingcosts, shippinginstructions, seller,
+                  durationendDay, durationendTime, auctionclosed)
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
 
+        $stmt2 = "INSERT INTO productphoto(productid, filename)
+                 VALUES (?, ?)";
+        $adInfo = $pdo->prepare($stmt);
+        $photoInfo = $pdo->prepare($stmt2);
+        if ($foto1) $photoInfo->execute(array($productid, $foto1));
 
+        $adInfo->execute(array($productid, $title, $description, (float)$startprice, (int)$paymentmethod, $paymentinstruction,
+            $_SESSION['city'], $_SESSION['country'], (int)$duration, $durationbeginDay, $durationbeginTime,
+            (float)$shippingCosts, $shippingInstructions, $_SESSION['username'], $durationendDay, $durationendTime));
+
+        print_r($adInfo->errorInfo());
+        print_r($photoInfo->errorInfo());
     }
-}
-function getCategories(){
-    global $pdo;
-    $stmt = $pdo->query("select Name, ID From Categories");
-    $Categories = array();
-    $data = $stmt->fetchAll();
-    foreach($data as $row){
-        $Categories[$row['ID']] = $row['Name'];
-    }
-    return $Categories;
 }
 ?>
 <!DOCTYPE html>
@@ -136,11 +127,14 @@ function getCategories(){
         <div class="form-group row">
             <label class="col-2 col-form-label">Categorie</label>
             <div class="col-10">
-                <select name="categorie">
+                <select class="form-control" id="Categories" name="Categories">
                     <?php
-                    $Categorie = getCategories();
-                    foreach($Categorie as $key => $value) {
-                        echo "<option value=$key>".$value."</option>";
+                    $stmt = $pdo->prepare("SELECT * FROM Categories");
+                    $stmt->execute();
+                    $data = $stmt->fetchAll();
+                    foreach ($data as $row) { ?>
+                        <option><?php echo $row['Name']?></option>
+                        <?php
                     }
                     ?>
                 </select>

@@ -147,9 +147,9 @@ if(isset($_SESSION['username'])){
                     </div>
                     </p>
                     <?php if($_SESSION['merchant'] == 1) {
-                        echo "<a href='" . $app_url . "/views/account/" . $id . "/edit' class='btn btn-default'><i class='fa fa-wrench' aria-hidden='true'></i> Gegevens wijzigen</a>";
+                        echo "<a href='" . $app_url . "/views/merchant/" . $id . "API.php' class='btn btn-default'><i class='fa fa-wrench' aria-hidden='true'></i> Gegevens wijzigen</a>";
                     } else {
-                        echo "<a href='" . $app_url . "/views/account/" . $id . "/edit' class='btn btn-success'>Upgraden</a>";
+                        echo "<a href='" . $app_url . "/views/merchant/" . $id . "/API.php' class='btn btn-success'>Upgraden</a>";
                     }
                     ?>
                 </div>
@@ -172,16 +172,18 @@ if(isset($_SESSION['username'])){
                 </thead>
                 <tbody>
                 <tr>
-                    <td>20170666</td>
-                    <td>06-04-2017</td>
-                    <td>€48,00</td>
+                    <td>
+                        Dummy data
+                    </td>
+                    <td>empty</td>
+                    <td>empty</td>
                     <td><span class="badge badge-success">Veiling gewonnen</span></td>
                     <td>
                         <a class="btn btn-info btn-sm" href="#"><i class="fa fa-info"></i></a>
                     </td>
                 </tr>
                 <tr>
-                    <td>20170603</td>
+                    <td>empty</td>
                     <td>10-03-2017</td>
                     <td>€7,75</td>
                     <td><span class="badge badge-danger">Veiling verloren</span></td>
@@ -213,15 +215,25 @@ if(isset($_SESSION['username'])){
                     <th></th>
                 </thead>
                 <tbody>
+
+                <?php
+                $user = $_SESSION['username'];
+                $stmt = $pdo->prepare("SELECT * FROM Object WHERE seller = ?");
+                $stmt->execute([$user]);
+                $data = $stmt->fetch(PDO::FETCH_ASSOC);
+                ?>
+
                     <tr>
-                        <td>201705121</td>
-                        <td>12-05-2017</td>
-                        <td>€11,50</td>
+                        <td><?php
+                            echo $data['productid'];
+                            ?></td>
+                        <td><?php echo $data['durationbeginDay'] ?></td>
+                        <td>€ <?php echo $data['sellingprice'] ?></td>
                         <td><span class="badge badge-success">Actief</span></td>
                         <td>
                             <a class="btn btn-default btn-sm" href="#"><i class="fa fa-wrench" style="width: 12px"></i></a>
                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                    data-target="#deleteModal" data-ad="1"><i class="fa fa-trash-o fa-sm"></i></button>
+                                    data-target="#deleteModal" data-ad="<?php echo $data['productid']; ?>"><i class="fa fa-trash-o fa-sm"></i></button>
                         </td>
                     </tr>
                     <tr>
