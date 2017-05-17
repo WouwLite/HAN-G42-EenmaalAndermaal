@@ -3,7 +3,7 @@
 <!-- *********************************** -->
 </div>
 
-<?php //require($_SERVER['DOCUMENT_ROOT'] . '/config/database.php'); ?>
+<?php require_once($_SERVER['DOCUMENT_ROOT'] . '/config/database.php'); ?>
 <!-- Add sidebarmenu -->
 <div id="sidebar">
     <ul>

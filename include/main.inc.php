@@ -3,8 +3,10 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/style.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
+if (!isset($_SESSION)) {
+    session_start();
+}
 
-session_start();
 
 ?>
 
