@@ -4,16 +4,11 @@ $_SESSION['amount'] = 00.01;
 $_SESSION['orderNumber'] = 12345;
 require_once($_SERVER['DOCUMENT_ROOT'] . "/config/app.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/app/Mollie/API/Autoloader.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
 $mollie = new Mollie_API_Client;
 $mollie->setApiKey('test_a27kq9WerzGjJNSCMfaPe73TTmzqD4');
 
-function updateData()
-{
-    global $vars, $pdo;
-    $stmt = "UPDATE Users set merchant = 1 where username = '$_SESSION.['username'].'";
-    $process = $pdo->prepare($stmt);
-    $process->execute();
-}
+
 try {
     $payment = $mollie->payments->create(
         array(
