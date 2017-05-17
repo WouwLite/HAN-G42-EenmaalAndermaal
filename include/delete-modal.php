@@ -10,7 +10,7 @@ SELECT email FROM Users WHERE username = ( SELECT Seller FROM Object WHERE produ
 SQL;
 
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([(int)$_POST['ad-id']]);
+    $stmt->execute([(int)$_POST['deleteItem']]);
     $useremail = $stmt->fetchColumn();
     print("<!-- " . $useremail . " -->");
 
@@ -20,11 +20,11 @@ SQL;
     mail($useremail, $subject, $message, $headers);
 
     $delsql = <<<SQL
-DELETE FROM Object
-WHERE productid = ?
+DELETE FROM Object WHERE productid = ?
 SQL;
     $delstmt = $pdo->prepare($delsql);
-    $stmt->execute([(int)$_POST['ad-id']]);
+    $delstmt->execute([(int)$_POST['deleteItem']]);
+    var_dump($delstmt->errorInfo());
 }
 ?>
 
