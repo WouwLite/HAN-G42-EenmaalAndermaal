@@ -11,6 +11,10 @@ function getHighestId()
     $stmt = $pdo->query("select top 1 MAX(productid) + 1 from Object");
     $data = $stmt->fetchColumn();
     return $data;
+    if($data == 0){
+        $data = 1;
+        return $data;
+    }
 }
 
 
@@ -58,9 +62,6 @@ function saveProductData()
         } else {
             $paymentmethod = 2;
         }
-        $city = "nijmegen"; //vervangen!!!
-        $duration = $vars['duration'];
-        $country = "nederland";
         $paymentinstruction = $vars['paymentinstruction'];
         $duration = $vars['duration'];
         $durationbeginDay = date("Y-m-d");
@@ -87,6 +88,7 @@ function saveProductData()
         $photoInfo = $pdo->prepare($stmt2);
         if ($foto1) $photoInfo->execute(array($productid, $foto1));
 
+
         $adInfo->execute(array($productid, $title, $description, (float)$startprice, (int)$paymentmethod, $paymentinstruction,
             $_SESSION['city'], $_SESSION['country'], (int)$duration, $durationbeginDay, $durationbeginTime,
             (float)$shippingCosts, $shippingInstructions, $_SESSION['username'], $durationendDay, $durationendTime));
@@ -94,6 +96,11 @@ function saveProductData()
         print_r($adInfo->errorInfo());
         print_r($photoInfo->errorInfo());
     }
+
+
+}
+?>
+
 }
 ?>
 <!DOCTYPE html>
