@@ -106,7 +106,6 @@ function passValid()
     } else {
         $errors['password1'] = 'je wachtwoord moet 5 tekens of langer zijn en er moet minstens 1 hoofdletter en 1 speciale teken in zitten';
         print($vars['password1']);
-        print(array_flip(get_defined_constants(true)['pcre'])[preg_last_error()]);
         return false;
     }
 }
@@ -182,12 +181,22 @@ function checkNoErrors()
 
 </head>
 <body>
+<a href="<?= $app_url ?>" class="btn btn-danger" role="button" aria-pressed="true"
+   style="margin-left: 5px;margin-top: 5px;">Terug naar thuis</a>
 <div class="container">
     <form class="form-horizontal sign-up-form" method="post" action="#">
         <div class="title">
             <img src="/storage/images/logo/logo-ea-groot-donker.png" style="max-height: 70px" alt="EenmaalAndermaal Logo">
         </div>
-
+        <div class="alert alert-info" role="alert">
+            Heb je al een account? <a href="<?= $app_url ?>/views/account/login.php">klik dan hier om in te loggen</a>
+        </div>
+        <?php
+        if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors()) {
+            print("<div class='alert alert-danger'><strong>Oei!</strong> er ging iets mis tijdens het registreren, 
+                    controleer en pas de rode velden aan en probeer het daarna opniew</div>");
+        }
+        ?>
         <div <?php print((!empty($errors['username'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?> >
             <div class="input-group inputform row">
                 <span class="input-group-addon fa fa-user"></span>
@@ -389,7 +398,8 @@ function checkNoErrors()
                 <button type="submit" class="btn btn-primary" id="final-submit" name="final-submit"
                         value="finished">Registreer
                 </button>
-                <a href="<?=$app_url?>/views/account/login.php" class="btn btn-success" role="button" aria-pressed="true">Aanmelden</a>
+                <!--                <a href="-->
+                <? //=$app_url?><!--/views/account/login.php" class="btn btn-success" role="button" aria-pressed="true">Aanmelden</a>-->
             </div>
         </div>
     </form>
