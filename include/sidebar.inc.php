@@ -45,7 +45,7 @@
         <!--        </li>-->
         <?php
         $catsql = <<<SQL
-        SELECT Name FROM Categories WHERE Parent = -1;
+        SELECT Name FROM [top level categories];
 SQL;
 
         $stmt = $pdo->prepare($catsql);
