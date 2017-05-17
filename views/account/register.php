@@ -232,6 +232,10 @@ function checkNoErrors()
                             class="btn btn-default">Stuur Code</button>
                 </span>
             </div>
+            <small class="form-text text-muted">Om aan ons te bewijzen dat je email echt bestaat druk je op de "Stuur
+                Code" knop,
+                daarna sturen wij je een code die je hier onder moet invullen.
+            </small>
             <div class="form-control-feedback"><?php global $errors;
                 echo $errors['email'] ?></div>
 
@@ -246,6 +250,10 @@ function checkNoErrors()
             </div>
             <div class="form-control-feedback"><?php global $errors;
                 echo $errors['secretcode'] ?></div>
+            <small class="form-text text-muted">Voer hier de code die je in de mail hebt onvangen in (als je hem niet
+                vind
+                check je spam inbox of stuur de code opniew)
+            </small>
         </div>
 
 

@@ -13,8 +13,8 @@ $pdo = new PDO ("sqlsrv:Server=$hostname;Database=$dbname;ConnectionPooling=0","
 require($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 
 if ($debug == false) {
-//session_start();
-include_once ($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
+    session_start();
+    include_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
 }
 
 include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
@@ -25,7 +25,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
 $merchantStatus = false;
 
-//session_start();
 if(isset($_SESSION['username'])){
     $user = $_SESSION['username'];
     $stmt = $pdo->prepare("SELECT * FROM Users WHERE username = ?");
@@ -75,10 +74,10 @@ if(isset($_SESSION['username'])){
                         </div>
                         <div class="col-md-6">
                             <?php echo $_SESSION['username']; ?> <br> <?php
-                                  echo $_SESSION['firstname']; ?> <br> <?php
-                                  echo $_SESSION['lastname']; ?> <br> <?php
-                                  echo $_SESSION['email']; ?> <br> <?php
-                                  echo $_SESSION['birthday']; ?> <br> <?php
+                            echo $_SESSION['firstname']; ?> <br> <?php
+                            echo $_SESSION['lastname']; ?> <br> <?php
+                            echo $_SESSION['email']; ?> <br> <?php
+                            echo $_SESSION['birthday']; ?> <br> <?php
                             ?>
                         </div>
 
@@ -105,8 +104,8 @@ if(isset($_SESSION['username'])){
                         </div>
                         <div class="col-md-6">
                             <?php echo $_SESSION['address1']; ?> <br> <?php
-                                  echo $_SESSION['zipcode']; ?> <br> <?php
-                                  echo $_SESSION['city']; ?> <br> <?php
+                            echo $_SESSION['zipcode']; ?> <br> <?php
+                            echo $_SESSION['city']; ?> <br> <?php
                             ?>
                         </div>
 
@@ -141,7 +140,7 @@ if(isset($_SESSION['username'])){
                             } else {
                                 ?>
                                 <span class="badge badge-pill badge-primary">Gebruiker</span><br>
-                            <?php
+                                <?php
                             }
                             ?>
 
@@ -168,16 +167,16 @@ if(isset($_SESSION['username'])){
             <h3>Laatste biedingen</h3>
             <table class="table table-striped table-bordered">
                 <thead>
-                    <th>ID</th>
-                    <th>Datum</th>
-                    <th>Bedrag</th>
-                    <th>Status</th>
-                    <th></th>
+                <th>ID</th>
+                <th>Datum</th>
+                <th>Bedrag</th>
+                <th>Status</th>
+                <th></th>
                 </thead>
                 <tbody>
                 <tr>
                     <td>
-                        Dummy data
+                        Dummy data 1234567890-3456
                     </td>
                     <td>empty</td>
                     <td>empty</td>
@@ -211,44 +210,60 @@ if(isset($_SESSION['username'])){
         <div class="col-md-6">
             <h3>Mijn veilingen</h3>
             <table class="table table-striped table-bordered">
-                <thead>
+                <?php
+                $user = $_SESSION['username'];
+                $stmt = $pdo->prepare("SELECT COUNT(Seller) FROM Object WHERE seller = ?");
+                $stmt->execute([$user]);
+                $aantalVeilingen = $stmt->fetchColumn();
+                if ($aantalVeilingen > 0) {
+                    ?>
+                    <thead>
                     <th>ID</th>
                     <th>Datum</th>
                     <th>Huidig bod</th>
                     <th>Status</th>
-                    <th></th>
-                </thead>
-                <tbody>
+                    <th>Bewerk</th>
+                    </thead>
+                    <?php
+                } else {
+                    echo '<th>U heeft nog geen veilingen geplaatst</th>';
+                }
+                ?>
 
                 <?php
                 $user = $_SESSION['username'];
                 $stmt = $pdo->prepare("SELECT * FROM Object WHERE seller = ?");
                 $stmt->execute([$user]);
-                $data = $stmt->fetch(PDO::FETCH_ASSOC);
-                ?>
+                $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                if ($aantalVeilingen > 0) {
+                    foreach ($data as $d) { ?>
+                        <td> <?php echo $d['productid']; ?></td>
+                        <td> <?php echo $d['durationbeginDay']; ?></td>
+                        <td>€<?php echo $d['sellingprice']; ?></td>
+                        <?php
+                        if (date("Y-m-d") < $d['durationendDay']) {
+                            ?>
+                            <td><span class="badge badge-success">Actief</span></td>
+                            <?php
+                        } else {
+                            ?>
+                            <td><span class="badge badge-danger">Gesloten</span></td>
+                            <?php
+                        }
+                        ?>
 
-                    <tr>
-                        <td><?php
-                            echo $data['productid'];
-                            ?></td>
-                        <td><?php echo $data['durationbeginDay'] ?></td>
-                        <td>€ <?php echo $data['sellingprice'] ?></td>
-                        <td><span class="badge badge-success">Actief</span></td>
                         <td>
-                            <a class="btn btn-default btn-sm" href="#"><i class="fa fa-wrench" style="width: 12px"></i></a>
+                            <a class="btn btn-default btn-sm" href="#"><i class="fa fa-wrench"
+                                                                          style="width: 12px"></i></a>
                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                    data-target="#deleteModal" data-ad="<?php echo $data['productid']; ?>"><i class="fa fa-trash-o fa-sm"></i></button>
+                                    data-target="#deleteModal" data-ad="<?php echo $d['productid']; ?>"><i
+                                        class="fa fa-trash-o fa-sm"></i></button>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>201612129</td>
-                        <td>12-12-2016</td>
-                        <td>€6,66</td>
-                        <td><span class="badge badge-danger">Gesloten</span></td>
-                        <td>
-                            <a class="btn btn-default btn-sm" href="#"><i class="fa fa-wrench" style="width: 12px"></i></a>
-                        </td>
-                    </tr>
+                        </tr>
+                        <?php
+                    }
+                }
+                ?>
                 </tbody>
             </table>
         </div>
@@ -258,5 +273,4 @@ if(isset($_SESSION['username'])){
 include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/delete-modal.php');
-
 ?>
