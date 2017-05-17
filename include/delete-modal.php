@@ -24,7 +24,7 @@ DELETE FROM Object WHERE productid = ?
 SQL;
     $delstmt = $pdo->prepare($delsql);
     $delstmt->execute([(int)$_POST['deleteItem']]);
-    var_dump($delstmt->errorInfo());
+    header("Refresh:0");
 }
 ?>
 
