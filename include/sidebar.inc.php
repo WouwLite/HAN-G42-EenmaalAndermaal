@@ -31,23 +31,30 @@
         <li><span class="sidebar-span"></span></li>
         <li><strong>Rubrieken</strong></li>
         <!-- Create FOREACH with categories from DB -->
-        <li class="nav-item">
-            <a class="nav-link" href="#">Auto's</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Computers</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Scrumboarden</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Games</a>
-        </li>
+        <!--        <li class="nav-item">-->
+        <!--            <a class="nav-link" href="#">Auto's</a>-->
+        <!--        </li>-->
+        <!--        <li class="nav-item">-->
+        <!--            <a class="nav-link" href="#">Computers</a>-->
+        <!--        </li>-->
+        <!--        <li class="nav-item">-->
+        <!--            <a class="nav-link" href="#">Scrumboarden</a>-->
+        <!--        </li>-->
+        <!--        <li class="nav-item">-->
+        <!--            <a class="nav-link" href="#">Games</a>-->
+        <!--        </li>-->
         <?php
-        if($categories->parent == -1) {
+        $catsql = <<<SQL
+        SELECT Name FROM Categories WHERE Parent = -1;
+SQL;
+
+        $stmt = $pdo->prepare($catsql);
+        $stmt->execute();
+        $categories = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        if ($categories) {
             foreach($categories as $category) {
                 echo "<li class='nav-item'>";
-                    echo "<a class='nav-link' href='" . $app_url . "/views/categories/" . $category->name . "'>" . $category->name . "</a>";
+                echo "<a class='nav-link' href='" . $app_url . "/views/categories/" . $category . "'>" . $category . "</a>";
                 echo "</li>";
             }
         }

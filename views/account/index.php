@@ -25,7 +25,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
 $merchantStatus = false;
 
-session_start();
+//session_start();
 if(isset($_SESSION['username'])){
     $user = $_SESSION['username'];
     $stmt = $pdo->prepare("SELECT * FROM Users WHERE username = ?");
@@ -85,7 +85,9 @@ if(isset($_SESSION['username'])){
 
                     </div>
                     </p>
-                    <a href="<?=$app_url?>/views/account/<?=$id?>/edit" class="btn btn-default"><i class="fa fa-wrench" aria-hidden="true"></i> Gegevens wijzigen</a>
+                    <a href="<?= $app_url ?>/views/account/edit" class="btn btn-default"><i class="fa fa-wrench"
+                                                                                            aria-hidden="true"></i>
+                        Gegevens wijzigen</a>
                 </div>
             </div>
         </div>
@@ -111,7 +113,9 @@ if(isset($_SESSION['username'])){
 
                     </div>
                     </p>
-                    <a href="<?=$app_url?>/views/account/<?=$id?>/edit" class="btn btn-default"><i class="fa fa-wrench" aria-hidden="true"></i> Adres wijzigen</a>
+                    <a href="<?= $app_url ?>/views/account/edit" class="btn btn-default"><i class="fa fa-wrench"
+                                                                                            aria-hidden="true"></i>
+                        Adres wijzigen</a>
                 </div>
             </div>
         </div>
@@ -147,9 +151,9 @@ if(isset($_SESSION['username'])){
                     </div>
                     </p>
                     <?php if($_SESSION['merchant'] == 1) {
-                        echo "<a href='" . $app_url . "/views/merchant/" . $id . "API.php' class='btn btn-default'><i class='fa fa-wrench' aria-hidden='true'></i> Gegevens wijzigen</a>";
+                        echo "<a href='" . $app_url . "/views/merchant/API.php' class='btn btn-default'><i class='fa fa-wrench' aria-hidden='true'></i> Gegevens wijzigen</a>";
                     } else {
-                        echo "<a href='" . $app_url . "/views/merchant/" . $id . "/API.php' class='btn btn-success'>Upgraden</a>";
+                        echo "<a href='" . $app_url . "/views/merchant/API.php' class='btn btn-success'>Upgraden</a>";
                     }
                     ?>
                 </div>

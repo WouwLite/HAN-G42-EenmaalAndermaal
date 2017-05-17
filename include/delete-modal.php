@@ -10,11 +10,12 @@ SELECT email FROM Users WHERE username = ( SELECT Seller FROM Object WHERE produ
 SQL;
 
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$vars['ad-id']]);
+    $stmt->execute([(int)$_POST['ad-id']]);
     $useremail = $stmt->fetchColumn();
+    print("<!-- " . $useremail . " -->");
 
     $subject = "Je aanbieding is verwijderd";
-    $message = "Om de volgende reden is je advertentie verwijderd: " . $vars['reason'];
+    $message = "Om de volgende reden is je advertentie verwijderd: " . $_POST['reason'];
     $headers = 'From: noreply@iproject42.icasites.nl';
     mail($useremail, $subject, $message, $headers);
 
@@ -23,7 +24,7 @@ DELETE FROM Object
 WHERE productid = ?
 SQL;
     $delstmt = $pdo->prepare($delsql);
-    $stmt->execute([$vars['ad-id']]);
+    $stmt->execute([(int)$_POST['ad-id']]);
 }
 ?>
 
