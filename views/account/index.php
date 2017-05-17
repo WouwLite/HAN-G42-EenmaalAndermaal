@@ -13,7 +13,7 @@ $pdo = new PDO ("sqlsrv:Server=$hostname;Database=$dbname;ConnectionPooling=0","
 require($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 
 if ($debug == false) {
-//session_start();
+    session_start();
     include_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
 }
 
