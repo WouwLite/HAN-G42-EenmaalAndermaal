@@ -228,7 +228,7 @@ if (isset($_SESSION['username'])) {
                         </thead>
                         <?php
                     } else {
-                        echo '<th>U heeft nog geen veilingen geplaatst</th>';
+                        echo '<th>U heeft nog geen veilingen geplaatst.</th>';
                     }
                     ?>
 
