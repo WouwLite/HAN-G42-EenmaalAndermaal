@@ -97,8 +97,7 @@ function updateProductData()
         } else {
             $paymentmethod = 2;
         }
-        $username = $_SESSION['username'];
-        $productid = getHighestId();
+        $productid = vars['productid'];
         $duration = $vars['duration'];
         $paymentinstruction = $vars['paymentinstruction'];
         $duration = $vars['duration'];
@@ -109,24 +108,20 @@ function updateProductData()
         $days = $duration;
         $durationendDay = date('Y-m-d', strtotime('+' . $days . 'days'));
         $durationendTime = $durationbeginTime;
-        $foto1 = $vars['foto1'] ?? null;
-        $foto2 = $vars['foto2'] ?? null;
-        $foto3 = $vars['foto3'] ?? null;
-        $foto4 = $vars['foto4'] ?? null;
         $categorieName = $vars['Categories'];
         global $pdo;
         $stmt = "UPDATE Object
-                  SET productid = ?, title = ?, description = ?, startprice = ?, paymentmethodNumber = ?, paymentinstruction = ?,
-                      city = ?, country = ?, duration = ?, durationbeginDay = ?, durationbeginTime = ?, shippingcosts = ?,
-                      shippinginstructions = ?, seller = ?, durationendDay = ?, durationendTime = ?, auctionclosed = ?, Categories = ?
-                  WHERE seller = '$username'";
+                  SET title = ?, description = ?, startprice = ?, paymentmethodNumber = ?, paymentinstruction = ?,
+                      duration = ?, durationbeginDay = ?, durationbeginTime = ?, shippingcosts = ?,
+                      shippinginstructions = ?, durationendDay = ?, durationendTime = ?, Categories = ?
+                  WHERE productid = ?";
 
         $updateAdInfo = $pdo->prepare($stmt);
-
-        $updateAdInfo->execute(array($productid, $title, $description, (float)$startprice, (int)$paymentmethod, $paymentinstruction,
-            $_SESSION['city'], $_SESSION['country'], (int)$duration, $durationbeginDay, $durationbeginTime,
-            (float)$shippingCosts, $shippingInstructions, $_SESSION['username'], $durationendDay, $durationendTime, (int)$categorieName));
-        header('location: ../account/index.php');
+        $updateAdInfo->execute(array($title, $description, (float)$startprice, (int)$paymentmethod, $paymentinstruction,
+            (int)$duration, $durationbeginDay, $durationbeginTime,
+            (float)$shippingCosts, $shippingInstructions, $durationendDay, $durationendTime, (int)$categorieName), (int)$productid);
+        //header('location: ../account/index.php');
+        print_r($updateAdInfo->errorInfo());
     }
 }
 ?>
@@ -155,7 +150,7 @@ function updateProductData()
         <div class="form-group row">
             <label class="col-2 col-form-label"></label>
             <div class="col-8">
-                <h1 class="product-title-page">Plaats advertentie</h1>
+                <h1 class="product-title-page">Wijzig advertentie <?php echo 'Het advertentie nummer is: ' . $_GET['id']; ?></h1>
             </div>
         </div>
         <div class="form-group row">
@@ -185,6 +180,8 @@ function updateProductData()
                     echo $errors['title'] ?></div>
             </div>
         </div>
+
+        <input type="hidden" value="<?php echo $_GET['id'];?>" name="productid">
 
         <div <?php print((!empty($errors['description'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
             <label class="col-2 col-form-label">Beschrijving:*</label>
