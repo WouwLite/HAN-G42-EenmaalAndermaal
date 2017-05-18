@@ -95,7 +95,7 @@ function saveProductData()
         $title = $vars['title'];
         $description = $vars['description'];
         $startprice = $vars['startprice'];
-        if ($vars['paymentmethod'] == 'Pin') {
+        if ($vars['paymentmethod'] == 'Creditcard') {
             $paymentmethod = 1;
         } else {
             $paymentmethod = 2;
@@ -265,8 +265,15 @@ function saveProductData()
             <label class="col-2 col-form-label">Betaal methode:*</label>
             <div class="col-10">
                 <select class="form-control" name="paymentmethod" id="payment-method">
-                    <option name="pin">Pin</option>
-                    <option name="creditcard">Creditcard</option>
+                    <?php
+                    $stmt = $pdo->prepare("SELECT * FROM paymentmethods");
+                    $stmt->execute();
+                    $dataPaymentMethods = $stmt->fetchAll();
+                    foreach ($dataPaymentMethods as $row) { ?>
+                        <option><?php echo $row['paymentmethod'] ?></option>
+                        <?php
+                    }
+                    ?>
                 </select>
                 <div class="form-control-feedback"><?php global $errors;
                     echo $errors['paymentmethod'] ?></div>
