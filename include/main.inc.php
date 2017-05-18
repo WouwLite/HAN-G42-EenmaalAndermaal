@@ -6,6 +6,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
 if (!isset($_SESSION)) {
     session_start();
 }
+include_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
 
 
 ?>
@@ -40,24 +41,32 @@ if (!isset($_SESSION)) {
             <!-- ml-auto >> margin left auto, aligns the div to right -->
         <ul class="navbar-nav ml-auto">
             <!-- ADD IF STATEMENT TO SHOW ADD-NEW BUTTON. ELSE HIDE -->
-                <?php if (!empty($_SESSION['username']) || $debug): ?>
+            <?php if (!empty($_SESSION['username']) || $debug) { ?>
+                <?php if ($user['merchant']) {
+                    echo <<<HTML
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?=$app_url?>/views/merchant/NewProduct.php"><i class="fa fa-plus fa-inverse" aria-hidden="true"></i> Nieuw</a>
+                        <a class="nav-link text-white" href="{$app_url}/views/merchant/NewProduct.php"><i class="fa fa-plus fa-inverse" aria-hidden="true"></i> Nieuw</a>
+                    </li>
+HTML;
+                }
+                echo <<<HTML
+                    <li class="nav-item">
+                    <a class="nav-link text-white" href="{$app_url}/views/account"><i class="fa fa-user fa-inverse" aria-hidden="true"></i> Account</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link text-white" href="<?=$app_url?>/views/account"><i class="fa fa-user fa-inverse" aria-hidden="true"></i> Account</a>
+                        <a class="nav-link text-white" href="{$app_url}/views/account/logout.php"><i class="fa fa-power-off fa-inverse" aria-hidden="true"></i> Afmelden</a>
+                    </li>
+HTML;
+            } else {
+                echo <<<HTML
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{$app_url}/views/account/register.php"><i class="fa fa-user-plus fa-inverse" aria-hidden="true"></i> Registreren</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?=$app_url?>/views/account/logout.php"><i class="fa fa-power-off fa-inverse" aria-hidden="true"></i> Afmelden</a>
+                        <a class="nav-link text-white" href="{$app_url}/views/account/login.php"><i class="fa fa-user fa-inverse" aria-hidden="true"></i> Aanmelden</a>
                     </li>
-                <?php else: ?>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="<?=$app_url?>/views/account/register.php"><i class="fa fa-user-plus fa-inverse" aria-hidden="true"></i> Registreren</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="<?=$app_url?>/views/account/login.php"><i class="fa fa-user fa-inverse" aria-hidden="true"></i> Aanmelden</a>
-                    </li>
-                <?php endif; ?>
+HTML;
+            } ?>
         </ul>
     </nav>
 
