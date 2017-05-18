@@ -45,7 +45,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
                 <?php if ($user['merchant']) {
                     echo <<<HTML
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="{$app_url}/views/merchant/NewProduct.php"><i class="fa fa-plus fa-inverse" aria-hidden="true"></i> Nieuw</a>
+                        <a class="nav-link text-white" href="{$app_url}/views/merchant/createAd.php"><i class="fa fa-plus fa-inverse" aria-hidden="true"></i> Nieuw</a>
                     </li>
 HTML;
                 }

@@ -114,12 +114,12 @@ function saveProductData()
         $foto2 = $vars['foto2'] ?? null;
         $foto3 = $vars['foto3'] ?? null;
         $foto4 = $vars['foto4'] ?? null;
-        $categorieName = $vars['categorie'];
+        $categorieName = $vars['Categories'];
         global $pdo;
         $stmt = "INSERT INTO Object(productid, title, description, startprice, paymentmethodNumber, paymentinstruction,
                   city, country, duration, durationbeginDay, durationbeginTime, shippingcosts, shippinginstructions, seller,
-                  durationendDay, durationendTime, auctionclosed)
-                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
+                  durationendDay, durationendTime, auctionclosed, Categories)
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?)";
 
         $stmt2 = "INSERT INTO productphoto(productid, filename)
                  VALUES (?, ?)";
@@ -132,7 +132,7 @@ function saveProductData()
 
         $adInfo->execute(array($productid, $title, $description, (float)$startprice, (int)$paymentmethod, $paymentinstruction,
             $_SESSION['city'], $_SESSION['country'], (int)$duration, $durationbeginDay, $durationbeginTime,
-            (float)$shippingCosts, $shippingInstructions, $_SESSION['username'], $durationendDay, $durationendTime));
+            (float)$shippingCosts, $shippingInstructions, $_SESSION['username'], $durationendDay, $durationendTime, (int)$categorieName));
 
         print_r($adInfo->errorInfo());
         print_r($photoInfo->errorInfo());
@@ -203,7 +203,7 @@ function saveProductData()
                     $stmt->execute();
                     $data = $stmt->fetchAll();
                     foreach ($data as $row) { ?>
-                        <option><?php echo $row['Name']?></option>
+                        <option value="<?=$row['ID']?>"><?php echo $row['Name']?></option>
                         <?php
                     }
                     ?>
@@ -254,7 +254,7 @@ function saveProductData()
                     <label>Geen minimale prijs</label>
                         </span>
                 </div>
-                <input id="minimum-bid-price" placeholder="€ 0,00" name="startprice" type="number" class="form-control"
+                <input id="minimum-bid-price" placeholder="€ 0,00" name="startprice" type="number" step="0.01" class="form-control"
                        disabled>
                 <div class="form-control-feedback"><?php global $errors;
                     echo $errors['startprice'] ?></div>
@@ -282,7 +282,7 @@ function saveProductData()
         <div class="form-group row">
             <label class="col-2 col-form-label">Verzendkosten:</label>
             <div class="col-10">
-                <input id="minimum-bid-price" placeholder="€ 0,00" name="shippingcosts" type="number"
+                <input id="minimum-bid-price" placeholder="€ 0,00" name="shippingcosts" type="number" step="0.01"
                        class="form-control">
             </div>
         </div>

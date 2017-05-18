@@ -220,7 +220,7 @@ if (isset($_SESSION['username'])) {
                     if ($aantalVeilingen > 0) {
                         ?>
                         <thead>
-                        <th>ID</th>
+                        <th>Titel</th>
                         <th>Datum</th>
                         <th>Huidig bod</th>
                         <th>Status</th>
@@ -239,7 +239,7 @@ if (isset($_SESSION['username'])) {
                     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     if ($aantalVeilingen > 0) {
                         foreach ($data as $d) { ?>
-                            <td> <?php echo $d['productid']; ?></td>
+                            <td> <?php echo $d['title']; ?></td>
                             <td> <?php echo $d['durationbeginDay']; ?></td>
                             <td>€<?php echo $d['sellingprice']; ?></td>
                             <?php
@@ -255,7 +255,7 @@ if (isset($_SESSION['username'])) {
                             ?>
 
                             <td>
-                                <a class="btn btn-default btn-sm" href="#"><i class="fa fa-wrench"
+                                <a class="btn btn-default btn-sm" href="changeAd.php?id=<?= $d['productid']; ?>"><i class="fa fa-wrench"
                                                                               style="width: 12px"></i></a>
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                         data-target="#deleteModal" data-ad="<?php echo $d['productid']; ?>"><i
