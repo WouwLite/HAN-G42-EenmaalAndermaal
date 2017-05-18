@@ -97,7 +97,7 @@ function updateProductData()
         } else {
             $paymentmethod = 2;
         }
-        $productid = vars['productid'];
+        $productid = $vars['productid'];
         $duration = $vars['duration'];
         $paymentinstruction = $vars['paymentinstruction'];
         $duration = $vars['duration'];
@@ -119,7 +119,7 @@ function updateProductData()
         $updateAdInfo = $pdo->prepare($stmt);
         $updateAdInfo->execute(array($title, $description, (float)$startprice, (int)$paymentmethod, $paymentinstruction,
             (int)$duration, $durationbeginDay, $durationbeginTime,
-            (float)$shippingCosts, $shippingInstructions, $durationendDay, $durationendTime, (int)$categorieName), (int)$productid);
+            (float)$shippingCosts, $shippingInstructions, $durationendDay, $durationendTime, (int)$categorieName, $productid));
         //header('location: ../account/index.php');
         print_r($updateAdInfo->errorInfo());
     }
@@ -150,7 +150,7 @@ function updateProductData()
         <div class="form-group row">
             <label class="col-2 col-form-label"></label>
             <div class="col-8">
-                <h1 class="product-title-page">Wijzig advertentie <?php echo 'Het advertentie nummer is: ' . $_GET['id']; ?></h1>
+                <h1 class="product-title-page">Wijzig advertentie</h1>
             </div>
         </div>
         <div class="form-group row">
@@ -181,7 +181,7 @@ function updateProductData()
             </div>
         </div>
 
-        <input type="hidden" value="<?php echo $_GET['id'];?>" name="productid">
+        <input type="hidden" value="<?php echo $_GET['id'];?>" name="productid" id="productid">
 
         <div <?php print((!empty($errors['description'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
             <label class="col-2 col-form-label">Beschrijving:*</label>
