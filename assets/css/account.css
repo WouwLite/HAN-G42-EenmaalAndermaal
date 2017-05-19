@@ -1,0 +1,7 @@
+.table-userdata > tbody > tr > td {
+    padding: 0.5rem;
+}
+
+.card-text {
+    overflow: auto;
+}
