@@ -82,10 +82,10 @@ function saveProductData()
         $days = $duration;
         $durationendDay = date('Y-m-d', strtotime('+' . $days . 'days'));
         $durationendTime = $durationbeginTime;
-        $foto1 = $_POST['foto1'] ?? null;
-        $foto2 = $_POST['foto2'] ?? null;
-        $foto3 = $_POST['foto3'] ?? null;
-        $foto4 = $_POST['foto4'] ?? null;
+        $foto1 = ($_FILES['foto1']['error'] == UPLOAD_ERR_NO_FILE) ? null : $_FILES['foto1'];
+        $foto2 = ($_FILES['foto2']['error'] == UPLOAD_ERR_NO_FILE) ? null : $_FILES['foto2'];
+        $foto3 = ($_FILES['foto3']['error'] == UPLOAD_ERR_NO_FILE) ? null : $_FILES['foto3'];
+        $foto4 = ($_FILES['foto4']['error'] == UPLOAD_ERR_NO_FILE) ? null : $_FILES['foto4'];
         $stmt = "INSERT INTO Object(productid, title, description, startprice, paymentmethodNumber, paymentinstruction,
                   city, country, duration, durationbeginDay, durationbeginTime, shippingcosts, shippinginstructions, seller,
                   durationendDay, durationendTime, auctionclosed, Categories)
@@ -95,10 +95,31 @@ function saveProductData()
                  VALUES (?, ?)";
         $adInfo = $pdo->prepare($stmt);
         $photoInfo = $pdo->prepare($stmt2);
-        if ($foto1) $photoInfo->execute(array($productid, $foto1));
-        if ($foto2) $photoInfo->execute(array($productid, $foto2));
-        if ($foto3) $photoInfo->execute(array($productid, $foto3));
-        if ($foto4) $photoInfo->execute(array($productid, $foto4));
+        $destdir = "AdImages\\";
+        if ($foto1) {
+            $ext = pathinfo($foto1['name'], PATHINFO_EXTENSION);
+            $uniquefilename = uniqid('EAImg') . "." . $ext;
+            $photoInfo->execute(array($productid, $uniquefilename));
+            move_uploaded_file($foto1['tmp_name'], $destdir . $uniquefilename);
+        }
+        if ($foto2) {
+            $ext = pathinfo($foto2['name'], PATHINFO_EXTENSION);
+            $uniquefilename = uniqid('EAImg') . "." . $ext;
+            $photoInfo->execute(array($productid, $uniquefilename));
+            move_uploaded_file($foto2['tmp_name'], $destdir . $uniquefilename);
+        }
+        if ($foto3) {
+            $ext = pathinfo($foto3['name'], PATHINFO_EXTENSION);
+            $uniquefilename = uniqid('EAImg') . "." . $ext;
+            $photoInfo->execute(array($productid, $uniquefilename));
+            move_uploaded_file($foto3['tmp_name'], $destdir . $uniquefilename);
+        }
+        if ($foto4) {
+            $ext = pathinfo($foto4['name'], PATHINFO_EXTENSION);
+            $uniquefilename = uniqid('EAImg') . "." . $ext;
+            $photoInfo->execute(array($productid, $uniquefilename));
+            move_uploaded_file($foto4['tmp_name'], $destdir . $uniquefilename);
+        }
 
         if ($adInfo->execute(array($productid, $_POST['title'], $_POST['description'], (float)$_POST['startprice'], (int)$_POST['paymentmethod'], $_POST['paymentinstruction'],
             $user['city'], $user['country'], (int)$duration, $durationbeginDay, $durationbeginTime,

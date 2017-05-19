@@ -32,6 +32,7 @@ $merchantStatus = false;
 //    $_SESSION['questionnumber'] = $data['questionnumber'];
 //    $_SESSION['answer'] = $data['answer'];
 //    $_SESSION['merchant'] = $data['merchant'];
+//    $_SESSION['admin'] = $data['admin'];
 //
 //}
 
