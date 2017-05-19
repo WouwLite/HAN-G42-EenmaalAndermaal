@@ -64,11 +64,11 @@ function checkEmptyFields()
 function sendmail()
 {
     global $vars;
-    $secretCode = uniqid();
-    $subject    = "EenmaalAndermaal email activatie code";
-//    $message    = "Uw geheime code is: " . $secretCode;
-    $message    = include('test.inc.php');
-    $headers    = 'From: noreply@iproject42.icasites.nl';
+    $secretCode     = uniqid();
+    $subject        = "EenmaalAndermaal email activatie code";
+    $message        =
+        "Uw geheime code is: " . $secretCode . " . <br> Vul deze code in op de registratiepagina.";
+    $headers        = 'From: noreply@iproject42.icasites.nl';
     mail($vars['email'], $subject, $message, $headers);
     $_SESSION['secretCode'] = password_hash($secretCode, PASSWORD_DEFAULT);
 }
@@ -191,7 +191,7 @@ function checkNoErrors()
 <body>
 <a href="<?= $app_url ?>" class="btn btn-danger" role="button" aria-pressed="true"
    style="margin-left: 5px;margin-top: 5px;">Terug naar thuis</a>
-<div class="container">
+<div class="jumbotron">
     <form class="form-horizontal sign-up-form" method="post" action="#">
         <div class="title">
             <img src="/storage/images/logo/logo-ea-groot-donker.png" style="max-height: 70px" alt="EenmaalAndermaal Logo">

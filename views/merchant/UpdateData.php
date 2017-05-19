@@ -21,7 +21,7 @@ header('Location: http://iproject42.icasites.nl/views/account/index.php#');
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>My Sexy Title</title>
 </head>
 <body>
 
