@@ -1,4 +1,4 @@
-<p align="center"><img src="http://placehold.it/350x150" height="150px"></p>
+<p align="center"><img src="http://iproject42.icasites.nl/storage/images/logo/logo-ea-groot-licht.png" height="34px"></p>
 
 <p align="center">
 <a href="https://travis-ci.org/komcommy/HAN-G42-EenmaalAndermaal"><img src="https://img.shields.io/travis/rust-lang/rust.svg" alt="Build"></a>
