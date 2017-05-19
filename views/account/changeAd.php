@@ -1,11 +1,4 @@
 <?php
-$hostname = "mssql2.iproject.icasites.nl"; //Naam van de Server
-$dbname = "iproject42";    //Naam van de Database
-$username = "iproject42";      //Inlognaam
-$pw = "7MqNNSxC";      //Password
-
-$pdo = new PDO ("sqlsrv:Server=$hostname;Database=$dbname;ConnectionPooling=0","$username","$pw");
-
 require($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 
 if ($debug == false) {
