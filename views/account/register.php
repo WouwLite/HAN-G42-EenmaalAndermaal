@@ -1,9 +1,16 @@
 <?php
-require($_SERVER['DOCUMENT_ROOT'] . "/config/app.php");
-require_once ($_SERVER['DOCUMENT_ROOT'] . "/include/style.inc.php");
+require($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/include/style.inc.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . '/app/getpost.php');
+
+// Start a session
 session_start();
+
+// Check if user is already logged on. If yes, redirect to accountpage.
+if (isset($_SESSION['username'])) {
+    header("Location: index.php");
+}
 
 $vars = array();
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -22,45 +29,46 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
 }
 
-$username = $vars['username'] ?? "";
-$firstname = $vars['firstname'] ?? "";
-$lastname = $vars['lastname'] ?? "";
-$email = $vars['email'] ?? "";
-$secretcode = $vars['secretcode'] ?? "";
-$address1 = $vars['address1'] ?? "";
-$address2 = $vars['address2'] ?? "";
-$zipcode = $vars['zipcode'] ?? "";
-$city = $vars['city'] ?? "";
-$country = $vars['country'] ?? "";
-$birthday = $vars['birthday'] ?? "";
-$secretanswer = $vars['secretanswer'] ?? "";
+$username       = $vars['username'] ?? "";
+$firstname      = $vars['firstname'] ?? "";
+$lastname       = $vars['lastname'] ?? "";
+$email          = $vars['email'] ?? "";
+$secretcode     = $vars['secretcode'] ?? "";
+$address1       = $vars['address1'] ?? "";
+$address2       = $vars['address2'] ?? "";
+$zipcode        = $vars['zipcode'] ?? "";
+$city           = $vars['city'] ?? "";
+$country        = $vars['country'] ?? "";
+$birthday       = $vars['birthday'] ?? "";
+$secretanswer   = $vars['secretanswer'] ?? "";
 
 function checkEmptyFields()
 {
     global $errors;
     global $vars;
-    $errors['username'] = ($vars['username'] == "") ? "vul je gebruikersnaam in aub." : '';
-    $errors['firstname'] = ($vars['firstname'] == "") ? "vul je voornaam in aub." : '';
-    $errors['lastname'] = ($vars['lastname'] == "") ? "vul je achternaam in aub." : '';
-    $errors['email'] = ($vars['email'] == "") ? "vul je email in aub." : '';
-    $errors['secretcode'] = ($vars['secretcode'] == "") ? "vul je geheime code in aub." : '';
-    $errors['password1'] = ($vars['password1'] == "") ? "vul je wachtwoord in aub." : '';
-    $errors['password2'] = ($vars['password2'] == "") ? "vul je wachtwoord nog een keer in aub." : '';
-    $errors['address1'] = ($vars['address1'] == "") ? "vul je adres in aub." : '';
-    $errors['zipcode'] = ($vars['zipcode'] == "") ? "vul je postcode in aub." : '';
-    $errors['city'] = ($vars['city'] == "") ? "vul je stad in aub." : '';
-    $errors['country'] = ($vars['country'] == "") ? "vul je land in aub." : '';
-    $errors['birthday'] = ($vars['birthday'] == "") ? "vul je geboorte datum in aub." : '';
-    $errors['secretanswer'] = ($vars['secretanswer'] == "") ? "vul je antwoord in aub." : '';
+    $errors['username']     = ($vars['username']     == "") ? "vul je gebruikersnaam in aub."   : '';
+    $errors['firstname']    = ($vars['firstname']    == "") ? "vul je voornaam in aub."         : '';
+    $errors['lastname']     = ($vars['lastname']     == "") ? "vul je achternaam in aub."       : '';
+    $errors['email']        = ($vars['email']        == "") ? "vul je email in aub."            : '';
+    $errors['secretcode']   = ($vars['secretcode']   == "") ? "vul je geheime code in aub."     : '';
+    $errors['password1']    = ($vars['password1']    == "") ? "vul je wachtwoord in aub."       : '';
+    $errors['password2']    = ($vars['password2']    == "") ? "vul je wachtwoord nog een keer in aub." : '';
+    $errors['address1']     = ($vars['address1']     == "") ? "vul je adres in aub."            : '';
+    $errors['zipcode']      = ($vars['zipcode']      == "") ? "vul je postcode in aub."         : '';
+    $errors['city']         = ($vars['city']         == "") ? "vul je stad in aub."             : '';
+    $errors['country']      = ($vars['country']      == "") ? "vul je land in aub."             : '';
+    $errors['birthday']     = ($vars['birthday']     == "") ? "vul je geboorte datum in aub."   : '';
+    $errors['secretanswer'] = ($vars['secretanswer'] == "") ? "vul je antwoord in aub."         : '';
 }
 
 function sendmail()
 {
     global $vars;
     $secretCode = uniqid();
-    $subject = "Eenmaal Andermaal email activatie code";
-    $message = "Je geheime code is: " . $secretCode;
-    $headers = 'From: noreply@iproject42.icasites.nl';
+    $subject    = "EenmaalAndermaal email activatie code";
+//    $message    = "Uw geheime code is: " . $secretCode;
+    $message    = include('test.inc.php');
+    $headers    = 'From: noreply@iproject42.icasites.nl';
     mail($vars['email'], $subject, $message, $headers);
     $_SESSION['secretCode'] = password_hash($secretCode, PASSWORD_DEFAULT);
 }
