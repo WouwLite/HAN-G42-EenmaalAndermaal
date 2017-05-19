@@ -75,9 +75,9 @@
 
 
     /*
-     * Includes
+     * Require config files, don't touch!
      */
 
-    include($_SERVER['DOCUMENT_ROOT'] . '/config/mail.php');
-    include($_SERVER['DOCUMENT_ROOT'] . '/config/cdn.php');
-    include($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
+    require($_SERVER['DOCUMENT_ROOT'] . '/config/mail.php');
+    require($_SERVER['DOCUMENT_ROOT'] . '/config/cdn.php');
+    require($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');

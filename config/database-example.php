@@ -1,4 +1,5 @@
 <!-- /config/database.php -->
+
 <?php
 
     /*
@@ -11,10 +12,10 @@
     | settings and wishes.
     */
 
-    $hostname   =   "mssql2.iproject.icasites.nl";
-    $dbname     =   "iproject42";
-    $username   =   "iproject42";
-    $pw         =   "7MqNNSxC";
+    $hostname   =   "hostname";
+    $dbname     =   "dbname";
+    $username   =   "username";
+    $pw         =   "passwd";
 
 // Don't change the values below!
 try {
