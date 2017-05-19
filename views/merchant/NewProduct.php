@@ -29,7 +29,7 @@ function getHighestId()
     $stmt = $pdo->query("select top 1 MAX(productid) + 1 from Object");
     $data = $stmt->fetchColumn();
     return $data;
-    if($data == 0){
+    if ($data == 0) {
         $data = 1;
         return $data;
     }
@@ -117,6 +117,7 @@ VALUES (?, ?)";
 
 
 }
+
 ?>
 
 }
