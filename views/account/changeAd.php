@@ -110,11 +110,15 @@ function updateProductData()
                   WHERE productid = ?";
 
         $updateAdInfo = $pdo->prepare($stmt);
-        $updateAdInfo->execute(array($title, $description, (float)$startprice, (int)$paymentmethod, $paymentinstruction,
+        if($updateAdInfo->execute(array($title, $description, (float)$startprice, (int)$paymentmethod, $paymentinstruction,
             (int)$duration, $durationbeginDay, $durationbeginTime,
-            (float)$shippingCosts, $shippingInstructions, $durationendDay, $durationendTime, (int)$categorieName, $productid));
-        header('location: ../account/index.php');
-//        print_r($updateAdInfo->errorInfo());
+            (float)$shippingCosts, $shippingInstructions, $durationendDay, $durationendTime, (int)$categorieName, $productid))){
+            header('location: ../account/index.php');
+        } else {
+            print_r($updateAdInfo->errorInfo());
+        }
+
+//
     }
 }
 ?>

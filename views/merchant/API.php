@@ -15,7 +15,6 @@ try {
             'amount' => $_SESSION['amount'],
             'description' => 'Upgrade naar verkoper',
             'redirectUrl' => 'http://iproject42.icasites.nl/views/merchant/UpdateData.php'.'',
-
             'metadata' => array(
                 'order_id' => ''.$_SESSION['orderNumber'].'',
             )
