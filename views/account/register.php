@@ -190,14 +190,14 @@ function checkNoErrors()
 </head>
 <body>
 <a href="<?=$app_url?>" class="btn btn-default" role="button" aria-pressed="true"
-   style="margin-left: 5px;margin-top: 5px;">Terug</a>
+   style="margin-left: 5px;margin-top: 5px;"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Terug</a>
 <div class="container bg-overlay">
     <form class="form-horizontal sign-up-form" method="post" action="#">
         <div class="title">
             <img src="<?=$cdn_url?>/storage/images/logo/logo-ea-groot-donker.png" style="max-height: 70px" alt="EenmaalAndermaal Logo">
         </div>
         <div class="alert alert-info" role="alert">
-            Heb je al een account? <a href="<?=$app_url?>/views/account/login.php">klik dan hier om in te loggen</a>
+            Heb je al een account? klik dan <a href="<?=$app_url?>/views/account/login.php"><strong>hier</strong></a> om in te loggen.
         </div>
         <?php
         if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors()) {
@@ -207,7 +207,7 @@ function checkNoErrors()
         ?>
         <div <?php print((!empty($errors['username'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?> >
             <div class="input-group inputform row">
-                <span class="input-group-addon fa fa-user"></span>
+                <span class="input-group-addon width50 fa fa-user"></span>
                 <input type="text" id="username" class="form-control" name="username"
                        placeholder="Gebruikersnaam" <?php print("value=\"$GLOBALS[username]\"") ?> autofocus>
             </div>
@@ -219,7 +219,7 @@ function checkNoErrors()
 
         <div <?php print((!empty($errors['firstname'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
             <div class="input-group inputform row">
-                <span class="input-group-addon fa fa-user" id="basicaddon1"></span>
+                <span class="input-group-addon width50 fa fa-user" id="basicaddon1"></span>
                 <input type="text" id="firstname" class="form-control" name="firstname" placeholder="Voornaam"
                     <?php print("value=\"$GLOBALS[firstname]\"") ?> >
             </div>
@@ -230,7 +230,7 @@ function checkNoErrors()
 
         <div <?php print((!empty($errors['lastname'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
             <div class="input-group inputform row">
-                <span class="input-group-addon fa fa-user" id="basicaddon1"></span>
+                <span class="input-group-addon width50 fa fa-user" id="basicaddon1"></span>
                 <input type="text" id="lastname" class="form-control" name="lastname" placeholder="Achternaam"
                     <?php print("value=\"$GLOBALS[lastname]\"") ?>>
             </div>
@@ -241,7 +241,7 @@ function checkNoErrors()
 
         <div <?php print((!empty($errors['email'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
             <div class="input-group inputform row">
-                <span class="input-group-addon fa fa-envelope" id="basicaddon1"></span>
+                <span class="input-group-addon width50 fa fa-envelope" id="basicaddon1"></span>
                 <input type="email" id="email" class="form-control" name="email" placeholder="E-Mail Adres"
                     <?php print("value=\"$GLOBALS[email]\"") ?> required>
                 <span class="input-group-button">
