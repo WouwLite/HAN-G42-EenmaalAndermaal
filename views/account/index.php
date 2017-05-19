@@ -139,7 +139,7 @@ if (isset($_SESSION['username'])) {
                                 <tbody>
                                 <tr>
                                     <td>Status:</td>
-                                    <td><?php if ($_SESSION['merchant'] == 1) {
+                                    <td><?php if ($user['merchant'] == 1) {
                                             ?>
                                             <span class="badge badge-pill badge-info">Verkoper</span><br>
 
@@ -162,7 +162,7 @@ if (isset($_SESSION['username'])) {
                                 </tbody>
                             </table>
                         </div>
-                        <?php if ($_SESSION['merchant'] == 1) {
+                        <?php if ($user['merchant'] == 1) {
                             echo "<a href='" . $app_url . "/views/merchant/changeData.php' class='btn btn-default'><i class='fa fa-wrench' aria-hidden='true'></i> Gegevens wijzigen</a>";
                         } else {
                             echo "<a href='" . $app_url . "/views/merchant/API.php' class='btn btn-success'>Upgraden</a>";
