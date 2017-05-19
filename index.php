@@ -1,2 +1,3 @@
 <?php
-header("Refresh:0; url=/views/public");
+// Redirect visitors to the default homepage.
+header("Refresh:0; url=/views/public/splash.php");

@@ -1,5 +1,14 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . "/config/app.php");
+
+// Start a session
+session_start();
+
+// Check if user is already logged on. If yes, redirect to accountpage.
+if (isset($_SESSION['username'])) {
+    header("Location: index.php");
+}
+
 function checkEmptyFields()
 {
     global $errors;
