@@ -68,3 +68,5 @@ fabric.properties
 dev/
 # Yep, I just ignored a part of you, you stupid application!
 # Don't hate ;-).
+/config/database.php
+/.idea/deployment.xml
