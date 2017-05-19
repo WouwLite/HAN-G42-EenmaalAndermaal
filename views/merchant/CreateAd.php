@@ -133,31 +133,37 @@ function saveProductData()
             (float)$shippingCosts, $shippingInstructions, $_SESSION['username'], $durationendDay, $durationendTime, (int)$categorieName));
         header('location: ../account/index.php');
     }
-//    if(isset($_FILES['foto1'])) {
-//        $errors = array();
-//        $file_name = $_FILES['foto1']['name'];
-//        $file_size = $_FILES['foto1']['size'];
-//        $file_tmp = $_FILES['foto1']['tmp_name'];
-//        $file_type = $_FILES['foto1']['type'];
-//        $file_ext = strtolower(end(explode('.', $_FILES['foto1']['name'])));
-//
-//        $expensions = array("jpeg", "jpg", "png");
-//
-//        if (in_array($file_ext, $expensions) === false) {
-//            $errors[] = "extension not allowed, please choose a JPEG or PNG file.";
-//        }
-//
-//        if ($file_size > 2097152) {
-//            $errors[] = 'File size must be excately 2 MB';
-//        }
-//
-//        if (empty($errors) == true) {
-//            move_uploaded_file($file_tmp, "AdImages/" . $file_name);
-//            echo "Success";
-//        } else {
-//            print_r($errors);
-//        }
-//    }
+    echo 'voor picture';
+
+    if(isset($_FILES['picture'])) {
+        echo 'in isset files picture';
+        if(isset($_POST['final-submit'])) {
+            echo 'in post final-submit picture';
+            $errors = array();
+            $file_name = $_FILES['picture']['name'];
+            $file_size = $_FILES['picture']['size'];
+            $file_tmp = $_FILES['picture']['tmp_name'];
+            $file_type = $_FILES['picture']['type'];
+            $file_ext = strtolower(end(explode('.', $_FILES['picture']['name'])));
+
+            $expensions = array("jpeg", "jpg", "png");
+
+            if (in_array($file_ext, $expensions) === false) {
+                $errors[] = "extension not allowed, please choose a JPEG or PNG file.";
+            }
+
+            if ($file_size > 2097152) {
+                $errors[] = 'File size must be excately 2 MB';
+            }
+
+            if (empty($errors) == true) {
+                move_uploaded_file($file_tmp, "AdImages/" . $file_name);
+                echo "Success";
+            } else {
+                print_r($errors);
+            }
+        }
+    }
 }
 
 ?>
@@ -183,7 +189,7 @@ function saveProductData()
 
 <?php if($data['merchant'] == 1){ ?>
 <div class="container main-part">
-    <form action="#" method="post">
+    <form action="#" method="post" enctype="multipart/form-data">
         <div class="form-group row">
             <label class="col-2 col-form-label"></label>
             <div class="col-8">
@@ -228,10 +234,10 @@ function saveProductData()
         <div class="form-group row">
             <label class="col-2 col-form-label">Upload tot 4 fotos:</label>
             <div class="col-10">
-                <input type="file" name="foto1" id="foto2" class="form-control">
-                <input type="file" name="foto2" id="foto1" class="form-control">
-                <input type="file" name="foto3" id="foto3" class="form-control">
-                <input type="file" name="foto4" id="foto4" class="form-control">
+                <input type="file" name="picture" id="picture" class="form-control">
+<!--                <input type="file" name="foto2" id="foto1" class="form-control">-->
+<!--                <input type="file" name="foto3" id="foto3" class="form-control">-->
+<!--                <input type="file" name="foto4" id="foto4" class="form-control">-->
             </div>
         </div>
         <div <?php print((!empty($errors['startprice'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
