@@ -189,15 +189,15 @@ function checkNoErrors()
 
 </head>
 <body>
-<a href="<?= $app_url ?>" class="btn btn-danger" role="button" aria-pressed="true"
-   style="margin-left: 5px;margin-top: 5px;">Terug naar thuis</a>
-<div class="jumbotron">
+<a href="<?=$app_url?>" class="btn btn-default" role="button" aria-pressed="true"
+   style="margin-left: 5px;margin-top: 5px;">Terug</a>
+<div class="container bg-overlay">
     <form class="form-horizontal sign-up-form" method="post" action="#">
         <div class="title">
-            <img src="/storage/images/logo/logo-ea-groot-donker.png" style="max-height: 70px" alt="EenmaalAndermaal Logo">
+            <img src="<?=$cdn_url?>/storage/images/logo/logo-ea-groot-donker.png" style="max-height: 70px" alt="EenmaalAndermaal Logo">
         </div>
         <div class="alert alert-info" role="alert">
-            Heb je al een account? <a href="<?= $app_url ?>/views/account/login.php">klik dan hier om in te loggen</a>
+            Heb je al een account? <a href="<?=$app_url?>/views/account/login.php">klik dan hier om in te loggen</a>
         </div>
         <?php
         if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors()) {
