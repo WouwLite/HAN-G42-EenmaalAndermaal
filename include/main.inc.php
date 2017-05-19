@@ -70,6 +70,12 @@ HTML;
         </ul>
     </nav>
 
+    <div class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container">
+            <p>Hello world!</p>
+        </div>
+    </div>
+
     <!-- **************************************** -->
     <!--  HERE STARTS THE MAIN CONTENT-CONTAINER  -->
     <!-- **************************************** -->

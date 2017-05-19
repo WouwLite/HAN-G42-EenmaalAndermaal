@@ -8,6 +8,9 @@ include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
  * Voer hieronder eventuele extra PHP variables toe
  */
 
+// Start session
+session_start();
+
 ?>
 <div class="container-float">
     <ol class="breadcrumb">
@@ -15,21 +18,22 @@ include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
         <li class="breadcrumb-item active">Nieuwste advertenties</li>
     </ol>
 </div>
-
-<div class="jumbotron">
-    <h1 class="display-3">Hello, world!</h1>
-    <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-    <hr class="my-4">
-    <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+<?php
+// If user is logged on, don't show this jumbotron / call-to-action
+if (!isset($_SESSION['username'])): ?>
+    <div class="jumbotron">
+    <h1 class="display-3">Wordt nu lid!</h1>
+        <p class="lead"><?=$title?> is hét platform voor het aanbieden van je producten. Van nieuw tot oud, alles kan! Én als klap op de vuurpijl: het is volledig <span class="badge badge-primary">GRATIS</span>.</p>
     <p class="lead">
-        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+        <a class="btn btn-outline-primary btn-lg btn-block" href="#" role="button">Registreren</a>
     </p>
-</div>
+    </div>
+<?php endif; ?>
 
 <div class="container-float">
-    <h1>Hello world!</h1>
+    <h1>Nieuwste advertenties</h1>
     <p>
-        Here comes the dynamic content.
+        badge unit ding maken met foreach DB loop van top xx laatste biedingen.
     </p>
 </div>
 

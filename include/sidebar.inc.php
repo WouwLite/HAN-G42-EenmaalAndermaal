@@ -30,19 +30,6 @@
         </li>
         <li><span class="sidebar-span"></span></li>
         <li><strong>Rubrieken</strong></li>
-        <!-- Create FOREACH with categories from DB -->
-        <!--        <li class="nav-item">-->
-        <!--            <a class="nav-link" href="#">Auto's</a>-->
-        <!--        </li>-->
-        <!--        <li class="nav-item">-->
-        <!--            <a class="nav-link" href="#">Computers</a>-->
-        <!--        </li>-->
-        <!--        <li class="nav-item">-->
-        <!--            <a class="nav-link" href="#">Scrumboarden</a>-->
-        <!--        </li>-->
-        <!--        <li class="nav-item">-->
-        <!--            <a class="nav-link" href="#">Games</a>-->
-        <!--        </li>-->
         <?php
         $catsql = <<<SQL
         SELECT Name FROM [top level categories];
@@ -67,11 +54,6 @@ SQL;
         <span></span>
     </div>
 </div>
-
-<!-- FOOTER WERKT NOG NIET, IVM CONTAINEROVERLAY OP VERKEERD NIVEAU. -->
-<footer>
-    <p>Hello world!</p>
-</footer>
 
 <script>
     $(document).ready(function () {

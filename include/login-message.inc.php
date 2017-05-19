@@ -1,7 +1,5 @@
 <?php
-
-header('location: login.php');
-
+header("Refresh:0; url=/views/account/login.php");
 ?>
 
 
