@@ -21,6 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
 }
 
+if(empty($_SESSION['username'])){
+    include($_SERVER['DOCUMENT_ROOT'] . '/include/login-message.inc.php');
+}
+
 function getHighestId()
 {
     global $pdo;

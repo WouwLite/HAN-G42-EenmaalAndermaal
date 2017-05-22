@@ -120,6 +120,11 @@ function updateProductData()
 //
     }
 }
+
+if(empty($_SESSION['username'])){
+    include($_SERVER['DOCUMENT_ROOT'] . '/include/login-message.inc.php');
+}
+
 if($dataAd['durationendDay'] > date("Y-m-d")) {
     echo $dataAd['durationendDay'];
     echo " --------  ";
