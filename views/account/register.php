@@ -406,7 +406,7 @@ function checkNoErrors()
                 <br>
                 <div class="form-group row">
                     <button type="submit" class="btn btn-success btn-lg btn-block" id="final-submit" name="final-submit"
-                            value="finished" style="margin:auto;">Registreer
+                            value="finished" style="margin:auto;">Registreren
                     </button>
                 </div>
             </form>
