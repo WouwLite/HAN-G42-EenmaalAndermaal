@@ -167,7 +167,7 @@ function saveProductData()
             }
 
             else if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors()) {
-                print("<div class='alert alert-danger'><strong>Oei!</strong> er ging iets mis tijdens het plaatsen van de advertentie, 
+                print("<div class='alert alert-danger'><strong>Oei!</strong> Er ging iets mis tijdens het plaatsen van de advertentie, 
                         controleer en pas de rode velden aan en probeer het daarna opnieuw</div>");
             }
             ?>
