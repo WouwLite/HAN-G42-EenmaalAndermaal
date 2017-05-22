@@ -9,9 +9,9 @@ if ($debug == false) {
 include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
 if(isset($_SESSION['username'])) {
-    $user = $_SESSION['username'];
+    $username = $_SESSION['username'];
     $stmt = $pdo->prepare("SELECT * FROM Object WHERE seller = ? AND productid = ? ");
-    $stmt->execute([$user, $_GET['id']]);
+    $stmt->execute([$username, $_GET['id']]);
     $dataAd = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
@@ -126,9 +126,6 @@ if(empty($_SESSION['username'])){
 }
 
 if($dataAd['durationendDay'] > date("Y-m-d")) {
-    echo $dataAd['durationendDay'];
-    echo " --------  ";
-    echo date("Y-m-d");
     ?>
     <!DOCTYPE html>
     <html>

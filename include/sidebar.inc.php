@@ -4,6 +4,7 @@
 </div>
 
 <?php require_once($_SERVER['DOCUMENT_ROOT'] . '/config/database.php'); ?>
+<?php require_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php'); ?>
 <!-- Add sidebarmenu -->
 <div id="sidebar">
     <ul>
@@ -12,6 +13,18 @@
                 <input class="form-control sm-2" type="search" id="search" name="Search" placeholder="Zoek naar veiling..."/>
             </form>
         </li>
+        <?php
+        global $user;
+        if($user['admin'] == 1){
+            print('<li><strong>Admin</strong></li>
+            <li class="nav-item">
+                    <a class="nav-link active" href="/views/admin/adminpanel.php"><i class="fa fa-handshake-o" aria-hidden="true"></i> Alle advertenties</a>
+            </li>
+            <li class="nav-item">
+                    <a class="nav-link active" href="/views/admin/allUsers.php"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Alle gebruikers</a>
+            </li>');
+        }
+        ?>
         <li><strong>Dashboard</strong></li>
         <li class="nav-item">
             <a class="nav-link active" href="/views/public/"><i class="fa fa-home" aria-hidden="true"></i> Thuis</a>

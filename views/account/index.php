@@ -16,27 +16,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
 $merchantStatus = false;
 
-//if(isset($_SESSION['username'])){
-//    $user = $_SESSION['username'];
-//    $stmt = $pdo->prepare("SELECT * FROM Users WHERE username = ?");
-//    $stmt->execute([$user]);
-//    $data = $stmt->fetch(PDO::FETCH_ASSOC);
-//    $_SESSION['firstname'] = $data['firstname'];
-//    $_SESSION['lastname'] = $data['lastname'];
-//    $_SESSION['address1'] = $data['address1'];
-//    $_SESSION['zipcode'] = $data['zipcode'];
-//    $_SESSION['city'] = $data['city'];
-//    $_SESSION['country'] = $data['country'];
-//    $_SESSION['birthday'] = $data['birthday'];
-//    $_SESSION['email'] = $data['email'];
-//    $_SESSION['questionnumber'] = $data['questionnumber'];
-//    $_SESSION['answer'] = $data['answer'];
-//    $_SESSION['merchant'] = $data['merchant'];
-//    $_SESSION['admin'] = $data['admin'];
-//
-//}
-
-
 /*
  * Einde PHP variable-area
  */
@@ -216,9 +195,9 @@ if (isset($_SESSION['username'])) {
                 <h3>Mijn veilingen</h3>
                 <table class="table table-striped table-bordered">
                     <?php
-                    $user = $_SESSION['username'];
+                    $username = $_SESSION['username'];
                     $stmt = $pdo->prepare("SELECT COUNT(Seller) FROM Object WHERE seller = ?");
-                    $stmt->execute([$user]);
+                    $stmt->execute([$username]);
                     $aantalVeilingen = $stmt->fetchColumn();
                     if ($aantalVeilingen > 0) {
                         ?>
@@ -231,14 +210,15 @@ if (isset($_SESSION['username'])) {
                         </thead>
                         <?php
                     } else {
+                        global $user;
                         echo '<th>U heeft nog geen veilingen geplaatst.</th>';
                     }
                     ?>
 
                     <?php
-                    $user = $_SESSION['username'];
+                    $username = $_SESSION['username'];
                     $stmt = $pdo->prepare("SELECT * FROM Object WHERE seller = ?");
-                    $stmt->execute([$user]);
+                    $stmt->execute([$username]);
                     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     if ($aantalVeilingen > 0) {
                         foreach ($data as $d) { ?>
