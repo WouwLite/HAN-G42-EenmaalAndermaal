@@ -119,9 +119,9 @@ function saveProductData()
             move_uploaded_file($foto4['tmp_name'], $destdir . $uniquefilename);
         }
 
-        if ($adInfo->execute(array($productid, $_POST['title'], $_POST['description'], (float)$_POST['startprice'], (int)$_POST['paymentmethod'], $_POST['paymentinstruction'],
+        if ($adInfo->execute(array($productid, $_POST['title'], $_POST['description'], $_POST['startprice'], (int)$_POST['paymentmethod'], $_POST['paymentinstruction'],
             $user['city'], $user['country'], (int)$duration, $durationbeginDay, $durationbeginTime,
-            (float)$_POST['shippingcosts'], $_POST['shippinginstruction'], $_SESSION['username'], $durationendDay, $durationendTime, (int)$_POST['Categories']))
+            $_POST['shippingcosts'], $_POST['shippinginstruction'], $_SESSION['username'], $durationendDay, $durationendTime, (int)$_POST['Categories']))
         ) {
             //header('location: ../account/index.php');
         } else {

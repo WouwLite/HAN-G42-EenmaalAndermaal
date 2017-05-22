@@ -110,9 +110,9 @@ function updateProductData()
                   WHERE productid = ?";
 
         $updateAdInfo = $pdo->prepare($stmt);
-        if($updateAdInfo->execute(array($title, $description, (float)$startprice, (int)$paymentmethod, $paymentinstruction,
+        if($updateAdInfo->execute(array($title, $description, $startprice, (int)$paymentmethod, $paymentinstruction,
             (int)$duration, $durationbeginDay, $durationbeginTime,
-            (float)$shippingCosts, $shippingInstructions, $durationendDay, $durationendTime, (int)$categorieName, $productid))){
+            $shippingCosts, $shippingInstructions, $durationendDay, $durationendTime, (int)$categorieName, $productid))){
             //header('location: ../account/index.php');
         } else {
             print_r($updateAdInfo->errorInfo());
@@ -224,7 +224,7 @@ function updateProductData()
             <label>Geen minimale prijs</label>
                 </span>
                 </div>
-                <input id="minimum-bid-price" placeholder="€ 0,00" name="startprice" value="<?php echo $dataAd['startprice']; ?>" type="number" class="form-control"
+                <input id="minimum-bid-price" placeholder="€ 0,00" name="startprice" value="<?php echo $dataAd['startprice']; ?>" type="number" step="0.01" class="form-control"
                        disabled>
                 <div class="form-control-feedback"><?php global $errors;
                     echo $errors['startprice'] ?></div>
