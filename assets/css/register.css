@@ -1,10 +1,9 @@
 body {
     background-color: ecf0f1;
-    /*background-image: url("../../storage/images/aaron-burden-1080px.jpg");*/
     background-size: cover;
 }
 
-.row {
+.margin2 {
     margin-top: 2px;
     margin-bottom: 2px;
 }
@@ -61,3 +60,8 @@ body {
     margin-right: auto;
     width: 100%;
 }
+
+/*input[type=text] {*/
+    /*border: none;*/
+    /*border-bottom: 2px solid yellow;*/
+/*}*/
