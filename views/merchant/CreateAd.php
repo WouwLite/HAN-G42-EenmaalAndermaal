@@ -190,7 +190,7 @@ function saveProductData()
             <div <?php print((!empty($errors['title'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
                 <label for="title" class="col-2 col-form-label">Titel:*</label>
                 <div class="col-10">
-                    <input id="title" type="text" id="title" name="title" class="form-control" placeholder="Titel:"
+                    <input id="title" type="text" id="title" name="title" class="form-control" placeholder="Titel"
                            autofocus>
                     <div class="form-control-feedback"><?= $errors['title']??'' ?></div>
                 </div>
