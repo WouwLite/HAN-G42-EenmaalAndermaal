@@ -34,9 +34,9 @@ if (isset($user['username']) && $user['admin'] == 1) {
         <br>
         <table class="table table-sm table-striped table-bordered">
             <?php
-            $user = $_SESSION['username'];
+            $username = $_SESSION['username'];
             $stmt = $pdo->prepare("SELECT COUNT(Seller) FROM Object WHERE seller = ?");
-            $stmt->execute([$user]);
+            $stmt->execute([$username]);
             $aantalVeilingen = $stmt->fetchColumn();
             if ($aantalVeilingen > 0) {
                 ?>
@@ -65,14 +65,14 @@ if (isset($user['username']) && $user['admin'] == 1) {
                 </thead>
                 <?php
             } else {
-                echo '<th>U heeft nog geen veilingen geplaatst.</th>';
+                echo '<th>Er zijn nog geen veilingen geplaatst.</th>';
             }
             ?>
 
             <?php
-            $user = $_SESSION['username'];
+            $username = $_SESSION['username'];
             $stmt = $pdo->prepare("SELECT * FROM Object");
-            $stmt->execute([$user]);
+            $stmt->execute([$username]);
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             if ($aantalVeilingen > 0) {
                 foreach ($data as $d) { ?>
