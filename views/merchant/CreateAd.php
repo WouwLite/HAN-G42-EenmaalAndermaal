@@ -16,10 +16,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     global $_POST, $errors;
 //    $_POST = getRealPOST();
     if (isset($_POST['final-submit'])) {
-        echo "test";
         checkEmptyFields();
         saveProductData();
     }
+}
+
+if(empty($_SESSION['username'])){
+    include($_SERVER['DOCUMENT_ROOT'] . '/include/login-message.inc.php');
 }
 
 function getHighestId()
@@ -72,7 +75,6 @@ function checkNoErrors()
 
 function saveProductData()
 {
-    echo "test";
     global $user, $_POST, $pdo;
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $productid = getHighestId();
@@ -121,11 +123,11 @@ function saveProductData()
             move_uploaded_file($foto4['tmp_name'], $destdir . $uniquefilename);
         }
 
-        if ($adInfo->execute(array($productid, $_POST['title'], $_POST['description'], (float)$_POST['startprice'], (int)$_POST['paymentmethod'], $_POST['paymentinstruction'],
+        if ($adInfo->execute(array($productid, $_POST['title'], $_POST['description'], $_POST['startprice'], (int)$_POST['paymentmethod'], $_POST['paymentinstruction'],
             $user['city'], $user['country'], (int)$duration, $durationbeginDay, $durationbeginTime,
-            (float)$_POST['shippingcosts'], $_POST['shippinginstruction'], $_SESSION['username'], $durationendDay, $durationendTime, (int)$_POST['Categories']))
+            $_POST['shippingcosts'], $_POST['shippinginstruction'], $_SESSION['username'], $durationendDay, $durationendTime, (int)$_POST['Categories']))
         ) {
-            header('location: ../account/index.php');
+            //header('location: ../account/index.php');
         } else {
             print_r($adInfo->errorInfo());
         }
@@ -163,6 +165,16 @@ function saveProductData()
                     <h1 class="product-title-page">Plaats advertentie</h1>
                 </div>
             </div>
+            <?php
+            if ($_SERVER['REQUEST_METHOD'] == "POST" and checkNoErrors()) {
+                print("<div class='alert alert-success'><strong>Gelukt<br></strong> Uw advertentie is succesvol geplaatst.</div>");
+            }
+
+            else if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors()) {
+                print("<div class='alert alert-danger'><strong>Oei!</strong> Er ging iets mis tijdens het plaatsen van de advertentie, 
+                        controleer en pas de rode velden aan en probeer het daarna opnieuw</div>");
+            }
+            ?>
             <div class="form-group row">
                 <label class="col-2 col-form-label">Categorie*</label>
                 <div class="col-10">
@@ -182,7 +194,7 @@ function saveProductData()
             <div <?php print((!empty($errors['title'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
                 <label for="title" class="col-2 col-form-label">Titel:*</label>
                 <div class="col-10">
-                    <input id="title" type="text" id="title" name="title" class="form-control" placeholder="Titel:"
+                    <input id="title" type="text" id="title" name="title" class="form-control" placeholder="Titel"
                            autofocus>
                     <div class="form-control-feedback"><?= $errors['title']??'' ?></div>
                 </div>

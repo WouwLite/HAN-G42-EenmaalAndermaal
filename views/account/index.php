@@ -280,6 +280,7 @@ if (isset($_SESSION['username'])) {
     include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/include/delete-modal.php');
+    include($_SERVER['DOCUMENT_ROOT'] . '/views/account/removeAd.php');
 } else {
     include($_SERVER['DOCUMENT_ROOT'] . '/include/login-message.inc.php');
 }
