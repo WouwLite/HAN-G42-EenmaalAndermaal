@@ -113,7 +113,7 @@ function updateProductData()
         if($updateAdInfo->execute(array($title, $description, (float)$startprice, (int)$paymentmethod, $paymentinstruction,
             (int)$duration, $durationbeginDay, $durationbeginTime,
             (float)$shippingCosts, $shippingInstructions, $durationendDay, $durationendTime, (int)$categorieName, $productid))){
-            header('location: ../account/index.php');
+            //header('location: ../account/index.php');
         } else {
             print_r($updateAdInfo->errorInfo());
         }
@@ -149,17 +149,17 @@ function updateProductData()
             <div class="col-8">
                 <h1 class="product-title-page">Wijzig advertentie</h1>
             </div>
-            <?php
-            if ($_SERVER['REQUEST_METHOD'] == "POST" and checkNoErrors()) {
-                print("<div class='alert alert-success'><strong>Gelukt<br></strong> Uw advertentie is succesvol bijgewerkt.</div>");
-            }
-
-            else if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors()) {
-                print("<div class='alert alert-danger'><strong>Oei!</strong> Er ging iets mis tijdens het bijwerken van de advertentie, 
-                        controleer en pas de rode velden aan en probeer het daarna opnieuw</div>");
-            }
-            ?>
         </div>
+        <?php
+        if ($_SERVER['REQUEST_METHOD'] == "POST" and checkNoErrors()) {
+            print("<div class='alert alert-success'><strong>Gelukt<br></strong> Uw advertentie is succesvol bijgewerkt.</div>");
+        }
+
+        else if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors()) {
+            print("<div class='alert alert-danger'><strong>Oei!</strong> Er ging iets mis tijdens het bijwerken van de advertentie, 
+                        controleer en pas de rode velden aan en probeer het daarna opnieuw</div>");
+        }
+        ?>
         <div class="form-group row">
             <label class="col-2 col-form-label">Categorie*</label>
             <div class="col-10">
