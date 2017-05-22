@@ -189,228 +189,230 @@ function checkNoErrors()
 
 </head>
 <body>
-<a href="<?=$app_url?>" class="btn btn-default" role="button" aria-pressed="true"
-   style="margin-left: 5px;margin-top: 5px;"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Terug</a>
-<div class="container bg-overlay">
-    <form class="form-horizontal sign-up-form" method="post" action="#">
-        <div class="title">
-            <img src="<?=$cdn_url?>/storage/images/logo/logo-ea-groot-donker.png" style="max-height: 70px" alt="EenmaalAndermaal Logo">
+    <div class="bg-overlay">
+        <div class="container col-md-8 col-xs-6 jumbotron">
+            <a href="<?=$app_url?>" class="btn btn-default" role="button" aria-pressed="true"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Terug</a>
+            <form class="form-horizontal sign-up-form" method="post" action="#">
+                <div class="title">
+                    <img src="<?=$cdn_url?>/storage/images/logo/logo-ea-groot-donker.png" style="max-height: 70px" alt="EenmaalAndermaal Logo">
+                </div>
+                <div class="alert alert-info" role="alert">
+                    Heb je al een account? klik dan <a href="<?=$app_url?>/views/account/login.php"><strong>hier</strong></a> om in te loggen.
+                </div>
+                <?php
+                if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors()) {
+                    print("<div class='alert alert-danger'><strong>Oei!</strong> er ging iets mis tijdens het registreren, 
+                            controleer en pas de rode velden aan en probeer het daarna opniew</div>");
+                }
+                ?>
+                <div <?php print((!empty($errors['username'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?> >
+                    <div class="input-group inputform row">
+                        <span class="input-group-addon width50 fa fa-user"></span>
+                        <input type="text" id="username" class="form-control" name="username"
+                               placeholder="Gebruikersnaam" <?php print("value=\"$GLOBALS[username]\"") ?> autofocus>
+                    </div>
+                    <div class="form-control-feedback"><?php global $errors;
+                        echo $errors['username'] ?></div>
+                    <small class="form-text text-muted">unieke naam om mee in te loggen (3-20 tekens lang)</small>
+                </div>
+
+
+                <div <?php print((!empty($errors['firstname'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <div class="input-group inputform row">
+                        <span class="input-group-addon width50 fa fa-user" id="basicaddon1"></span>
+                        <input type="text" id="firstname" class="form-control" name="firstname" placeholder="Voornaam"
+                            <?php print("value=\"$GLOBALS[firstname]\"") ?> >
+                    </div>
+                    <div class="form-control-feedback"><?php global $errors;
+                        echo $errors['firstname'] ?></div>
+                </div>
+
+
+                <div <?php print((!empty($errors['lastname'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <div class="input-group inputform row">
+                        <span class="input-group-addon width50 fa fa-user" id="basicaddon1"></span>
+                        <input type="text" id="lastname" class="form-control" name="lastname" placeholder="Achternaam"
+                            <?php print("value=\"$GLOBALS[lastname]\"") ?>>
+                    </div>
+                    <div class="form-control-feedback"><?php global $errors;
+                        echo $errors['lastname'] ?></div>
+                </div>
+
+
+                <div <?php print((!empty($errors['email'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <div class="input-group inputform row">
+                        <span class="input-group-addon width50 fa fa-envelope" id="basicaddon1"></span>
+                        <input type="email" id="email" class="form-control" name="email" placeholder="E-Mail Adres"
+                            <?php print("value=\"$GLOBALS[email]\"") ?> required>
+                        <span class="input-group-button">
+                            <button type="submit" name="email-submit" id="email-submit"
+                                    class="btn btn-default">Stuur Code</button>
+                        </span>
+                    </div>
+                    <small class="form-text text-muted">Om aan ons te bewijzen dat je email echt bestaat druk je op de "Stuur
+                        Code" knop,
+                        daarna sturen wij je een code die je hier onder moet invullen.
+                    </small>
+                    <div class="form-control-feedback"><?php global $errors;
+                        echo $errors['email'] ?></div>
+
+                </div>
+
+
+                <div <?php print((!empty($errors['secretcode'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <div class="input-group inputform row">
+                        <span class="input-group-addon fa fa-lock" id="basicaddon1"></span>
+                        <input type="text" id="secretcode" class="form-control" name="secretcode" placeholder="Geheime code"
+                            <?php print("value=\"$GLOBALS[secretcode]\"") ?>>
+                    </div>
+                    <div class="form-control-feedback"><?php global $errors;
+                        echo $errors['secretcode'] ?></div>
+                    <small class="form-text text-muted">Voer hier de code die je in de mail hebt onvangen in (als je hem niet
+                        vind
+                        check je spam inbox of stuur de code opniew)
+                    </small>
+                </div>
+
+
+                 <div class="col-ms-6">
+                    <div <?php print((!empty($errors['password1'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                        <div class="input-group inputform row">
+                            <span class="input-group-addon fa fa-lock" id="basicaddon1"></span>
+                            <input type="password" id="password1" class="form-control" name="password1"
+                                   placeholder="Wachtwoord">
+                        </div>
+                        <div class="form-control-feedback"><?php global $errors;
+                            echo $errors['password1'] ?></div>
+                        <small class="form-text text-muted">Een wachtwoord moet minstens 1 hoofdletter, 1 kleine letter, 1 getal
+                            en 1 speciaal teken bevatten en moet minstens 5 tekens lang zijn
+                        </small>
+                    </div>
+                 </div>
+
+                <div class="col-ms-6">
+                    <div <?php print((!empty($errors['password2'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                        <div class="input-group inputform row">
+                            <span class="input-group-addon fa fa-lock" id="basicaddon1"></span>
+                            <input type="password" id="password2" class="form-control" name="password2"
+                                   placeholder="Herhaal wachtwoord">
+                        </div>
+                        <div class="form-control-feedback"><?php global $errors;
+                            echo $errors['password2'] ?></div>
+                    </div>
+                </div>
+
+
+                <div <?php print((!empty($errors['address1'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <div class="input-group inputform row">
+                        <span class="input-group-addon fa fa-map-marker" id="basicaddon1"></span>
+                        <input type="text" id="address1" class="form-control" name="address1" placeholder="Adres"
+                            <?php print("value=\"$GLOBALS[address1]\"") ?>>
+                    </div>
+                    <div class="form-control-feedback"><?php global $errors;
+                        echo $errors['address1'] ?></div>
+                </div>
+
+
+                <div class="form-group row">
+                    <div class="input-group inputform row">
+                        <span class="input-group-addon fa fa-map-marker" id="basicaddon1"></span>
+                        <input type="text" id="address2" class="form-control" name="address2"
+                               placeholder="Adres (optioneel)"
+                            <?php print("value=\"$GLOBALS[address2]\"") ?>>
+                    </div>
+                </div>
+
+
+                <div <?php print((!empty($errors['zipcode'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <div class="input-group inputform row">
+                        <span class="input-group-addon fa fa-map-marker" id="basicaddon1"></span>
+                        <input type="text" id="zipcode" class="form-control" name="zipcode" placeholder="Postcode"
+                            <?php print("value=\"$GLOBALS[zipcode]\"") ?>>
+                    </div>
+                    <div class="form-control-feedback"><?php global $errors;
+                        echo $errors['zipcode'] ?></div>
+                </div>
+
+
+                <div <?php print((!empty($errors['city'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <div class="input-group inputform row">
+                        <span class="input-group-addon fa fa-map-marker" id="basicaddon1"></span>
+                        <input type="text" id="city" class="form-control" name="city" placeholder="Plaatsnaam"
+                            <?php print("value=\"$GLOBALS[city]\"") ?>>
+                    </div>
+                    <div class="form-control-feedback"><?php global $errors;
+                        echo $errors['city'] ?></div>
+                </div>
+
+
+                <div <?php print((!empty($errors['country'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <div class="input-group inputform row">
+                        <span class="input-group-addon fa fa-globe" id="basicaddon1"></span>
+                        <select class="form-control" id="country" name="country">
+                            <?php
+                            $stmt = $pdo->prepare("SELECT * FROM Country");
+                            $stmt->execute();
+                            $data = $stmt->fetchAll();
+                            echo "<option>Netherlands</option>";
+                            foreach ($data as $row) { ?>
+                                <option><?php echo $row['countryname'] ?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-control-feedback"><?php global $errors;
+                        echo $errors['country'] ?></div>
+                </div>
+
+
+                <div <?php print((!empty($errors['birthday'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <div class="input-group inputform row">
+                        <span class="input-group-addon fa fa-calendar" id="basicaddon1"></span>
+                        <input type="date" placeholder="Wat is uw geboortedatum" name="birthday" value="<?php if(isset($_POST['birthday'])){ echo $_POST['birthday'];}?>">
+                    </div>
+                    <div class="form-control-feedback"><?php global $errors;
+                        echo $errors['birthday'] ?></div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="input-group inputform row">
+                        <span class="input-group-addon fa fa-cog" id="basicaddon1"></span>
+                        <select class="form-control" id="securityquestion" name="sequrityquestion">
+                            <?php
+                            $stmt = $pdo->prepare("SELECT * FROM Question");
+                            $stmt->execute();
+                            $data = $stmt->fetchAll();
+                            foreach ($data as $row) {
+                                print("<option value=\"$row[0]\">$row[1]</option>");
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div <?php print((!empty($errors['secretanswer'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <div class="input-group inputform row">
+                        <span class="input-group-addon fa fa-cog" id="basicaddon1"></span>
+                        <input type="text" id="secretanswer" class="form-control" name="secretanswer"
+                               placeholder="Antwoord..."
+                            <?php print("value=\"$GLOBALS[secretanswer]\"") ?>>
+                    </div>
+                    <div class="form-control-feedback"><?php global $errors;
+                        echo $errors['secretanswer'] ?></div>
+                </div>
+
+                <br>
+                <div class="form-group row">
+                    <button type="submit" class="btn btn-success btn-lg btn-block" id="final-submit" name="final-submit"
+                            value="finished" style="margin:auto;">Registreer
+                    </button>
+                </div>
+            </form>
         </div>
-        <div class="alert alert-info" role="alert">
-            Heb je al een account? klik dan <a href="<?=$app_url?>/views/account/login.php"><strong>hier</strong></a> om in te loggen.
-        </div>
-        <?php
-        if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors()) {
-            print("<div class='alert alert-danger'><strong>Oei!</strong> er ging iets mis tijdens het registreren, 
-                    controleer en pas de rode velden aan en probeer het daarna opniew</div>");
-        }
-        ?>
-        <div <?php print((!empty($errors['username'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?> >
-            <div class="input-group inputform row">
-                <span class="input-group-addon width50 fa fa-user"></span>
-                <input type="text" id="username" class="form-control" name="username"
-                       placeholder="Gebruikersnaam" <?php print("value=\"$GLOBALS[username]\"") ?> autofocus>
-            </div>
-            <div class="form-control-feedback"><?php global $errors;
-                echo $errors['username'] ?></div>
-            <small class="form-text text-muted">unieke naam om mee in te loggen (3-20 tekens lang)</small>
-        </div>
-
-
-        <div <?php print((!empty($errors['firstname'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-            <div class="input-group inputform row">
-                <span class="input-group-addon width50 fa fa-user" id="basicaddon1"></span>
-                <input type="text" id="firstname" class="form-control" name="firstname" placeholder="Voornaam"
-                    <?php print("value=\"$GLOBALS[firstname]\"") ?> >
-            </div>
-            <div class="form-control-feedback"><?php global $errors;
-                echo $errors['firstname'] ?></div>
-        </div>
-
-
-        <div <?php print((!empty($errors['lastname'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-            <div class="input-group inputform row">
-                <span class="input-group-addon width50 fa fa-user" id="basicaddon1"></span>
-                <input type="text" id="lastname" class="form-control" name="lastname" placeholder="Achternaam"
-                    <?php print("value=\"$GLOBALS[lastname]\"") ?>>
-            </div>
-            <div class="form-control-feedback"><?php global $errors;
-                echo $errors['lastname'] ?></div>
-        </div>
-
-
-        <div <?php print((!empty($errors['email'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-            <div class="input-group inputform row">
-                <span class="input-group-addon width50 fa fa-envelope" id="basicaddon1"></span>
-                <input type="email" id="email" class="form-control" name="email" placeholder="E-Mail Adres"
-                    <?php print("value=\"$GLOBALS[email]\"") ?> required>
-                <span class="input-group-button">
-                    <button type="submit" name="email-submit" id="email-submit"
-                            class="btn btn-default">Stuur Code</button>
-                </span>
-            </div>
-            <small class="form-text text-muted">Om aan ons te bewijzen dat je email echt bestaat druk je op de "Stuur
-                Code" knop,
-                daarna sturen wij je een code die je hier onder moet invullen.
-            </small>
-            <div class="form-control-feedback"><?php global $errors;
-                echo $errors['email'] ?></div>
-
-        </div>
-
-
-        <div <?php print((!empty($errors['secretcode'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-            <div class="input-group inputform row">
-                <span class="input-group-addon fa fa-lock" id="basicaddon1"></span>
-                <input type="text" id="secretcode" class="form-control" name="secretcode" placeholder="Geheime code"
-                    <?php print("value=\"$GLOBALS[secretcode]\"") ?>>
-            </div>
-            <div class="form-control-feedback"><?php global $errors;
-                echo $errors['secretcode'] ?></div>
-            <small class="form-text text-muted">Voer hier de code die je in de mail hebt onvangen in (als je hem niet
-                vind
-                check je spam inbox of stuur de code opniew)
-            </small>
-        </div>
-
-
-        <div <?php print((!empty($errors['password1'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-            <div class="input-group inputform row">
-                <span class="input-group-addon fa fa-lock" id="basicaddon1"></span>
-                <input type="password" id="password1" class="form-control" name="password1"
-                       placeholder="Wachtwoord">
-            </div>
-            <div class="form-control-feedback"><?php global $errors;
-                echo $errors['password1'] ?></div>
-            <small class="form-text text-muted">Een wachtwoord moet minstens 1 hoofdletter, 1 kleine letter, 1 getal
-                en 1 speciaal teken bevatten en moet minstens 5 tekens lang zijn
-            </small>
-        </div>
-
-
-        <div <?php print((!empty($errors['password2'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-            <div class="input-group inputform row">
-                <span class="input-group-addon fa fa-lock" id="basicaddon1"></span>
-                <input type="password" id="password2" class="form-control" name="password2"
-                       placeholder="Herhaal wachtwoord">
-            </div>
-            <div class="form-control-feedback"><?php global $errors;
-                echo $errors['password2'] ?></div>
-        </div>
-
-
-        <div <?php print((!empty($errors['address1'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-            <div class="input-group inputform row">
-                <span class="input-group-addon fa fa-map-marker" id="basicaddon1"></span>
-                <input type="text" id="address1" class="form-control" name="address1" placeholder="Adres"
-                    <?php print("value=\"$GLOBALS[address1]\"") ?>>
-            </div>
-            <div class="form-control-feedback"><?php global $errors;
-                echo $errors['address1'] ?></div>
-        </div>
-
-
-        <div class="form-group row">
-            <div class="input-group inputform row">
-                <span class="input-group-addon fa fa-map-marker" id="basicaddon1"></span>
-                <input type="text" id="address2" class="form-control" name="address2"
-                       placeholder="Adres (optioneel)"
-                    <?php print("value=\"$GLOBALS[address2]\"") ?>>
-            </div>
-        </div>
-
-
-        <div <?php print((!empty($errors['zipcode'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-            <div class="input-group inputform row">
-                <span class="input-group-addon fa fa-map-marker" id="basicaddon1"></span>
-                <input type="text" id="zipcode" class="form-control" name="zipcode" placeholder="Postcode"
-                    <?php print("value=\"$GLOBALS[zipcode]\"") ?>>
-            </div>
-            <div class="form-control-feedback"><?php global $errors;
-                echo $errors['zipcode'] ?></div>
-        </div>
-
-
-        <div <?php print((!empty($errors['city'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-            <div class="input-group inputform row">
-                <span class="input-group-addon fa fa-map-marker" id="basicaddon1"></span>
-                <input type="text" id="city" class="form-control" name="city" placeholder="Plaatsnaam"
-                    <?php print("value=\"$GLOBALS[city]\"") ?>>
-            </div>
-            <div class="form-control-feedback"><?php global $errors;
-                echo $errors['city'] ?></div>
-        </div>
-
-
-        <div <?php print((!empty($errors['country'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-            <div class="input-group inputform row">
-                <span class="input-group-addon fa fa-globe" id="basicaddon1"></span>
-                <select class="form-control" id="country" name="country">
-                    <?php
-                    $stmt = $pdo->prepare("SELECT * FROM Country");
-                    $stmt->execute();
-                    $data = $stmt->fetchAll();
-                    echo "<option>Netherlands</option>";
-                    foreach ($data as $row) { ?>
-                        <option><?php echo $row['countryname'] ?></option>
-                        <?php
-                    }
-                    ?>
-                </select>
-            </div>
-            <div class="form-control-feedback"><?php global $errors;
-                echo $errors['country'] ?></div>
-        </div>
-
-
-        <div <?php print((!empty($errors['birthday'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-            <div class="input-group inputform row">
-                <span class="input-group-addon fa fa-calendar" id="basicaddon1"></span>
-                <input type="date" placeholder="Wat is uw geboortedatum" name="birthday" value="<?php if(isset($_POST['birthday'])){ echo $_POST['birthday'];}?>">
-            </div>
-            <div class="form-control-feedback"><?php global $errors;
-                echo $errors['birthday'] ?></div>
-        </div>
-
-        <div class="form-group row">
-            <div class="input-group inputform row">
-                <span class="input-group-addon fa fa-cog" id="basicaddon1"></span>
-                <select class="form-control" id="securityquestion" name="sequrityquestion">
-                    <?php
-                    $stmt = $pdo->prepare("SELECT * FROM Question");
-                    $stmt->execute();
-                    $data = $stmt->fetchAll();
-                    foreach ($data as $row) {
-                        print("<option value=\"$row[0]\">$row[1]</option>");
-                    }
-                    ?>
-                </select>
-            </div>
-        </div>
-
-
-        <div <?php print((!empty($errors['secretanswer'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-            <div class="input-group inputform row">
-                <span class="input-group-addon fa fa-cog" id="basicaddon1"></span>
-                <input type="text" id="secretanswer" class="form-control" name="secretanswer"
-                       placeholder="Antwoord..."
-                    <?php print("value=\"$GLOBALS[secretanswer]\"") ?>>
-            </div>
-            <div class="form-control-feedback"><?php global $errors;
-                echo $errors['secretanswer'] ?></div>
-        </div>
-
-
-        <div class="form-group row">
-            <div class="col-sm-7 col-sm-offset-6">
-                <button type="submit" class="btn btn-primary" id="final-submit" name="final-submit"
-                        value="finished">Registreer
-                </button>
-                <!--                <a href="-->
-                <? //=$app_url?><!--/views/account/login.php" class="btn btn-success" role="button" aria-pressed="true">Aanmelden</a>-->
-            </div>
-        </div>
-    </form>
-</div>
+        <br>
+        <br>
+    </div>
 </body>
 </html>
