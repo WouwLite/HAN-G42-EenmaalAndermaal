@@ -202,7 +202,7 @@ function checkNoErrors()
         <?php
         if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors()) {
             print("<div class='alert alert-danger'><strong>Oei!</strong> er ging iets mis tijdens het registreren, 
-                    controleer en pas de rode velden aan en probeer het daarna opniew</div>");
+                    controleer en pas de rode velden aan en probeer het daarna opnieuw</div>");
         }
         ?>
         <div <?php print((!empty($errors['username'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?> >
