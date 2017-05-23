@@ -5,3 +5,7 @@
 .card-text {
     overflow: auto;
 }
+
+.col-md-6 {
+    overflow: auto;
+}
