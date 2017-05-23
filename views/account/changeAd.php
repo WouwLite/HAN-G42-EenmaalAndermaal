@@ -8,18 +8,19 @@ if ($debug == false) {
 
 include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
+echo var_dump($_POST);
+
 if(isset($_SESSION['username'])) {
-    $username = $_SESSION['username'];
+    $user = $_SESSION['username'];
     $stmt = $pdo->prepare("SELECT * FROM Object WHERE seller = ? AND productid = ? ");
-    $stmt->execute([$username, $_GET['id']]);
+    $stmt->execute([$user, ($_POST['changeid'] ?? $_POST['productid'])]);
     $dataAd = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 $vars = array();
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    global $vars, $errors;
-    $vars = getRealPOST();
-    if (isset($vars['final-submit'])) {
+if ($_SERVER['REQUEST_METHOD'] == "POST" && !isset($_POST['changeid'])) {
+    global $errors;
+    if (isset($_POST['final-submit'])) {
         checkEmptyFields();
         if(checkNoErrors()){
             updateProductData();
@@ -41,30 +42,16 @@ function getHighestId()
     }
 }
 
-function getRealPOST()
-{
-    $pairs = explode("&", file_get_contents("php://input"));
-    $vars = array();
-    foreach ($pairs as $pair) {
-        $nv = explode("=", $pair);
-        $name = urldecode($nv[0]);
-        $value = urldecode($nv[1]);
-        $vars[$name] = $value;
-    }
-    return $vars;
-}
-
 function checkEmptyFields()
 {
     global $errors;
-    global $vars;
-    $errors['title'] = ($vars['title'] == "") ? "Vul aub een titel in voor de advertentie" : '';
-    $errors['description'] = ($vars['description'] == "") ? "Vul aub een beschrijving in." : '';
+    $errors['title'] = ($_POST['title'] == "") ? "Vul aub een titel in voor de advertentie" : '';
+    $errors['description'] = ($_POST['description'] == "") ? "Vul aub een beschrijving in." : '';
     //$errors['foto'] = ($vars['foto1'] == "") ? "." : '';
-    $errors['startprice'] = ($vars['startprice'] == "") ? "Vul aub een prijs in." : '';
-    $errors['paymentmethod'] = ($vars['paymentmethod'] == "") ? "Vul aub een betaalmethode in." : '';
-    $errors['shippingcosts'] = ($vars['shippingcosts'] == "") ? "Vul aub de verzendkosten in." : '';
-    $errors['duration'] = ($vars['duration'] == "") ? "Vul aub de lengte van uw advertentie in." : '';
+    $errors['startprice'] = ($_POST['startprice'] == "") ? "Vul aub een prijs in." : '';
+    $errors['paymentmethod'] = ($_POST['paymentmethod'] == "") ? "Vul aub een betaalmethode in." : '';
+    $errors['shippingcosts'] = ($_POST['shippingcosts'] == "") ? "Vul aub de verzendkosten in." : '';
+    $errors['duration'] = ($_POST['duration'] == "") ? "Vul aub de lengte van uw advertentie in." : '';
 }
 
 function checkNoErrors()
@@ -78,30 +65,14 @@ function checkNoErrors()
 
 function updateProductData()
 {
-    global $user, $_SESSION, $vars;
+    global $_SESSION, $pdo;
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $vars = getRealPost();
-        $title = $vars['title'];
-        $description = $vars['description'];
-        $startprice = $vars['startprice'];
-        if ($vars['paymentmethod'] == 'Creditcard') {
-            $paymentmethod = 1;
-        } else {
-            $paymentmethod = 2;
-        }
-        $productid = $vars['productid'];
-        $duration = $vars['duration'];
-        $paymentinstruction = $vars['paymentinstruction'];
-        $duration = $vars['duration'];
+        $duration = $_POST['duration'];
         $durationbeginDay = date("Y-m-d");
         $durationbeginTime = date("h:i:sa");
-        $shippingCosts = $vars['shippingcosts']; //vervangen!!!
-        $shippingInstructions = "niks"; //vervangen!!!
         $days = $duration;
         $durationendDay = date('Y-m-d', strtotime('+' . $days . 'days'));
         $durationendTime = $durationbeginTime;
-        $categorieName = $vars['Categories'];
-        global $pdo;
         $stmt = "UPDATE Object
                   SET title = ?, description = ?, startprice = ?, paymentmethodNumber = ?, paymentinstruction = ?,
                       duration = ?, durationbeginDay = ?, durationbeginTime = ?, shippingcosts = ?,
@@ -109,9 +80,10 @@ function updateProductData()
                   WHERE productid = ?";
 
         $updateAdInfo = $pdo->prepare($stmt);
-        if($updateAdInfo->execute(array($title, $description, $startprice, (int)$paymentmethod, $paymentinstruction,
+        if ($updateAdInfo->execute(array($_POST['title'], $_POST['description'], $_POST['startprice'], $_POST['paymentmethod'], $_POST['paymentinstruction'],
             (int)$duration, $durationbeginDay, $durationbeginTime,
-            $shippingCosts, $shippingInstructions, $durationendDay, $durationendTime, (int)$categorieName, $productid))){
+            $_POST['shippingcosts'], $_POST['shippinginstruction'], $durationendDay, $durationendTime, (int)$_POST['categories'], $_POST['productid']))
+        ) {
             //header('location: ../account/index.php');
         } else {
             print_r($updateAdInfo->errorInfo());
@@ -124,8 +96,12 @@ function updateProductData()
 if(empty($_SESSION['username'])){
     include($_SERVER['DOCUMENT_ROOT'] . '/include/login-message.inc.php');
 }
+echo $dataAd['durationendDay'];
+echo " --------  ";
+echo date("Y-m-d");
 
-if($dataAd['durationendDay'] > date("Y-m-d")) {
+if ($dataAd['durationendDay'] >= date("Y-m-d")) {
+
     ?>
     <!DOCTYPE html>
     <html>
@@ -155,9 +131,9 @@ if($dataAd['durationendDay'] > date("Y-m-d")) {
                 </div>
             </div>
             <?php
-            if ($_SERVER['REQUEST_METHOD'] == "POST" and checkNoErrors()) {
+            if ($_SERVER['REQUEST_METHOD'] == "POST" and !isset($_POST['changeid']) and checkNoErrors()) {
                 print("<div class='alert alert-success'><strong>Gelukt<br></strong> Uw advertentie is succesvol bijgewerkt.</div>");
-            } else if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors()) {
+            } else if ($_SERVER['REQUEST_METHOD'] == "POST" and !isset($_POST['changeid']) and !checkNoErrors()) {
                 print("<div class='alert alert-danger'><strong>Oei!</strong> Er ging iets mis tijdens het bijwerken van de advertentie, 
                             controleer en pas de rode velden aan en probeer het daarna opnieuw</div>");
             }
@@ -165,7 +141,7 @@ if($dataAd['durationendDay'] > date("Y-m-d")) {
             <div class="form-group row">
                 <label class="col-2 col-form-label">Categorie*</label>
                 <div class="col-10">
-                    <select class="form-control" id="Categories" name="Categories">
+                    <select class="form-control" id="categories" name="categories">
                         <?php
                         $stmt = $pdo->prepare("SELECT * FROM Categories");
                         $stmt->execute();
@@ -192,7 +168,8 @@ if($dataAd['durationendDay'] > date("Y-m-d")) {
                 </div>
             </div>
 
-            <input type="hidden" value="<?php echo $_GET['id']; ?>" name="productid" id="productid">
+            <input type="hidden" value="<?php echo $_POST['changeid']??$_POST['productid']; ?>" name="productid"
+                   id="productid">
 
             <div <?php print((!empty($errors['description'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
                 <label class="col-2 col-form-label">Beschrijving:*</label>
@@ -241,12 +218,15 @@ if($dataAd['durationendDay'] > date("Y-m-d")) {
                 <label class="col-2 col-form-label">Betaal methode:*</label>
                 <div class="col-10">
                     <select class="form-control" name="paymentmethod" id="payment-method">
-                        <option <?php print(($dataAd['paymentmethodNumber'] == 1) ? "selected" : "") ?>
-                                name="Creditcard">Creditcard
-                        </option>
-                        <option <?php print(($dataAd['paymentmethodNumber'] == 2) ? "selected" : "") ?> name="Bankgiro">
-                            Bankgiro
-                        </option>
+                        <?php
+                        $stmt = $pdo->prepare("SELECT * FROM paymentmethods");
+                        $stmt->execute();
+                        $dataPaymentMethods = $stmt->fetchAll();
+                        foreach ($dataPaymentMethods as $row) { ?>
+                            <option value="<?= $row['paymentmethodNumber'] ?>" <?= ($dataAd['paymentmethodNumber'] == $row['paymentmethodNumber']) ? 'selected' : '' ?>><?php echo $row['paymentmethod'] ?></option>
+                            <?php
+                        }
+                        ?>
                     </select>
                     <div class="form-control-feedback"><?php global $errors;
                         echo $errors['paymentmethod'] ?></div>
@@ -330,10 +310,6 @@ else {
 
 include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
-include($_SERVER['DOCUMENT_ROOT'] . '/include/delete-modal.php');
-
-
-
 ?>
 
 

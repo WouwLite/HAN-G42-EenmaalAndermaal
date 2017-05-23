@@ -1,10 +1,8 @@
 <!-- /include/delete-modal.php -->
 
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'] . '/app/getpost.php');
 require_once ($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $vars = getRealPOST();
     $sql = <<<SQL
 SELECT email FROM Users WHERE username = ( SELECT Seller FROM Object WHERE productid = ?)
 SQL;
