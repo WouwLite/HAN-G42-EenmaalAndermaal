@@ -17,7 +17,7 @@ if (isset($_SESSION['username'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title><?=$title?></title>
-    <?php include($_SERVER['DOCUMENT_ROOT' . '/assets/css/vendor/bootstrap.min.css']) ?>
+    <?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/css/vendor/bootstrap.min.css') ?>
     <link href="<?=$app_url?>/assets/css/vendor/bootstrap.min.css" rel="stylesheet">
     <link href="<?=$app_url?>/assets/css/splash.css" rel="stylesheet">
 

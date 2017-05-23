@@ -16,22 +16,24 @@ function getAds()
 
 $Ads = getAds();
 $i = 0;
-echo "<div class='container'>";
-foreach ($Ads as $Adverts) {
-    if ($i == 0) {
-        echo "<div class='row'>";
-    }
-    $i++;
-    echo "<div class='col-sm-4'>";
-    echo "<h2>" . $Adverts[0] . "</h2>";
-    if ($i == 5) {
-        $i = 0;
+?>
+<div class='container'>
+    <?php
+    foreach ($Ads as $Adverts) {
+        if ($i == 0) {
+            echo "<div class='row'>";
+        }
+        $i++;
+        echo "<div class='col-sm-4'>";
+        echo "<h2>" . $Adverts[0] . "</h2>";
+        if ($i == 5) {
+            $i = 0;
+            echo "</div>";
+        }
         echo "</div>";
     }
-    echo "</div>";
-}
-echo "</div>";
-?>
-
+    ?>
+</div>
+</div>
 
 
