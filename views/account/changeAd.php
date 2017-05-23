@@ -8,12 +8,12 @@ if ($debug == false) {
 
 include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
-echo var_dump($_POST);
+
 
 if(isset($_SESSION['username'])) {
-    $user = $_SESSION['username'];
+    $username = $_SESSION['username'];
     $stmt = $pdo->prepare("SELECT * FROM Object WHERE seller = ? AND productid = ? ");
-    $stmt->execute([$user, ($_POST['changeid'] ?? $_POST['productid'])]);
+    $stmt->execute([$username, ($_POST['changeid'] ?? $_POST['productid'])]);
     $dataAd = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
@@ -48,9 +48,10 @@ function checkEmptyFields()
     $errors['title'] = ($_POST['title'] == "") ? "Vul aub een titel in voor de advertentie" : '';
     $errors['description'] = ($_POST['description'] == "") ? "Vul aub een beschrijving in." : '';
     //$errors['foto'] = ($vars['foto1'] == "") ? "." : '';
-    $errors['startprice'] = ($_POST['startprice'] == "") ? "Vul aub een prijs in." : '';
+    if($_POST['startprice'] = 1){
+        $errors['startprice'] = ($_POST['startprice'] == "") ? "Vul aub een prijs in." : '';
+    }
     $errors['paymentmethod'] = ($_POST['paymentmethod'] == "") ? "Vul aub een betaalmethode in." : '';
-    $errors['shippingcosts'] = ($_POST['shippingcosts'] == "") ? "Vul aub de verzendkosten in." : '';
     $errors['duration'] = ($_POST['duration'] == "") ? "Vul aub de lengte van uw advertentie in." : '';
 }
 
@@ -80,13 +81,13 @@ function updateProductData()
                   WHERE productid = ?";
 
         $updateAdInfo = $pdo->prepare($stmt);
-        if ($updateAdInfo->execute(array($_POST['title'], $_POST['description'], $_POST['startprice'], $_POST['paymentmethod'], $_POST['paymentinstruction'],
+        if ($updateAdInfo->execute(array($_POST['title'], $_POST['description'], $_POST['startprice']??0, $_POST['paymentmethod'], $_POST['paymentinstruction'],
             (int)$duration, $durationbeginDay, $durationbeginTime,
-            $_POST['shippingcosts'], $_POST['shippinginstruction'], $durationendDay, $durationendTime, (int)$_POST['categories'], $_POST['productid']))
+            (int)$_POST['shippingcosts']??0, $_POST['shippinginstruction'], $durationendDay, $durationendTime, (int)$_POST['categories'], $_POST['productid']))
         ) {
             //header('location: ../account/index.php');
         } else {
-            print_r($updateAdInfo->errorInfo());
+
         }
 
 //
@@ -96,11 +97,11 @@ function updateProductData()
 if(empty($_SESSION['username'])){
     include($_SERVER['DOCUMENT_ROOT'] . '/include/login-message.inc.php');
 }
-echo $dataAd['durationendDay'];
-echo " --------  ";
-echo date("Y-m-d");
 
-if ($dataAd['durationendDay'] >= date("Y-m-d")) {
+
+$date1 = new DateTime(date("Y-m-d h:i:s"));
+$date2 = new DateTime($d['durationendDay'] . ' ' . $d['durationendTime']);
+if ($date1 <= $date2){
 
     ?>
     <!DOCTYPE html>
@@ -194,7 +195,7 @@ if ($dataAd['durationendDay'] >= date("Y-m-d")) {
                 <div class="input-inline col-10">
                     <div class="form-check">
             <span class="inline-input">
-            <input onclick="check()" type="radio" id="radio1" class="minimum-bid-price"
+            <input onclick="check()" type="radio" value="1" name="radio" id="radio1" class="minimum-bid-price"
                    value="<?php echo $dataAd['shippingcosts']; ?>">
                             <label for="minimum-bid-price">Start bieden vanaf:</label>
                     </div>
@@ -202,7 +203,7 @@ if ($dataAd['durationendDay'] >= date("Y-m-d")) {
 
                     <div class="form-check">
                     <span class="inline-input">
-                <input onclick="uncheck()" type="radio" id="123" class="minimum-bid-price">
+                <input onclick="uncheck()" type="radio" value="2" name="radio" id="radio2" class="minimum-bid-price">
                 <label>Geen minimale prijs</label>
                     </span>
                     </div>

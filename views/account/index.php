@@ -211,7 +211,8 @@ if (isset($_SESSION['username'])) {
                         <?php
                     } else {
                         global $user;
-                        echo '<th>U heeft nog geen veilingen geplaatst.</th>';
+                        ?> <th class="table-danger">U heeft nog geen veilingen geplaatst.</th>
+                        <?php
                     }
                     ?>
 
@@ -224,11 +225,20 @@ if (isset($_SESSION['username'])) {
                         foreach ($data as $d) { ?>
                             <td> <?php echo $d['title']; ?></td>
                             <td> <?php echo $d['durationbeginDay']; ?></td>
-                            <td>€<?php echo $d['sellingprice']; ?></td>
                             <?php
-                            $date1 = new DateTime(date("Y-m-d h:i:s"));
-                            $date2 = new DateTime($d['durationendDay'] . ' ' . $d['durationendTime']);
-                            if ($date1 <= $date2){
+                                if($d['sellingprice'] == NULL){
+                                    print '<td><i>Nog geen biedingen</i></td>';
+                                }
+                                else {
+                                    ?>
+                                    <td>€ <?php $d['sellingprice']; ?></td>
+                                    <?php
+                                }
+                            ?>
+                            <?php
+                            $date1 = date("Y-m-d H:i:s");
+                            $date2 = $d['durationendDay'] . ' ' . $d['durationendTime'];
+                            if (strtotime($date1) <= strtotime($date2)) {
                                 ?>
                                 <td><span class="badge badge-success">Actief</span></td>
                                 <?php
@@ -236,9 +246,7 @@ if (isset($_SESSION['username'])) {
                                 ?>
                                 <td><span class="badge badge-danger">Gesloten</span></td>
                                 <?php
-                                $productidToDelete = $d['productid'];
-                                $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 1 WHERE productid = ?");
-                                $stmt->execute([$productidToDelete]);
+
                             }
                             ?>
 

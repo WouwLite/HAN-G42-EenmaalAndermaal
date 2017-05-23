@@ -17,7 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 //    $_POST = getRealPOST();
     if (isset($_POST['final-submit'])) {
         checkEmptyFields();
-        saveProductData();
+        if(checkNoErrors()){
+            saveProductData();
+        }
     }
 }
 
@@ -58,9 +60,10 @@ function checkEmptyFields()
     $errors['title'] = ($_POST['title'] == "") ? "Vul aub een titel in voor de advertentie" : '';
     $errors['description'] = ($_POST['description'] == "") ? "Vul aub een beschrijving in." : '';
     //$errors['foto'] = ($_POST['foto1'] == "") ? "." : '';
-    $errors['startprice'] = ($_POST['startprice'] == "") ? "Vul aub een prijs in." : '';
+    if($_POST['radio'] == 1){
+        $errors['startprice'] = ($_POST['startprice'] == "") ? "Vul aub een prijs in." : '';
+    }
     $errors['paymentmethod'] = ($_POST['paymentmethod'] == "") ? "Vul aub een betaalmethode in." : '';
-    $errors['shippingcosts'] = ($_POST['shippingcosts'] == "") ? "Vul aub de verzendkosten in." : '';
     $errors['duration'] = ($_POST['duration'] == "") ? "Vul aub de lengte van uw advertentie in." : '';
 }
 
@@ -123,9 +126,9 @@ function saveProductData()
             move_uploaded_file($foto4['tmp_name'], $destdir . $uniquefilename);
         }
 
-        if ($adInfo->execute(array($productid, $_POST['title'], $_POST['description'], $_POST['startprice'], (int)$_POST['paymentmethod'], $_POST['paymentinstruction'],
+        if ($adInfo->execute(array($productid, $_POST['title'], $_POST['description'], $_POST['startprice']??0, (int)$_POST['paymentmethod'], $_POST['paymentinstruction'],
             $user['city'], $user['country'], (int)$duration, $durationbeginDay, $durationbeginTime,
-            $_POST['shippingcosts'], $_POST['shippinginstruction'], $_SESSION['username'], $durationendDay, $durationendTime, (int)$_POST['Categories']))
+            (int)$_POST['shippingcosts']??0, $_POST['shippinginstruction'], $_SESSION['username'], $durationendDay, $durationendTime, (int)$_POST['Categories']))
         ) {
             //header('location: ../account/index.php');
         } else {
@@ -222,14 +225,14 @@ function saveProductData()
                 <div class="input-inline col-10">
                     <div class="form-check">
                 <span class="inline-input">
-                <input onclick="check()" type="radio" id="radio1" class="minimum-bid-price">
+                <input onclick="check()" type="radio" id="radio1" name="radio" value="1" class="minimum-bid-price">
                                 <label for="minimum-bid-price">Start bieden vanaf:</label>
                     </div>
                     </span>
 
                     <div class="form-check">
                         <span class="inline-input">
-                    <input onclick="uncheck()" type="radio" id="123" class="minimum-bid-price">
+                    <input onclick="uncheck()" type="radio" id="radio2" name="radio" value="2" class="minimum-bid-price">
                     <label>Geen minimale prijs</label>
                         </span>
                     </div>
@@ -332,6 +335,5 @@ function saveProductData()
 <?php
 include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
-include($_SERVER['DOCUMENT_ROOT'] . '/include/showAds.inc.php');
 ?>
 
