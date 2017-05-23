@@ -37,7 +37,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
             $username = $_SESSION['username'];
             $stmt = $pdo->prepare("SELECT COUNT(Seller) FROM Object WHERE seller = ?");
             $stmt->execute([$username]);
-            $aantalVeilingen = $stmt->fetchColumn();
+            $aantalVeilingen = $stmt->fetchAll();
             if ($aantalVeilingen > 0) {
                 ?>
                 <thead>

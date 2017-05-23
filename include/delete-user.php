@@ -1,27 +1,29 @@
-<!-- /include/delete-modal.php -->
+<!-- /include/delete-user.php -->
 
 <?php
+require_once($_SERVER['DOCUMENT_ROOT'] . '/app/getpost.php');
 require_once ($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $vars = getRealPOST();
     $sql = <<<SQL
-SELECT email FROM Users WHERE username = ( SELECT Seller FROM Object WHERE productid = ?)
+SELECT email FROM Users WHERE username = ?
 SQL;
 
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([(int)$_POST['deleteItem']]);
+    $stmt->execute([$_POST['deleteUser']]);
     $useremail = $stmt->fetchColumn();
     print("<!-- " . $useremail . " -->");
 
-    $subject = "Je aanbieding is verwijderd";
-    $message = "Om de volgende reden is je advertentie verwijderd: " . $_POST['reason'];
+    $subject = "Je account is verwijderd";
+    $message = "Om de volgende reden is je account verwijderd: " . $_POST['reason'];
     $headers = 'From: noreply@iproject42.icasites.nl';
     mail($useremail, $subject, $message, $headers);
 
     $delsql = <<<SQL
-DELETE FROM Object WHERE productid = ?
+DELETE FROM Users WHERE username = ?
 SQL;
     $delstmt = $pdo->prepare($delsql);
-    $delstmt->execute([(int)$_POST['deleteItem']]);
+    $delstmt->execute([$_POST['deleteUser']]);
 }
 ?>
 
@@ -37,7 +39,7 @@ SQL;
             </div>
             <form action="" method="post">
                 <div class="modal-body">
-                    <p>Weet je zeker dat je advertentie nr.<span class="ad-id">test</span> wilt verwijderen?<br>
+                    <p>Weet je zeker dat je het geselecteerde account <span class="username">test</span> wilt verwijderen?<br>
                         Dit kan niet ongedaan worden!</p>
                     <div class="form-group">
                         <label for="reason" class="form-control-label">Reden voor verwijdering</label>
@@ -46,8 +48,8 @@ SQL;
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuleren</button>
-                    <button type="submit" id="deleteButton" name="deleteItem" value="" class="btn btn-danger">Ja,
-                        verwijder de advertentie
+                    <button type="submit" id="deleteButton" name="deleteUser" value="" class="btn btn-danger">Ja,
+                        verwijder het account.
                     </button>
                 </div>
             </form>
@@ -63,9 +65,9 @@ SQL;
 
     $('#deleteModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
-        var ad = button.data('ad');
+        var username = button.data('user');
         var modal = $(this);
-        modal.find('.ad-id').text(ad);
-        $('#deleteButton').val(ad);
+        modal.find('.username').text(username);
+        $('#deleteButton').val(username);
     })
 </script>

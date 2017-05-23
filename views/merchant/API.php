@@ -1,7 +1,7 @@
 <?php
 session_start();
 $_SESSION['amount'] = 00.01;
-$_SESSION['orderNumber'] = 12345;
+//$_SESSION['orderNumber'] = uniqid();
 require_once($_SERVER['DOCUMENT_ROOT'] . "/config/app.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/app/Mollie/API/Autoloader.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
@@ -14,9 +14,10 @@ try {
         array(
             'amount' => $_SESSION['amount'],
             'description' => 'Upgrade naar verkoper',
-            'redirectUrl' => 'http://iproject42.icasites.nl/views/merchant/UpdateData.php'.'',
+            'redirectUrl' => 'http://iproject42.icasites.nl/views/account/' . '',
+            'webhookUrl' => 'http://iproject42.icasites.nl/views/merchant/UpdateData.php',
             'metadata' => array(
-                'order_id' => ''.$_SESSION['orderNumber'].'',
+                'username' => '' . $_SESSION['username'] . '',
             )
         )
     );

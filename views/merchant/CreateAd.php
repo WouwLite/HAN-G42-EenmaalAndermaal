@@ -75,7 +75,7 @@ function checkNoErrors()
 
 function saveProductData()
 {
-    global $user, $_POST, $pdo;
+    global $user, $pdo;
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $productid = getHighestId();
         $duration = $_POST['duration'];

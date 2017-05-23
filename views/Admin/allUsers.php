@@ -86,12 +86,12 @@ if (isset($user['username']) && $user['admin'] == 1) {
                         <td> <?php echo $d['merchant']; ?></td>
                         <td> <?php echo $d['admin']; ?></td>
                         <td>
-                            <a class="btn btn-default btn-sm" href="#"><i
-                                    class="fa fa-wrench"
-                                    style="width: 12px"></i></a>
+                            <a class="btn btn-default btn-sm" href="changeAd.php?id=<?= $d['username']; ?>"><i
+                                        class="fa fa-wrench"
+                                        style="width: 12px"></i></a>
                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                    data-target="#deleteModal" data-ad="<?php echo $d['productid']; ?>"><i
-                                    class="fa fa-trash-o fa-sm"></i></button>
+                                    data-target="#deleteModal" data-user="<?php echo $d['username']; ?>"><i
+                                        class="fa fa-trash-o fa-sm"></i></button>
                         </td>
                     </tr>
                     <?php
@@ -110,7 +110,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
 
     include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
-    include($_SERVER['DOCUMENT_ROOT'] . '/include/delete-modal.php');
+    include($_SERVER['DOCUMENT_ROOT'] . '/include/delete-user.php');
 } else {
     header ('location: ../account/login.php');
 }

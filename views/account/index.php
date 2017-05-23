@@ -238,9 +238,12 @@ if (isset($_SESSION['username'])) {
                             ?>
 
                             <td>
-                                <a class="btn btn-default btn-sm" href="changeAd.php?id=<?= $d['productid']; ?>"><i
-                                            class="fa fa-wrench"
-                                            style="width: 12px"></i></a>
+                                <form action="changeAd.php" method="post">
+                                    <button class="btn btn-default btn-sm" name="changeid"
+                                            value="<?= $d['productid'] ?>"><i
+                                                class="fa fa-wrench"
+                                                style="width: 12px"></i></button>
+                                </form>
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                         data-target="#deleteModal" data-ad="<?php echo $d['productid']; ?>"><i
                                             class="fa fa-trash-o fa-sm"></i></button>
