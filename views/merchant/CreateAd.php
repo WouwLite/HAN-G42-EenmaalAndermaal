@@ -332,5 +332,6 @@ function saveProductData()
 <?php
 include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/include/showAds.inc.php');
 ?>
 

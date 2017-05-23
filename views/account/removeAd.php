@@ -14,7 +14,7 @@ function getAds()
     return $ads;
 }
 echo $_SESSION['username'];
-removeAds();
+//removeAds();
 function removeAds()
 {
     global $pdo;

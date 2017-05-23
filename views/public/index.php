@@ -30,14 +30,11 @@ if (!isset($_SESSION['username'])): ?>
     </div>
 <?php endif; ?>
 
-<div class="container-float">
-    <h1>Nieuwste advertenties</h1>
-    <p>
-        badge unit ding maken met foreach DB loop van top xx laatste biedingen.
-    </p>
-</div>
-
 <?php
+
+include($_SERVER['DOCUMENT_ROOT'] . '/include/showAds.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
+
+
 ?>
