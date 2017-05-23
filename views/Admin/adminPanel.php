@@ -32,14 +32,14 @@ if (isset($user['username']) && $user['admin'] == 1) {
         <br>
         <h3>Alle advertenties</h3>
         <br>
-        <table class="table table-sm table-striped table-bordered">
-            <?php
-            $username = $_SESSION['username'];
-            $stmt = $pdo->prepare("SELECT COUNT(Seller) FROM Object WHERE seller = ?");
-            $stmt->execute([$username]);
-            $aantalVeilingen = $stmt->fetchAll();
-            if ($aantalVeilingen > 0) {
-                ?>
+        <?php
+        $stmt = $pdo->prepare("SELECT COUNT(Seller) FROM Object");
+        $stmt->execute();
+        $auctions = $stmt->fetchColumn();
+        if ($auctions > 0) {
+        ?>
+        <table class="table table-sm table-striped table-bordered" style="height: 15em; overflow-x: auto; overflow-y: auto;">
+            <tbody>
                 <thead>
                 <th>Product id</th>
                 <th>Titel</th>
@@ -64,8 +64,8 @@ if (isset($user['username']) && $user['admin'] == 1) {
                 <th>Bewerk</th>
                 </thead>
                 <?php
-            } else {
-                echo '<th>Er zijn nog geen veilingen geplaatst.</th>';
+            } else if ($aantalVeilingen == 0){
+                print("<div class='alert alert-danger'><strong>Oei!</strong> Het lijkt erop dat er nog geen advertenties zijn geplaatst.</div>");
             }
             ?>
 
@@ -74,7 +74,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
             $stmt = $pdo->prepare("SELECT * FROM Object");
             $stmt->execute([$username]);
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            if ($aantalVeilingen > 0) {
+            if ($auctions > 0) {
                 foreach ($data as $d) { ?>
                 <tr>
                     <td> <?php echo $d['productid']; ?></td>
@@ -95,7 +95,9 @@ if (isset($user['username']) && $user['admin'] == 1) {
                     <td> <?php echo $d['durationendDay']; ?></td>
                     <td> <?php echo $d['durationendTime']; ?></td>
                     <?php
-                    if (date("Y-m-d") <= $d['durationendDay']) {
+                    $date1 = new DateTime(date("Y-m-d h:i:s"));
+                    $date2 = new DateTime($d['durationendDay'] . ' ' . $d['durationendTime']);
+                    if ($date1 <= $date2){
                         ?>
                         <td><span class="badge badge-success">Actief</span></td>
                         <?php
@@ -125,7 +127,25 @@ if (isset($user['username']) && $user['admin'] == 1) {
     </div>
 
     </body>
-
+<!--    <script>-->
+<!--        var table = $('table'),-->
+<!--            thead = table.find('thead'),-->
+<!---->
+<!--            fixed_thead;-->
+<!---->
+<!--        thead.find('td').each(function() {-->
+<!--            var el = $(this);-->
+<!--            el.css('width', el.width());-->
+<!--        });-->
+<!---->
+<!--        fixed_thead = thead.clone();-->
+<!--        thead.after(fixed_thead);-->
+<!---->
+<!--        fixed_thead.css({-->
+<!--            'position': 'fixed',-->
+<!--            'top': 0-->
+<!--        });-->
+<!--    </script>-->
     </html>
 
     <?php

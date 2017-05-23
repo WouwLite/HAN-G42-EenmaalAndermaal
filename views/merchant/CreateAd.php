@@ -80,7 +80,7 @@ function saveProductData()
         $productid = getHighestId();
         $duration = $_POST['duration'];
         $durationbeginDay = date("Y-m-d");
-        $durationbeginTime = date("h:i:sa");
+        $durationbeginTime = date("h:i:s");
         $days = $duration;
         $durationendDay = date('Y-m-d', strtotime('+' . $days . 'days'));
         $durationendTime = $durationbeginTime;

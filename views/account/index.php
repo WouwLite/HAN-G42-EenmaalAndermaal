@@ -226,7 +226,9 @@ if (isset($_SESSION['username'])) {
                             <td> <?php echo $d['durationbeginDay']; ?></td>
                             <td>€<?php echo $d['sellingprice']; ?></td>
                             <?php
-                            if (date("Y-m-d") <= $d['durationendDay']) {
+                            $date1 = new DateTime(date("Y-m-d h:i:s"));
+                            $date2 = new DateTime($d['durationendDay'] . ' ' . $d['durationendTime']);
+                            if ($date1 <= $date2){
                                 ?>
                                 <td><span class="badge badge-success">Actief</span></td>
                                 <?php
@@ -234,6 +236,9 @@ if (isset($_SESSION['username'])) {
                                 ?>
                                 <td><span class="badge badge-danger">Gesloten</span></td>
                                 <?php
+                                $productidToDelete = $d['productid'];
+                                $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 1 WHERE productid = ?");
+                                $stmt->execute([$productidToDelete]);
                             }
                             ?>
 
