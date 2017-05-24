@@ -8,7 +8,7 @@ SELECT email FROM Users WHERE username = ( SELECT Seller FROM Object WHERE produ
 SQL;
 
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([(int)$_POST['deleteItem']]);
+    $stmt->execute([$_POST['deleteItem']]);
     $useremail = $stmt->fetchColumn();
     print("<!-- " . $useremail . " -->");
 
@@ -30,7 +30,9 @@ SQL;
     $filenames = $getimgstmt->fetchAll(PDO::FETCH_COLUMN);
     $destdir = $_SERVER['DOCUMENT_ROOT'] . "\\views\\merchant\\AdImages\\";
     foreach ($filenames as $file) {
-        unlink($destdir . $file);
+        if (file_exists($destdir . $file)) {
+            unlink($destdir . $file);
+        }
     }
 
     $delimg = <<<SQL
@@ -38,8 +40,8 @@ DELETE FROM productPhoto WHERE productid = ?
 SQL;
 
 
-    $pdo->prepare($delimg)->execute([(int)$_POST['deleteItem']]);
-    $pdo->prepare($delobj)->execute([(int)$_POST['deleteItem']]);
+    $pdo->prepare($delimg)->execute([$_POST['deleteItem']]);
+    $pdo->prepare($delobj)->execute([$_POST['deleteItem']]);
 }
 ?>
 
