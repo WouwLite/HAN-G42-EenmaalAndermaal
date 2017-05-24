@@ -15,7 +15,7 @@ SQL;
     $subject = "Je aanbieding is verwijderd";
     $message = "Om de volgende reden is je advertentie verwijderd: " . $_POST['reason'];
     $headers = 'From: noreply@iproject42.icasites.nl';
-//    mail($useremail, $subject, $message, $headers);
+    mail($useremail, $subject, $message, $headers);
 
     $delobj = <<<SQL
 DELETE FROM Object WHERE productid = ?
