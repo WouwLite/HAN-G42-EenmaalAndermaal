@@ -44,8 +44,10 @@ body {
     color: #d17581;
 }
 
-.thumbnail {
-    padding: 0;
+.img-thumbnail {
+    margin-bottom: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .thumbnail .caption-full {
