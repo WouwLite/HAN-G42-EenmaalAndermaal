@@ -28,7 +28,7 @@ SQL;
     $getimgstmt = $pdo->prepare($getimgsql);
     $getimgstmt->execute([$_POST['deleteItem']]);
     $filenames = $getimgstmt->fetchAll(PDO::FETCH_COLUMN);
-    $destdir = $_SERVER['DOCUMENT_ROOT'] . "\\views\\merchant\\AdImages\\";
+    $destdir = $app_url . "\\views\\merchant\\AdImages\\";
     foreach ($filenames as $file) {
         if (file_exists($destdir . $file)) {
             unlink($destdir . $file);

@@ -18,8 +18,8 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 <script src="<?= $app_url ?>/assets/js/vendor/bootstrap.min.js"></script>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<script src="<?= $app_url ?>/assets/js/vendor/bootstrap.min.js"></script>
-<script src="<?= $app_url ?>/assets/js/vendor/jquery.js"></script>
+<!--<script src="--><? //= $app_url ?><!--/assets/js/vendor/bootstrap.min.js"></script>-->
+<!--<script src="--><? //= $app_url ?><!--/assets/js/vendor/jquery.js"></script>-->
 
 <!-- External Fonts -->
 <link href="https://fonts.googleapis.com/css?family=Nunito|Nunito+Sans|Comfortaa" rel="stylesheet">
