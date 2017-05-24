@@ -60,21 +60,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title><?= $title ?></title>
     <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/css/register.css">
 <!--    <link rel="stylesheet" href="--><?php //$_SERVER['DOCUMENT_ROOT'] ?><!--/assets/css/login-register.css">-->
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/style.inc.php'); ?>
-</head>
-<body>
-
 <div class="bg-overlay">
     <div class="container col-md-8 col-xs-6 jumbotron" style="background: rgba(236, 240, 241, 0.9);">
-        Ok, de quote (") zit ergens verstopt in de bg-overlay of jumbotrol
         <a href="<?= $app_url ?>" class="btn btn-danger" role="button" aria-pressed="true"
            style="margin-left: 5px;margin-top: 5px;">Terug naar thuis</a>
         <div>
