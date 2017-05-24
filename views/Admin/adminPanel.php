@@ -37,6 +37,13 @@ if (isset($user['username']) && $user['admin'] == 1) {
         $activeAuctions = $stmt->fetchColumn();
         if ($activeAuctions > 0) {
         ?>
+        <h3 class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er zijn: <?= $activeAuctions; ?> actieve veilingen.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </h3>
+
+        <script>$(".alert").alert('close')</script>
         <div class="activeAds" style="overflow-x: auto; overflow-y: auto; height: 15em;">
             <table class="table table-sm table-striped table-bordered" style="overflow-x: auto; overflow-y: auto; height: 15em;">
                 <tbody>
@@ -154,6 +161,11 @@ if (isset($user['username']) && $user['admin'] == 1) {
         $closedAuctions = $stmt->fetchColumn();
         if ($closedAuctions > 0) {
         ?>
+        <h3 class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er zijn: <?= $closedAuctions; ?> gesloten veilingen.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </h3>
         <div class="closedAds" style="overflow-x: auto; overflow-y: auto; height: 15em;">
             <table class="table table-sm table-striped table-bordered"
                    style="height: 15em; overflow-x: auto; overflow-y: auto;">
