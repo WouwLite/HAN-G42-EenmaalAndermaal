@@ -1,7 +1,7 @@
 <!-- /include/delete-modal.php -->
 
 <?php
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sql = <<<SQL
 SELECT email FROM Users WHERE username = ( SELECT Seller FROM Object WHERE productid = ?)
@@ -15,13 +15,31 @@ SQL;
     $subject = "Je aanbieding is verwijderd";
     $message = "Om de volgende reden is je advertentie verwijderd: " . $_POST['reason'];
     $headers = 'From: noreply@iproject42.icasites.nl';
-    mail($useremail, $subject, $message, $headers);
+//    mail($useremail, $subject, $message, $headers);
 
-    $delsql = <<<SQL
+    $delobj = <<<SQL
 DELETE FROM Object WHERE productid = ?
 SQL;
-    $delstmt = $pdo->prepare($delsql);
-    $delstmt->execute([(int)$_POST['deleteItem']]);
+
+    $getimgsql = <<<SQL
+SELECT filename FROM productPhoto WHERE productid = ?
+SQL;
+
+    $getimgstmt = $pdo->prepare($getimgsql);
+    $getimgstmt->execute([$_POST['deleteItem']]);
+    $filenames = $getimgstmt->fetchAll(PDO::FETCH_COLUMN);
+    $destdir = $_SERVER['DOCUMENT_ROOT'] . "\\views\\merchant\\AdImages\\";
+    foreach ($filenames as $file) {
+        unlink($destdir . $file);
+    }
+
+    $delimg = <<<SQL
+DELETE FROM productPhoto WHERE productid = ?
+SQL;
+
+
+    $pdo->prepare($delimg)->execute([(int)$_POST['deleteItem']]);
+    $pdo->prepare($delobj)->execute([(int)$_POST['deleteItem']]);
 }
 ?>
 

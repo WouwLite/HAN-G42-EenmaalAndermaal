@@ -1,30 +1,38 @@
 <?php
-session_start();
+
+$hostname = "mssql2.iproject.icasites.nl"; //Naam van de Server
+$dbname = "iproject42";    //Naam van de Database
+$username = "iproject42";      //Inlognaam
+$pw = "7MqNNSxC";      //Password
+
+$pdo = new PDO ("sqlsrv:Server=$hostname;Database=$dbname;ConnectionPooling=0", "$username", "$pw");
+
 require($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
-include_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
+
+if ($debug == false) {
+//session_start();
+    include_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
+}
+
 include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
-//session_start();
+session_start();
 
-$username = $_SESSION['username'];
+$user = $_SESSION['username'];
 $stmt = $pdo->prepare("SELECT * FROM Users WHERE username = ?");
-$stmt->execute([$username]);
+$stmt->execute([$user]);
 $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$errors = array();
+$vars = array();
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    global $_POST, $errors;
-//    $_POST = getRealPOST();
-    if (isset($_POST['final-submit'])) {
+    global $vars, $errors;
+    $vars = getRealPOST();
+    if (isset($vars['final-submit'])) {
         checkEmptyFields();
-        if(checkNoErrors()){
+        if (checkNoErrors()) {
             saveProductData();
         }
     }
-}
-
-if(empty($_SESSION['username'])){
-    include($_SERVER['DOCUMENT_ROOT'] . '/include/login-message.inc.php');
 }
 
 function getHighestId()
@@ -38,33 +46,34 @@ function getHighestId()
     } else {
         return $data;
     }
+
+
 }
 
-//function getRealPOST()
-//{
-//    $pairs = explode("&", file_get_contents("php://input"));
-//    $_POST = array();
-//    foreach ($pairs as $pair) {
-//        $nv = explode("=", $pair);
-//        $name = urldecode($nv[0]);
-//        $value = urldecode($nv[1]);
-//        $_POST[$name] = $value;
-//    }
-//    return $_POST;
-//}
+function getRealPOST()
+{
+    $pairs = explode("&", file_get_contents("php://input"));
+    $vars = array();
+    foreach ($pairs as $pair) {
+        $nv = explode("=", $pair);
+        $name = urldecode($nv[0]);
+        $value = urldecode($nv[1]);
+        $vars[$name] = $value;
+    }
+    return $vars;
+}
 
 function checkEmptyFields()
 {
     global $errors;
-    global $_POST;
-    $errors['title'] = ($_POST['title'] == "") ? "Vul aub een titel in voor de advertentie" : '';
-    $errors['description'] = ($_POST['description'] == "") ? "Vul aub een beschrijving in." : '';
-    //$errors['foto'] = ($_POST['foto1'] == "") ? "." : '';
-    if($_POST['radio'] == 1){
-        $errors['startprice'] = ($_POST['startprice'] == "") ? "Vul aub een prijs in." : '';
-    }
-    $errors['paymentmethod'] = ($_POST['paymentmethod'] == "") ? "Vul aub een betaalmethode in." : '';
-    $errors['duration'] = ($_POST['duration'] == "") ? "Vul aub de lengte van uw advertentie in." : '';
+    global $vars;
+    $errors['title'] = ($vars['title'] == "") ? "Vul aub een titel in voor de advertentie" : '';
+    $errors['description'] = ($vars['description'] == "") ? "Vul aub een beschrijving in." : '';
+    //$errors['foto'] = ($vars['foto1'] == "") ? "." : '';
+    $errors['startprice'] = ($vars['startprice'] == "") ? "Vul aub een prijs in." : '';
+    $errors['paymentmethod'] = ($vars['paymentmethod'] == "") ? "Vul aub een betaalmethode in." : '';
+    $errors['shippingcosts'] = ($vars['shippingcosts'] == "") ? "Vul aub de verzendkosten in." : '';
+    $errors['duration'] = ($vars['duration'] == "") ? "Vul aub de lengte van uw advertentie in." : '';
 }
 
 function checkNoErrors()
@@ -78,19 +87,34 @@ function checkNoErrors()
 
 function saveProductData()
 {
-    global $user, $pdo;
+    global $user, $_SESSION, $vars;
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $vars = getRealPost();
         $productid = getHighestId();
-        $duration = $_POST['duration'];
+        $title = $vars['title'];
+        $description = $vars['description'];
+        $startprice = $vars['startprice'];
+        if ($vars['paymentmethod'] == 'Creditcard') {
+            $paymentmethod = 1;
+        } else {
+            $paymentmethod = 2;
+        }
+        $duration = $vars['duration'];
+        $paymentinstruction = $vars['paymentinstruction'];
+        $duration = $vars['duration'];
         $durationbeginDay = date("Y-m-d");
-        $durationbeginTime = date("h:i:s");
+        $durationbeginTime = date("h:i:sa");
+        $shippingCosts = $vars['shippingcosts']; //vervangen!!!
+        $shippingInstructions = "niks"; //vervangen!!!
         $days = $duration;
         $durationendDay = date('Y-m-d', strtotime('+' . $days . 'days'));
         $durationendTime = $durationbeginTime;
-        $foto1 = ($_FILES['foto1']['error'] == UPLOAD_ERR_NO_FILE) ? null : $_FILES['foto1'];
-        $foto2 = ($_FILES['foto2']['error'] == UPLOAD_ERR_NO_FILE) ? null : $_FILES['foto2'];
-        $foto3 = ($_FILES['foto3']['error'] == UPLOAD_ERR_NO_FILE) ? null : $_FILES['foto3'];
-        $foto4 = ($_FILES['foto4']['error'] == UPLOAD_ERR_NO_FILE) ? null : $_FILES['foto4'];
+        $foto1 = $vars['foto1'] ?? null;
+        $foto2 = $vars['foto2'] ?? null;
+        $foto3 = $vars['foto3'] ?? null;
+        $foto4 = $vars['foto4'] ?? null;
+        $categorieName = $vars['categories'];
+        global $pdo;
         $stmt = "INSERT INTO Object(productid, title, description, startprice, paymentmethodNumber, paymentinstruction,
                   city, country, duration, durationbeginDay, durationbeginTime, shippingcosts, shippinginstructions, seller,
                   durationendDay, durationendTime, auctionclosed, Categories)
@@ -100,42 +124,43 @@ function saveProductData()
                  VALUES (?, ?)";
         $adInfo = $pdo->prepare($stmt);
         $photoInfo = $pdo->prepare($stmt2);
-        $destdir = "AdImages\\";
-        if ($foto1) {
-            $ext = pathinfo($foto1['name'], PATHINFO_EXTENSION);
-            $uniquefilename = uniqid('EAImg') . "." . $ext;
-            $photoInfo->execute(array($productid, $uniquefilename));
-            move_uploaded_file($foto1['tmp_name'], $destdir . $uniquefilename);
-        }
-        if ($foto2) {
-            $ext = pathinfo($foto2['name'], PATHINFO_EXTENSION);
-            $uniquefilename = uniqid('EAImg') . "." . $ext;
-            $photoInfo->execute(array($productid, $uniquefilename));
-            move_uploaded_file($foto2['tmp_name'], $destdir . $uniquefilename);
-        }
-        if ($foto3) {
-            $ext = pathinfo($foto3['name'], PATHINFO_EXTENSION);
-            $uniquefilename = uniqid('EAImg') . "." . $ext;
-            $photoInfo->execute(array($productid, $uniquefilename));
-            move_uploaded_file($foto3['tmp_name'], $destdir . $uniquefilename);
-        }
-        if ($foto4) {
-            $ext = pathinfo($foto4['name'], PATHINFO_EXTENSION);
-            $uniquefilename = uniqid('EAImg') . "." . $ext;
-            $photoInfo->execute(array($productid, $uniquefilename));
-            move_uploaded_file($foto4['tmp_name'], $destdir . $uniquefilename);
-        }
+        if ($foto1) $photoInfo->execute(array($productid, $foto1));
+        if ($foto2) $photoInfo->execute(array($productid, $foto2));
+        if ($foto3) $photoInfo->execute(array($productid, $foto3));
+        if ($foto4) $photoInfo->execute(array($productid, $foto4));
 
-        if ($adInfo->execute(array($productid, $_POST['title'], $_POST['description'], $_POST['startprice']??0, (int)$_POST['paymentmethod'], $_POST['paymentinstruction'],
-            $user['city'], $user['country'], (int)$duration, $durationbeginDay, $durationbeginTime,
-            (int)$_POST['shippingcosts']??0, $_POST['shippinginstruction'], $_SESSION['username'], $durationendDay, $durationendTime, (int)$_POST['Categories']))
-        ) {
-            //header('location: ../account/index.php');
-        } else {
-            print_r($adInfo->errorInfo());
-        }
+        $adInfo->execute(array($productid, $title, $description, (float)$startprice, (int)$paymentmethod, $paymentinstruction,
+            $_SESSION['city'], $_SESSION['country'], (int)$duration, $durationbeginDay, $durationbeginTime,
+            (float)$shippingCosts, $shippingInstructions, $_SESSION['username'], $durationendDay, $durationendTime, (int)$categorieName));
 
+        print_r($adInfo->errorInfo());
+        print_r($photoInfo->errorInfo());
     }
+//    if(isset($_FILES['foto1'])) {
+//        $errors = array();
+//        $file_name = $_FILES['foto1']['name'];
+//        $file_size = $_FILES['foto1']['size'];
+//        $file_tmp = $_FILES['foto1']['tmp_name'];
+//        $file_type = $_FILES['foto1']['type'];
+//        $file_ext = strtolower(end(explode('.', $_FILES['foto1']['name'])));
+//
+//        $expensions = array("jpeg", "jpg", "png");
+//
+//        if (in_array($file_ext, $expensions) === false) {
+//            $errors[] = "extension not allowed, please choose a JPEG or PNG file.";
+//        }
+//
+//        if ($file_size > 2097152) {
+//            $errors[] = 'File size must be excately 2 MB';
+//        }
+//
+//        if (empty($errors) == true) {
+//            move_uploaded_file($file_tmp, "AdImages/" . $file_name);
+//            echo "Success";
+//        } else {
+//            print_r($errors);
+//        }
+//    }
 }
 
 ?>
@@ -161,23 +186,13 @@ function saveProductData()
 
 <?php if ($data['merchant'] == 1) { ?>
     <div class="container main-part">
-        <form action="#" method="POST" enctype="multipart/form-data">
+        <form action="#" method="post">
             <div class="form-group row">
                 <label class="col-2 col-form-label"></label>
                 <div class="col-8">
                     <h1 class="product-title-page">Plaats advertentie</h1>
                 </div>
             </div>
-            <?php
-            if ($_SERVER['REQUEST_METHOD'] == "POST" and checkNoErrors()) {
-                print("<div class='alert alert-success'><strong>Gelukt<br></strong> Uw advertentie is succesvol geplaatst.</div>");
-            }
-
-            else if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors()) {
-                print("<div class='alert alert-danger'><strong>Oei!</strong> Er ging iets mis tijdens het plaatsen van de advertentie, 
-                        controleer en pas de rode velden aan en probeer het daarna opnieuw</div>");
-            }
-            ?>
             <div class="form-group row">
                 <label class="col-2 col-form-label">Categorie*</label>
                 <div class="col-10">
@@ -187,7 +202,7 @@ function saveProductData()
                         $stmt->execute();
                         $data = $stmt->fetchAll();
                         foreach ($data as $row) { ?>
-                            <option value="<?= $row['ID'] ?>"><?= $row['Name'] ?></option>
+                            <option value="<?= $row['ID'] ?>"><?php echo $row['Name'] ?></option>
                             <?php
                         }
                         ?>
@@ -197,9 +212,10 @@ function saveProductData()
             <div <?php print((!empty($errors['title'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
                 <label for="title" class="col-2 col-form-label">Titel:*</label>
                 <div class="col-10">
-                    <input id="title" type="text" id="title" name="title" class="form-control" placeholder="Titel"
+                    <input id="title" type="text" id="title" name="title" class="form-control" placeholder="Titel:"
                            autofocus>
-                    <div class="form-control-feedback"><?= $errors['title']??'' ?></div>
+                    <div class="form-control-feedback"><?php global $errors;
+                        echo $errors['title'] ?></div>
                 </div>
             </div>
 
@@ -208,13 +224,14 @@ function saveProductData()
                 <div class="col-10">
             <textarea class="form-control" rows="4" name="description"
                       placeholder="Plaats hier een beschrijving van uw product"></textarea>
-                    <div class="form-control-feedback"><?= $errors['description']??'' ?></div>
+                    <div class="form-control-feedback"><?php global $errors;
+                        echo $errors['description'] ?></div>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-2 col-form-label">Upload tot 4 fotos:</label>
                 <div class="col-10">
-                    <input type="file" name="foto1" id="foto1" class="form-control">
+                    <input type="file" name="foto1" id="foto2" class="form-control">
                     <input type="file" name="foto2" id="foto1" class="form-control">
                     <input type="file" name="foto3" id="foto3" class="form-control">
                     <input type="file" name="foto4" id="foto4" class="form-control">
@@ -225,21 +242,22 @@ function saveProductData()
                 <div class="input-inline col-10">
                     <div class="form-check">
                 <span class="inline-input">
-                <input onclick="check()" type="radio" id="radio1" name="radio" value="1" class="minimum-bid-price">
+                <input onclick="check()" type="radio" id="radio1" class="minimum-bid-price">
                                 <label for="minimum-bid-price">Start bieden vanaf:</label>
                     </div>
                     </span>
 
                     <div class="form-check">
                         <span class="inline-input">
-                    <input onclick="uncheck()" type="radio" id="radio2" name="radio" value="2" class="minimum-bid-price">
+                    <input onclick="uncheck()" type="radio" id="123" class="minimum-bid-price">
                     <label>Geen minimale prijs</label>
                         </span>
                     </div>
                     <input id="minimum-bid-price" placeholder="€ 0,00" name="startprice" type="number" step="0.01"
                            class="form-control"
                            disabled>
-                    <div class="form-control-feedback"><?= $errors['startprice']??'' ?></div>
+                    <div class="form-control-feedback"><?php global $errors;
+                        echo $errors['startprice'] ?></div>
                 </div>
             </div>
 
@@ -252,12 +270,13 @@ function saveProductData()
                         $stmt->execute();
                         $dataPaymentMethods = $stmt->fetchAll();
                         foreach ($dataPaymentMethods as $row) { ?>
-                            <option value="<?= $row['paymentmethodNumber'] ?>"><?php echo $row['paymentmethod'] ?></option>
+                            <option><?php echo $row['paymentmethod'] ?></option>
                             <?php
                         }
                         ?>
                     </select>
-                    <div class="form-control-feedback"><?= $errors['paymentmethod']??'' ?></div>
+                    <div class="form-control-feedback"><?php global $errors;
+                        echo $errors['paymentmethod'] ?></div>
                 </div>
             </div>
             <div class="form-group row">
@@ -290,9 +309,11 @@ function saveProductData()
                         <option>5</option>
                         <option>7</option>
                     </select>
-                    <div class="form-control-feedback"><?= $errors['duration']??'' ?></div>
+                    <div class="form-control-feedback"><?php global $errors;
+                        echo $errors['duration'] ?></div>
                 </div>
             </div>
+
             <div class="form-group row">
                 <label class="col-2 col-form-label"></label>
                 <div class="form-check col-10">
@@ -334,5 +355,6 @@ function saveProductData()
 <?php
 include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
-?>
+include($_SERVER['DOCUMENT_ROOT'] . '/include/delete-modal.php');
 
+?>

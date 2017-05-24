@@ -32,7 +32,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
         <br>
         <h3>Alle gebruikers</h3>
         <br>
-        <table class="table table-sm table-striped table-bordered">
+        <table class="table table-sm table-striped table-bordered" style="height: 15em; overflow-x: auto; overflow-y: auto;">
             <?php
             $username = $_SESSION['username'];
             $stmt = $pdo->prepare("SELECT COUNT(username) FROM Users WHERE username = ?");
