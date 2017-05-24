@@ -8,7 +8,8 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 <link type="text/css" rel="stylesheet" href="<?= $app_url ?>/assets/css/sidebar.css">
 <link type="text/css" rel="stylesheet" href="<?= $app_url ?>/assets/css/account.css">
 <link type="text/css" rel="stylesheet" href="<?= $app_url ?>/assets/css/vendor/bootstrap.min.css">
-<link type="text/css" rel="stylesheet" href="<?= $app_url ?>/assets/css/shop-homepage.css">
+<!--<link type="text/css" rel="stylesheet" href="--><?//= $app_url ?><!--/assets/css/shop-homepage.css">-->
+<!-- Heej, zou je de shop-homepage.css willen embedden in je eigen code en niet globaal zetten? Het glitcht met andere stijlen! -->
 <!--    <link type="text/css" rel="stylesheet" href="--><? //=$cdn_url?><!--assets/css/footer.css">-->
 <link rel="stylesheet" href="https://use.fontawesome.com/68afb4fb20.css">
 

@@ -60,60 +60,66 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+
+<html>
+    <head>
     <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/css/register.css">
-<!--    <link rel="stylesheet" href="--><?php //$_SERVER['DOCUMENT_ROOT'] ?><!--/assets/css/login-register.css">-->
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/style.inc.php'); ?>
-<div class="bg-overlay">
-    <div class="container col-md-8 col-xs-6 jumbotron" style="background: rgba(236, 240, 241, 0.9);">
-        <a href="<?= $app_url ?>" class="btn btn-danger" role="button" aria-pressed="true"
-           style="margin-left: 5px;margin-top: 5px;">Terug naar thuis</a>
-        <div>
-            <br><br>
-            <center><img src="/storage/images/logo/logo-ea-groot-donker.png" style="max-height: 70px"
-                         alt="EenmaalAndermaal Logo"></center>
-            <br><br>
+    </head>
+
+    <body>
+        <div class="bg-overlay">
+            <div class="container col-md-8 col-xs-6 jumbotron" style="background: rgba(236, 240, 241, 0.9);">
+                <a href="<?=$app_url?>" class="btn btn-default" role="button" aria-pressed="true"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Terug</a>
+                <form class="form-horizontal sign-up-form" method="post" action="#">
+                    <div class="title">
+                        <img src="<?=$cdn_url?>/storage/images/logo/logo-ea-groot-donker.png" style="max-height: 70px" alt="EenmaalAndermaal Logo">
+                    </div>
+
+                    <!-- Melding voor registreren -->
+                    <div class="alert alert-info" role="alert">
+                        Heb je nog géén account? klik dan <a href="<?=$app_url?>/views/account/register.php"><strong>hier</strong></a> om te registreren.
+                    </div>
+
+
+                    <!-- Blok titel -->
+                    <div class="col-md-12">
+                        <h3 style="color: black">Aanmelden</h3>
+                    </div>
+
+<!--                <div class="container">-->
+                    <form class="form-horizontal sign-in-form" action="#" method="POST">
+                        <div <?php global $errors;
+                        print((!empty($errors['username'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                            <div class="input-group inputform">
+                                <span class="input-group-addon fa fa-user"></span>
+                                <input type="text" id="username" name="username" class="form-control" placeholder="Gebruikersnaam"
+                                       autofocus>
+                            </div>
+                            <div class="form-control-feedback"><?php global $errors;
+                                echo $errors['username'] ?></div>
+                        </div>
+
+                        <div <?php global $errors;
+                        print((!empty($errors['password'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                            <div class="input-group inputform">
+                                <span class="input-group-addon fa fa-lock" id="basicaddon1"></span>
+                                <input type="password" id="password" name="password" class="form-control" placeholder="Wachtwoord">
+                            </div>
+                            <div class="form-control-feedback"><?php global $errors;
+                                echo $errors['password'] ?></div>
+                        </div>
+
+                        <div class="form-group inputform" style="margin:auto;">
+                            <label class="col-sm-4 control-label"></label>
+                            <div>
+                                <button type="submit" class="btn btn-success btn-block">Aanmelden</button>
+                            </div>
+                        </div>
+                    </form>
+            </div>
+            <br>
+            <br>
         </div>
-        <div class="container">
-            <form class="form-horizontal sign-in-form" action="#" method="POST">
-                <div class="alert alert-info" role="alert">
-                    Heb je nog geen account?<br> <a href="<?= $app_url ?>/views/account/register.php">klik dan hier om te
-                        registreren</a>
-                </div>
-                <div <?php global $errors;
-                print((!empty($errors['username'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                    <div class="input-group inputform">
-                        <span class="input-group-addon fa fa-user"></span>
-                        <input type="text" id="username" name="username" class="form-control" placeholder="Gebruikersnaam"
-                               autofocus>
-                    </div>
-                    <div class="form-control-feedback"><?php global $errors;
-                        echo $errors['username'] ?></div>
-                </div>
-
-                <div <?php global $errors;
-                print((!empty($errors['password'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                    <div class="input-group inputform">
-                        <span class="input-group-addon fa fa-lock" id="basicaddon1"></span>
-                        <input type="password" id="password" name="password" class="form-control" placeholder="Wachtwoord">
-                    </div>
-                    <div class="form-control-feedback"><?php global $errors;
-                        echo $errors['password'] ?></div>
-                </div>
-
-                <div class="form-group row inputform" style="margin:auto;">
-                    <label class="col-sm-4 control-label"></label>
-                    <div>
-                        <button type="submit" class="btn btn-success btn-block">Login</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<footer class="footer">
-    <p class="copyright">&copy; 2017 - EenmaalAndermaal. Alle rechten voorbehouden</p>
-    <p class="author">Aaron Burden, Unsplash</p>
-</footer>
-</body>
+    </body>
 </html>
