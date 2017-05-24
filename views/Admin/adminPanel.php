@@ -39,7 +39,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
                 if($activeAuctions == 1) {
                 ?>
                 <div class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er
-                    is <?= $closedAuctions; ?> actieve veiling.
+                    is <strong><?= $activeAuctions; ?></strong> actieve veiling.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -49,7 +49,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
             else {
             ?>
                 <div class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er
-                    zijn: <?= $activeAuctions; ?> actieve veilingen.
+                    zijn: <strong><?= $activeAuctions; ?></strong> actieve veilingen.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -177,22 +177,22 @@ if (isset($user['username']) && $user['admin'] == 1) {
 
             if($closedAuctions ==1) {
                 ?>
-                <h3 class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er
-                    is <?= $closedAuctions; ?> gesloten veiling.
+                <div class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er
+                    is <strong><?= $closedAuctions; ?></strong> actieve veiling.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                </h3>
+                </div>
                 <?php
             }
             else {
                 ?>
-                <h3 class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er
-                    zijn: <?= $closedAuctions; ?> gesloten veilingen.
+                <div class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er
+                    is <strong><?= $closedAuctions; ?></strong> actieve veilingen.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                </h3>
+                </div>
                 <?php
             }
             ?>
