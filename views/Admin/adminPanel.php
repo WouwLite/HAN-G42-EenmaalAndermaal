@@ -38,22 +38,22 @@ if (isset($user['username']) && $user['admin'] == 1) {
         if ($activeAuctions > 0) {
                 if($activeAuctions == 1) {
                 ?>
-                <h6 class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er
+                <div class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er
                     is <?= $closedAuctions; ?> actieve veiling.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                </h6>
+                </div>
             <?php
             }
             else {
             ?>
-                <h6 class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er
+                <div class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er
                     zijn: <?= $activeAuctions; ?> actieve veilingen.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                </h6>
+                </div>
             <?php
             }
             ?>
