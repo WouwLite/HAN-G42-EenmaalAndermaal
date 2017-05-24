@@ -77,7 +77,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
                 <tr>
                     <td> <?php echo $d['productid']; ?></td>
                     <td> <?php echo $d['title']; ?></td>
-                    <td> <?php echo substr($d['description'], 0, 20) . "..."; ?></td>
+                    <td> <?php echo substr($d['description'], 0, 20) . "... "; ?></td>
                     <td> <?php echo $d['startprice']; ?></td>
                     <td> <?php echo $d['paymentmethodNumber']; ?></td>
                     <td> <?php echo $d['paymentinstruction']; ?></td>
