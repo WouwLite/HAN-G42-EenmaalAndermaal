@@ -193,81 +193,87 @@ if (isset($_SESSION['username'])) {
 
             <div class="col-md-6">
                 <h3>Mijn veilingen</h3>
-                <table class="table table-striped table-bordered">
-                    <?php
-                    $username = $_SESSION['username'];
-                    $stmt = $pdo->prepare("SELECT COUNT(Seller) FROM Object WHERE seller = ?");
-                    $stmt->execute([$username]);
-                    $aantalVeilingen = $stmt->fetchColumn();
-                    if ($aantalVeilingen > 0) {
-                        ?>
-                        <thead>
-                        <th>Titel</th>
-                        <th>Datum</th>
-                        <th>Huidig bod</th>
-                        <th>Status</th>
-                        <th>Bewerk</th>
-                        </thead>
+                <div class="myAuctions" style="overflow: auto; height: 20em;">
+                    <table class="table table-striped table-bordered">
                         <?php
-                    } else {
-                        global $user;
-                        ?> <th class="table-danger">U heeft nog geen veilingen geplaatst.</th>
-                        <?php
-                    }
-                    ?>
-
-                    <?php
-                    $username = $_SESSION['username'];
-                    $stmt = $pdo->prepare("SELECT * FROM Object WHERE seller = ?");
-                    $stmt->execute([$username]);
-                    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                    if ($aantalVeilingen > 0) {
-                        foreach ($data as $d) { ?>
-                            <td> <?php echo $d['title']; ?></td>
-                            <td> <?php echo $d['durationbeginDay']; ?></td>
-                            <?php
-                                if($d['sellingprice'] == NULL){
-                                    print '<td><i>Nog geen biedingen</i></td>';
-                                }
-                                else {
-                                    ?>
-                                    <td>€ <?php $d['sellingprice']; ?></td>
-                                    <?php
-                                }
+                        $username = $_SESSION['username'];
+                        $stmt = $pdo->prepare("SELECT COUNT(Seller) FROM Object WHERE seller = ?");
+                        $stmt->execute([$username]);
+                        $aantalVeilingen = $stmt->fetchColumn();
+                        if ($aantalVeilingen > 0) {
                             ?>
-                            <?php
-                            $date1 = date("Y-m-d H:i:s");
-                            $date2 = $d['durationendDay'] . ' ' . $d['durationendTime'];
-                            if (strtotime($date1) <= strtotime($date2)) {
-                                ?>
-                                <td><span class="badge badge-success">Actief</span></td>
-                                <?php
-                            } else {
-                                ?>
-                                <td><span class="badge badge-danger">Gesloten</span></td>
-                                <?php
-
-                            }
-                            ?>
-
-                            <td>
-                                <form action="changeAd.php" method="post">
-                                    <button class="btn btn-default btn-sm" name="changeid"
-                                            value="<?= $d['productid'] ?>"><i
-                                                class="fa fa-wrench"
-                                                style="width: 12px"></i></button>
-                                </form>
-                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                        data-target="#deleteModal" data-ad="<?php echo $d['productid']; ?>"><i
-                                            class="fa fa-trash-o fa-sm"></i></button>
-                            </td>
+                            <tr>
+                            <thead>
+                            <th>Titel</th>
+                            <th>Datum</th>
+                            <th>Huidig bod</th>
+                            <th>Status</th>
+                            <th>Bewerk</th>
+                            </thead>
                             </tr>
                             <?php
+                        } else {
+                            global $user;
+                            ?> <th class="table-danger">U heeft nog geen veilingen geplaatst.</th>
+                            <?php
                         }
-                    }
-                    ?>
-                    </tbody>
-                </table>
+                        ?>
+
+                        <?php
+                        $username = $_SESSION['username'];
+                        $stmt = $pdo->prepare("SELECT * FROM Object WHERE seller = ?");
+                        $stmt->execute([$username]);
+                        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        if ($aantalVeilingen > 0) {
+                            foreach ($data as $d) { ?>
+                            <tr>
+                                <td> <?php echo $d['title']; ?></td>
+                                <td> <?php echo $d['durationbeginDay']; ?></td>
+                                <?php
+                                    if($d['sellingprice'] == NULL){
+                                        print '<td><i>Nog geen biedingen</i></td>';
+                                    }
+                                    else {
+                                        ?>
+                                        <td>€ <?php $d['sellingprice']; ?></td>
+                                        <?php
+                                    }
+                                ?>
+                                <?php
+                                $date1 = date("Y-m-d H:i:s");
+                                $date2 = $d['durationendDay'] . ' ' . $d['durationendTime'];
+                                if (strtotime($date1) <= strtotime($date2)) {
+                                    ?>
+                                    <td><span class="badge badge-success">Actief</span></td>
+                                    <?php
+                                } else {
+                                    ?>
+                                    <td><span class="badge badge-danger">Gesloten</span></td>
+                                    <?php
+
+                                }
+                                ?>
+
+                                <td>
+                                    <form action="changeAd.php" method="post">
+                                        <button class="btn btn-default btn-sm" name="changeid"
+                                                value="<?= $d['productid'] ?>"><i
+                                                    class="fa fa-wrench"
+                                                    style="width: 12px"></i></button>
+                                    </form>
+                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                            data-target="#deleteModal" data-ad="<?php echo $d['productid']; ?>"><i
+                                                class="fa fa-trash-o fa-sm"></i></button>
+                                </td>
+                             </tr>
+                                <?php
+                            }
+                        }
+                        ?>
+                        </tbody>
+
+                    </table>
+                </div>
             </div>
         </div>
     </div>

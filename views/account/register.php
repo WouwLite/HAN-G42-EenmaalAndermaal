@@ -1,6 +1,5 @@
 <?php
 
-
 require($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/config/cdn.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/style.inc.php');
@@ -75,7 +74,7 @@ function sendmail()
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>Airmail Welcome</title>
+    <title>EenmaalAndermaal Activatiecode</title>
     <style type="text/css">
 
         * {
@@ -494,18 +493,19 @@ function sendmail()
                             <td>
                                 <table class="soapbox">
                                     <tr>
-                                        <td class="soapbox-title">Welcome to EenmaalAndermaal!</td>
+                                        <td class="soapbox-title">Welkom bij EenmaalAndermaal!</td>
                                     </tr>
                                 </table>                     
                                 <table class="body">
                                     <tr>
                                         <td class="body-padding"></td>
                                         <td class="body-padded">
-                                            <div class="body-title">Hey, thanks for signing up</div>
+                                            <div class="body-title">Gaaf! We hebben je email-aanmelding ontvangen</div>
                                             <table class="body-text">
                                                 <tr>
                                                     <td class="body-text-cell">
-                                                        We zijn erg enthousiast voor u om deel te nemen aan onze gemeenschap! U bent slechts een paar klikken verwijderd van het activeren van uw account!
+                                                        We zijn erg enthousiast voor u om deel te nemen aan onze gemeenschap! U bent slechts een paar klikken verwijderd van het activeren van uw account!<br>
+                                                        Selecteer en kopieer onderstaande code en plak deze in het code veld van het registratieformulier:
                                                     </td>
                                                 </tr>
                                             </table>
@@ -516,7 +516,7 @@ function sendmail()
                                             <table class="status" bgcolor="#fffeea" cellspacing="0">
                                                 <tr>
                                                     <td class="status-cell">
-                                                        Uw geheime code: <b>'.$secretCode.'</b>
+                                                        Uw geheime code is: <h3>'.$secretCode.'</h3>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -529,7 +529,7 @@ function sendmail()
                                                 <tr>
                                                     <td class="body-signature-cell">
                                                         <p>Hartelijk dank,</p>
-                                                        <p class="body-signature"><img src="<?=$cdn_url?>/storage/images/logo/logo-ea-groot-licht.png" style="max-height: 70px" alt="EenmaalAndermaal Logo"></p>
+                                                        <p class="body-signature"><img src="https://securehub.eu/dl/iproject/logo-ea-groot-donker.png" style="max-height: 70px" alt="EenmaalAndermaal Logo"></p>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -546,25 +546,11 @@ function sendmail()
         </tr>
     </table>
 
-    <table class="footer-wrap w320 full-width-gmail-android" bgcolor="#e5e5e5">
+    <table class="footer-wrap w320 full-width-gmail-android" bgcolor="#578CA9" style="background-color:#578CA9; color:white;">
         <tr>
             <td class="container">
                 <div class="content footer-lead">
-                    <a href="#"><b>Contacteer ons</b></a> Als je vragen of feedback hebt.
-                </div>
-            </td>
-        </tr>
-    </table>
-    <table class="footer-wrap w320 full-width-gmail-android" bgcolor="#e5e5e5">
-        <tr>
-            <td class="container">
-                <div class="content">
-                    <a href="#">Contact Us</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-                    <span class="footer-group">
-              <a href="#">Facebook</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-              <a href="#">Twitter</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-              <a href="#">Support</a>
-            </span>
+                    Indien u nog vragen heeft, kunt u <a href="mailto:info@iproject42.icasites.nl">contact</a> met ons opnemen.
                 </div>
             </td>
         </tr>
