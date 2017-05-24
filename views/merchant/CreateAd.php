@@ -293,7 +293,6 @@ function saveProductData()
                     <div class="form-control-feedback"><?= $errors['duration']??'' ?></div>
                 </div>
             </div>
-
             <div class="form-group row">
                 <label class="col-2 col-form-label"></label>
                 <div class="form-check col-10">
