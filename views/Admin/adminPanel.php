@@ -74,7 +74,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
                 $stmt->execute();
                 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if ($activeAuctions > 0) {
-                    foreach ($data as $d) { ?>
+                    foreach (array_slice($data, ($_GET['page']??1) * 10, 10) as $d) { ?>
                         <tr>
                             <td> <?php echo $d['productid']; ?></td>
                             <td> <?php echo $d['title']; ?></td>
