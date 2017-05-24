@@ -26,7 +26,7 @@ $slogan                     = 'De wereld draait door!';
 | //G42-EenmaalAndermaal.dev - //localhost
 */
 
-$app_url                      = 'C:\xampp\htdocs\EenmaalAndermaal';
+$app_url                      = 'https://localhost';
 
 /*
 |--------------------------------------------------------------------------

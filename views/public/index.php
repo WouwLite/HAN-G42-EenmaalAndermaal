@@ -9,7 +9,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
  */
 
 // Start session
-session_start();
+//session_start();
 
 ?>
 <div class="container-float">
@@ -31,10 +31,7 @@ if (!isset($_SESSION['username'])): ?>
 <?php endif; ?>
 
 <?php
-
 include($_SERVER['DOCUMENT_ROOT'] . '/include/showAds.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
-
-
 ?>

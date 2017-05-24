@@ -14,5 +14,7 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="library" name="respond" level="application" />
+    <orderEntry type="library" name="html5shiv" level="application" />
   </component>
 </module>
