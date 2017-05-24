@@ -9,13 +9,14 @@ from Object o left outer join productPhoto pp on o.productid=pp.productid";
     $result = $pdo->query($sql);
     $Ads = array();
     while ($row = $result->fetch()) {
-        $Ad = array($row['Title'], $row['description'], $row['Categories']);
+        $Ad = array($row['Title'], $row['description'], $row['Categories'], $row['filename']);
         $Ads[] = $Ad;
     }
     return $Ads;
 }
 
-/*$Ads = getAds();
+/*
+$Ads = getAds();
 $i = 0;
 echo "<div class='container'>";
 foreach ($Ads as $Adverts) {
@@ -33,7 +34,8 @@ foreach ($Ads as $Adverts) {
 }
 echo "</div>";
 echo "</div>";
-*/?>
+*/
+?>
 <!-- Page Content -->
 <div class="container">
     <div class="row">
@@ -67,6 +69,35 @@ echo "</div>";
                 </div>
             </div>
             <div class="row">
+            <?php
+            $ads = getAds();
+            foreach ($ads as $value) {
+            ?>
+            <div class="col-sm-4 col-lg-4 col-md-4">
+                <div class="thumbnail">
+                    <img src="http://placehold.it/320x150" alt="">
+                    <div class="caption">
+                        <h4 class="pull-right">$24.99</h4>
+                        <h4><a href="#"><?php echo $value[0] ?></a></h4>
+                        <p><?php echo $value[1] ?> </p>
+                    </div>
+                    <div class="ratings">
+                        <p class="pull-rigght">15 reviews</p>
+                        <p>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <?php
+            }
+            ?>
+            </div>
+            <div class="row">
                 <div class="col-sm-4 col-lg-4 col-md-4">
                     <div class="thumbnail">
                         <img src="http://placehold.it/320x150" alt="">
@@ -74,7 +105,9 @@ echo "</div>";
                             <h4 class="pull-right">$24.99</h4>
                             <h4><a href="#">First Product</a>
                             </h4>
-                            <p>See more snippets like this online store item at <a target="_blank" href="http://www.bootsnipp.com">Bootsnipp - http://bootsnipp.com</a>.</p>
+                            <p>See more snippets like this online store item at <a target="_blank"
+                                                                                   href="http://www.bootsnipp.com">Bootsnipp
+                                    - http://bootsnipp.com</a>.</p>
                         </div>
                         <div class="ratings">
                             <p class="pull-right">15 reviews</p>
@@ -175,15 +208,14 @@ echo "</div>";
                 <div class="col-sm-4 col-lg-4 col-md-4">
                     <h4><a href="#">Like this template?</a>
                     </h4>
-                    <p>If you like this template, then check out <a target="_blank" href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">this tutorial</a> on how to build a working review system for your online store!</p>
-                    <a class="btn btn-primary" target="_blank" href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">View Tutorial</a>
+                    <p>If you like this template, then check out <a target="_blank"
+                                                                    href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">this
+                            tutorial</a> on how to build a working review system for your online store!</p>
+                    <a class="btn btn-primary" target="_blank"
+                       href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">View
+                        Tutorial</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
-
-
-
