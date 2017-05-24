@@ -14,16 +14,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
 <!DOCTYPE html>
 
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-
-    <title><?=$title?></title>
-    <meta name="description" content="EenmaalAndermaal Veilingen">
-    <meta name="author" content="iConcepts BV">
-
-    <!-- /resources/include/styles.inc.php -->
-
-</head>
 
 <body>
     <!-- ************************* -->
