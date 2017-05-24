@@ -35,11 +35,30 @@ if (isset($user['username']) && $user['admin'] == 1) {
         <div class="allUsers" style="overflow: auto; height: 21em;">
             <table class="table table-sm table-striped table-bordered" style="height: 15em; overflow-x: auto; overflow-y: auto;">
                 <?php
-                $username = $_SESSION['username'];
-                $stmt = $pdo->prepare("SELECT COUNT(username) FROM Users WHERE username = ?");
-                $stmt->execute([$username]);
+                $stmt = $pdo->prepare("SELECT COUNT(username) FROM Users");
+                $stmt->execute();
                 $aantalGebruikers = $stmt->fetchColumn();
                 if ($aantalGebruikers> 0) {
+                    if($aantalGebruikers == 1) {
+                        ?>
+                        <h6 class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er
+                            is <?= $aantalGebruikers; ?> geregistreerde gebruiker.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </h6>
+                        <?php
+                    }
+                    else {
+                        ?>
+                        <h6 class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er
+                            zijn: <?= $aantalGebruikers; ?> geregistreerde gebruikers.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </h6>
+                        <?php
+                    }
                     ?>
                     <thead>
                     <th>Gebruikersnaam</th>
