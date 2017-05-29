@@ -3,6 +3,7 @@
 <!-- *********************************** -->
 </div>
 
+<?php require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php'); ?>
 <?php require_once($_SERVER['DOCUMENT_ROOT'] . '/config/database.php'); ?>
 <?php require_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php'); ?>
 <!-- Add sidebarmenu -->
@@ -13,15 +14,25 @@
                 <input class="form-control sm-2" type="search" id="search" name="Search" placeholder="Zoek naar veiling..."/>
             </form>
         </li>
+        <?php if ($debug): ?>
+            <li>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <strong>Let op!</strong> Debug staat enabled in the config/app.php !
+                </div>
+            </li>
+        <?php endif; ?>
         <?php
         global $user;
         if($user['admin'] == 1){
             print('<li><strong>Admin</strong></li>
             <li class="nav-item">
-                    <a class="nav-link active" href="/views/admin/adminpanel.php"><i class="fa fa-handshake-o" aria-hidden="true"></i> Alle advertenties</a>
+                    <a class="nav-link" href="/views/admin/adminpanel.php"><i class="fa fa-handshake-o" aria-hidden="true"></i> Alle advertenties</a>
             </li>
             <li class="nav-item">
-                    <a class="nav-link active" href="/views/admin/allUsers.php"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Alle gebruikers</a>
+                    <a class="nav-link" href="/views/admin/allUsers.php"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Alle gebruikers</a>
             </li>');
         }
         ?>

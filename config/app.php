@@ -26,7 +26,7 @@ $slogan                     = 'De wereld draait door!';
 | //G42-EenmaalAndermaal.dev - //localhost
 */
 
-$app_url                      = 'https://localhost';
+$app_url                      = 'http://iproject42.icasites.nl';
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +38,7 @@ $app_url                      = 'https://localhost';
 | different types of environment are: 'Development' and 'Production'
 */
 
-$debug                      = false;
+$debug                      = true;
 $environment                = 'Production';
 
 /*
