@@ -4,8 +4,11 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
 function getAds()
 {
     global $pdo;
-    $sql = "select top 25 o.productid, Title, description, durationbeginDay, durationbeginTime, durationendDay, durationendTime, Categories, pp.filename
-from Object o left outer join productPhoto pp on o.productid=pp.productid";
+    $sql = "select top 24 o.productid, Title, description, durationbeginDay, durationbeginTime, durationendDay, durationendTime, Categories, productPhoto.filename
+From Object o
+CROSS APPLY
+(SELECT TOP 1 productid, filename
+From productPhoto pp where o.productid=pp.productid) productPhoto";
     $result = $pdo->query($sql);
     $Ads = array();
     while ($row = $result->fetch()) {
@@ -37,64 +40,44 @@ echo "</div>";
 */
 ?>
 <!-- Page Content -->
+
 <div class="container">
-    <div class="row">
-        <div class="col-md-9">
-            <div class="row carousel-holder">
-                <div class="col-md-12">
-                    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                        <ol class="carousel-indicators">
-                            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                        </ol>
-                        <div class="carousel-inner" role="listbox">
-                            <div class="carousel-item active">
-                                <img class="slide-image" src="<?= $app_url ?>/storage/images/Dscn7471_sunset-sundog_crop_800x300.jpg" alt="">
-                            </div>
-                            <div class="carousel-item">
-                                <img class="slide-image" src="<?= $app_url ?>/storage/images/Dscn7471_sunset-sundog_crop_800x300.jpg" alt="">
-                            </div>
-                            <div class="carousel-item">
-                                <img class="slide-image" src="<?= $app_url ?>/storage/images/Dscn7471_sunset-sundog_crop_800x300.jpg" alt="">
-                            </div>
+    <header class="jumbotron hero-spacer">
+        <h1>Our Latest Items!</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non
+            incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>
+    </header>
+
+
+        <div class="row text-center">
+            <?php
+            $ads = getAds();
+            foreach ($ads as $value) {
+                ?>
+                <div class="col-md-3 col-sm-6 hero-feature">
+                    <div class="img-thumbnail">
+                        <img src="http://placehold.it/800x500"
+                             class="img-fluid"
+                             alt="<?php echo $value[3] ?>">
+                        <div class="figure-caption">
+                            <h3>
+                                <?php echo substr($value[0], 0, 30) ?>
+                            </h3>
+                            <p><?php echo substr($value[1], 0, 50) ?>... </p>
+                            <p>
+                                <a class="btn btn-primary"
+                                   href="<?= $app_url ?>/views/public/productPage.php?<?php echo $value[2] ?>">Bied
+                                    Nu</a>
+                                <a class="btn btn-secondary"
+                                   href="<?= $app_url ?>/views/public/productPage.php?<?php echo $value[2] ?>">Meer
+                                    Info</a>
+                            </p>
                         </div>
-                        <a class="carousel-control-prev" href="#carousel-example-generic" role="button"
-                           data-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#carousel-example-generic" role="button"
-                           data-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
                     </div>
                 </div>
-            </div>
-            <div class="row">
                 <?php
-                $ads = getAds();
-                foreach ($ads as $value) {
-                    ?>
-                    <div class="col-sm-4 col-lg-4 col-md-4">
-                        <div class="img-thumbnail">
-                            <img src="http://placehold.it/300x200"
-                           class="img-fluid" alt="<?php echo $value[3]?>">
-                            <div class="figure-caption">
-                                <h4><a href="<?= $app_url ?>/views/public/<?php echo $value[2] ?>"><?php echo substr($value[0], 0, 30) ?></a></h4>
-                                <p><?php echo substr($value[1], 0, 50) ?>... </p>
-                            </div>
-                            <div class="ratings">
-                                <p class="pull-rigght">15 reviews</p>
-                            </div>
-                        </div>
-                    </div>
-                    <?php
-                }
-                ?>
-            </div>
-
+            }
+            ?>
         </div>
     </div>
 </div>

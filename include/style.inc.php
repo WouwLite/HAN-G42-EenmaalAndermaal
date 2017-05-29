@@ -9,6 +9,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 <link type="text/css" rel="stylesheet" href="<?= $app_url ?>/assets/css/sidebar.css">
 <link type="text/css" rel="stylesheet" href="<?= $app_url ?>/assets/css/account.css">
 <link type="text/css" rel="stylesheet" href="<?= $app_url ?>/assets/css/vendor/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href="<?= $app_url ?>/assets/css/shop-homepage.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/68afb4fb20.css">
 
 
