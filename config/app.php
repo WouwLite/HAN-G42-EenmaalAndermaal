@@ -38,7 +38,7 @@ $app_url                      = 'http://iproject42.icasites.nl';
 | different types of environment are: 'Development' and 'Production'
 */
 
-$debug                      = true;
+$debug                      = false;
 $environment                = 'Production';
 
 /*
