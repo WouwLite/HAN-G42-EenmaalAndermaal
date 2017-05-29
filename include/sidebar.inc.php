@@ -14,6 +14,8 @@
                 <input class="form-control sm-2" type="search" id="search" name="Search" placeholder="Zoek naar veiling..."/>
             </form>
         </li>
+
+        <!-- Add debug alert when debugging is enabled -->
         <?php if ($debug): ?>
             <li>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -24,15 +26,16 @@
                 </div>
             </li>
         <?php endif; ?>
+
         <?php
         global $user;
         if($user['admin'] == 1){
             print('<li><strong>Admin</strong></li>
             <li class="nav-item">
-                    <a class="nav-link" href="/views/admin/adminpanel.php"><i class="fa fa-handshake-o" aria-hidden="true"></i> Alle advertenties</a>
+                    <a class="nav-link" href="' . $app_url . '/views/admin/adminpanel.php"><i class="fa fa-handshake-o" aria-hidden="true"></i> Alle advertenties</a>
             </li>
             <li class="nav-item">
-                    <a class="nav-link" href="/views/admin/allUsers.php"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Alle gebruikers</a>
+                    <a class="nav-link" href="' . $app_url . '/views/admin/allUsers.php"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Alle gebruikers</a>
             </li>');
         }
         ?>
@@ -41,16 +44,16 @@
             <a class="nav-link active" href="/views/public/"><i class="fa fa-home" aria-hidden="true"></i> Thuis</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#"><i class="fa fa-star" aria-hidden="true"></i> Populair</a>
+            <a class="nav-link disabled" href="#"><i class="fa fa-star" aria-hidden="true"></i> Populair</a>
         </li>
         <li><span class="sidebar-span"></span></li>
         <li><strong>Account</strong></li>
         <li class="nav-item">
-            <a class="nav-link" href="#"><i class="fa fa-gavel" aria-hidden="true"></i> Mijn biedingen <span class="badge badge-default"><?=$testBiedingNo?></span></a>
+            <a class="nav-link" href="<?=$app_url?>/views/account/index.php"><i class="fa fa-gavel" aria-hidden="true"></i> Mijn biedingen <span class="badge badge-default"><?=$testBiedingNo?></span></a>
         </li>
         <!-- Create IF statement. If user is merchant, show this link, else hide -->
         <li class="nav-item">
-            <a class="nav-link disabled" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Mijn advertenties <span class="badge badge-default"><?=$testAdvertNo?></span></a>
+            <a class="nav-link" href="<?=$app_url?>/views/account/index.php"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Mijn advertenties <span class="badge badge-default"><?=$testAdvertNo?></span></a>
         </li>
         <li><span class="sidebar-span"></span></li>
         <li><strong>Rubrieken</strong></li>

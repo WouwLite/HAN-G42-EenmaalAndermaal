@@ -25,7 +25,7 @@ if (!isset($_SESSION['username'])): ?>
     <h1 class="display-3">Word nu lid!</h1>
         <p class="lead"><?=$title?> is hét platform voor het aanbieden van je producten. Van nieuw tot oud, alles kan! Én als klap op de vuurpijl: het is volledig <span class="badge badge-primary">GRATIS</span>.</p>
     <p class="lead">
-        <a class="btn btn-outline-primary btn-lg btn-block" href="#" role="button">Registreren</a>
+        <a class="btn btn-outline-primary btn-lg btn-block" href="<?=$app_url?>/views/account/register.php" role="button">Registreren</a>
     </p>
     </div>
 <?php endif; ?>
