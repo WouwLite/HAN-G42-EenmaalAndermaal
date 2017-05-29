@@ -156,10 +156,14 @@ if (isset($user['username']) && $user['admin'] == 1) {
                 </tbody>
             </table>
         </div>
+        <a class="btn btn-primary"
+           href="<?= $app_url ?>/views/Admin/adminPanel.php?page=<?php echo ($_GET['page']??1) - 1 ?>">Vorige pagina</a>
+        <a class="btn btn-primary"
+           href="<?= $app_url ?>/views/Admin/adminPanel.php?page=<?php echo ($_GET['page']??1) + 1 ?>">Volgende
+            pagina</a>
 
 
-
-            <!-- =========================================================== !-->
+        <!-- =========================================================== !-->
 
 
 

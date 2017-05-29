@@ -70,3 +70,4 @@ dev/
 # Don't hate ;-).
 /config/database.php
 /.idea/deployment.xml
+/dev/SQL/
