@@ -22,7 +22,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 // If user is logged on, don't show this jumbotron / call-to-action
 if (!isset($_SESSION['username'])): ?>
     <div class="jumbotron">
-    <h1 class="display-3">Wordt nu lid!</h1>
+    <h1 class="display-3">Word nu lid!</h1>
         <p class="lead"><?=$title?> is hét platform voor het aanbieden van je producten. Van nieuw tot oud, alles kan! Én als klap op de vuurpijl: het is volledig <span class="badge badge-primary">GRATIS</span>.</p>
     <p class="lead">
         <a class="btn btn-outline-primary btn-lg btn-block" href="#" role="button">Registreren</a>

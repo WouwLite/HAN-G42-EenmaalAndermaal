@@ -1,6 +1,12 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . "/config/app.php");
 
+// Debugging
+if ($debug) {
+    ini_set('display_errors', 'On');
+    error_reporting(E_ALL | E_STRICT);
+}
+
 // Start a session
 session_start();
 
@@ -75,6 +81,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="title">
                         <img src="<?=$cdn_url?>/storage/images/logo/logo-ea-groot-donker.png" style="max-height: 70px" alt="EenmaalAndermaal Logo">
                     </div>
+
+                    <!-- Debugbericht -->
+                    <?php if ($debug): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <strong>Let op!</strong> Debug staat enabled in the config/app.php !
+                        </div>
+                    <?php endif; ?>
 
                     <!-- Melding voor registreren -->
                     <div class="alert alert-info" role="alert">

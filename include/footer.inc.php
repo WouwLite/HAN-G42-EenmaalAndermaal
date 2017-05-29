@@ -2,5 +2,5 @@
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/style.inc.php') ?>
 <br><br>
 <nav class="navbar fixed-bottom navbar-light bg-faded">
-    <--  <?=$app_url?>/include/footer.inc.php  --> *Afblijven, foei! Dit is een testje.*
-</nav>
+    &copy 2017 - EenmaalAndermaal
+</nav>§

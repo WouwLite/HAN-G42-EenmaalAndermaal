@@ -3,6 +3,13 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/style.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
+
+if ($debug) {
+    ini_set('display_errors', 'On');
+    error_reporting(E_ALL | E_STRICT);
+}
+
+
 if (!isset($_SESSION)) {
     session_start();
 }
@@ -59,12 +66,6 @@ HTML;
             } ?>
         </ul>
     </nav>
-
-    <div class="navbar navbar-default navbar-fixed-bottom">
-        <div class="container">
-            <p>Hello world!</p>
-        </div>
-    </div>
 
     <!-- **************************************** -->
     <!--  HERE STARTS THE MAIN CONTENT-CONTAINER  -->

@@ -1,3 +1,4 @@
+/* Define default sidebar style settings */
 #sidebar {
     background: #ecf0f1;
     width: 250px;
@@ -40,14 +41,7 @@
     display: block;
 }
 
-/*#sidebar ul li span {*/
-    /*height: 1px;*/
-    /*background: #bdc3c7;*/
-    /*margin-left: 15px;*/
-    /*margin-right: 15px;*/
-    /*display: block;*/
-/*}*/
-
+/* Textcolour */
 #sidebar ul li strong {
     color: #34495e;
     display: block;
@@ -57,6 +51,7 @@
     text-decoration: none;
 }
 
+/* Sidebar hamburger icon */
 #sidebar-hamburger {
     display: inline-block;
     vertical-align: middle;
