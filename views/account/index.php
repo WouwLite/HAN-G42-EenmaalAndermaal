@@ -3,6 +3,14 @@
 <?php
 require($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 
+// Start a session
+session_start();
+
+// Check if user is already logged on. If yes, redirect to accountpage.
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+}
+
 if ($debug == false) {
     session_start();
     include_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');

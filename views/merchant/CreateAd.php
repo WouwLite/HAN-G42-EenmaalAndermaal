@@ -17,13 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 //    $_POST = getRealPOST();
     if (isset($_POST['final-submit'])) {
         checkEmptyFields();
-        if(checkNoErrors()){
+        if (checkNoErrors()) {
             saveProductData();
         }
     }
 }
 
-if(empty($_SESSION['username'])){
+if (empty($_SESSION['username'])) {
     include($_SERVER['DOCUMENT_ROOT'] . '/include/login-message.inc.php');
 }
 
@@ -60,7 +60,7 @@ function checkEmptyFields()
     $errors['title'] = ($_POST['title'] == "") ? "Vul aub een titel in voor de advertentie" : '';
     $errors['description'] = ($_POST['description'] == "") ? "Vul aub een beschrijving in." : '';
     //$errors['foto'] = ($_POST['foto1'] == "") ? "." : '';
-    if($_POST['radio'] == 1){
+    if ($_POST['radio'] == 1) {
         $errors['startprice'] = ($_POST['startprice'] == "") ? "Vul aub een prijs in." : '';
     }
     $errors['paymentmethod'] = ($_POST['paymentmethod'] == "") ? "Vul aub een betaalmethode in." : '';
@@ -171,9 +171,7 @@ function saveProductData()
             <?php
             if ($_SERVER['REQUEST_METHOD'] == "POST" and checkNoErrors()) {
                 print("<div class='alert alert-success'><strong>Gelukt<br></strong> Uw advertentie is succesvol geplaatst.</div>");
-            }
-
-            else if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors()) {
+            } else if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors()) {
                 print("<div class='alert alert-danger'><strong>Oei!</strong> Er ging iets mis tijdens het plaatsen van de advertentie, 
                         controleer en pas de rode velden aan en probeer het daarna opnieuw</div>");
             }
@@ -223,19 +221,21 @@ function saveProductData()
             <div <?php print((!empty($errors['startprice'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
                 <label class="col-2 col-form-label">Prijs*</label>
                 <div class="input-inline col-10">
-                    <div class="form-check">
-                <span class="inline-input">
-                <input onclick="check()" type="radio" id="radio1" name="radio" value="1" class="minimum-bid-price">
-                                <label for="minimum-bid-price">Start bieden vanaf:</label>
-                    </div>
-                    </span>
 
-                    <div class="form-check">
-                        <span class="inline-input">
-                    <input onclick="uncheck()" type="radio" id="radio2" name="radio" value="2" class="minimum-bid-price">
-                    <label>Geen minimale prijs</label>
-                        </span>
-                    </div>
+                    <label class="custom-control custom-radio">
+                        <input onclick="uncheck()" id="radio2" name="radio" type="radio" class="custom-control-input"
+                               value="2">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Geen minimale prijs</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input onclick="check()" id="radio2" name="radio" type="radio" class="custom-control-input"
+                               value="1">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Start bieden vanaf:</span>
+                    </label>
+
+
                     <input id="minimum-bid-price" placeholder="€ 0,00" name="startprice" type="number" step="0.01"
                            class="form-control"
                            disabled>
@@ -293,12 +293,12 @@ function saveProductData()
                     <div class="form-control-feedback"><?= $errors['duration']??'' ?></div>
                 </div>
             </div>
-            <div class="form-group row">
-                <label class="col-2 col-form-label"></label>
-                <div class="form-check col-10">
-                    <input type="checkbox" required>
-                    Ik ga akkoord met de algemene voorwaarden
-                </div>
+            <div class="form-group row form-check col-10">
+                <label class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" required>
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">Ik ga akkoord met de algemene voorwaarden</span>
+                </label>
             </div>
             <div class="form-group row">
                 <div class="col-10">

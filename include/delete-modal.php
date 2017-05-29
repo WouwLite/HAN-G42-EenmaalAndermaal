@@ -8,14 +8,14 @@ SELECT email FROM Users WHERE username = ( SELECT Seller FROM Object WHERE produ
 SQL;
 
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([(int)$_POST['deleteItem']]);
+    $stmt->execute([$_POST['deleteItem']]);
     $useremail = $stmt->fetchColumn();
     print("<!-- " . $useremail . " -->");
 
     $subject = "Je aanbieding is verwijderd";
     $message = "Om de volgende reden is je advertentie verwijderd: " . $_POST['reason'];
     $headers = 'From: noreply@iproject42.icasites.nl';
-//    mail($useremail, $subject, $message, $headers);
+    mail($useremail, $subject, $message, $headers);
 
     $delobj = <<<SQL
 DELETE FROM Object WHERE productid = ?
@@ -28,9 +28,11 @@ SQL;
     $getimgstmt = $pdo->prepare($getimgsql);
     $getimgstmt->execute([$_POST['deleteItem']]);
     $filenames = $getimgstmt->fetchAll(PDO::FETCH_COLUMN);
-    $destdir = $_SERVER['DOCUMENT_ROOT'] . "\\views\\merchant\\AdImages\\";
+    $destdir = $app_url . "\\views\\merchant\\AdImages\\";
     foreach ($filenames as $file) {
-        unlink($destdir . $file);
+        if (file_exists($destdir . $file)) {
+            unlink($destdir . $file);
+        }
     }
 
     $delimg = <<<SQL
@@ -38,8 +40,8 @@ DELETE FROM productPhoto WHERE productid = ?
 SQL;
 
 
-    $pdo->prepare($delimg)->execute([(int)$_POST['deleteItem']]);
-    $pdo->prepare($delobj)->execute([(int)$_POST['deleteItem']]);
+    $pdo->prepare($delimg)->execute([$_POST['deleteItem']]);
+    $pdo->prepare($delobj)->execute([$_POST['deleteItem']]);
 }
 ?>
 

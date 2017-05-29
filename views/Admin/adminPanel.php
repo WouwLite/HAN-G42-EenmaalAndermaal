@@ -36,7 +36,28 @@ if (isset($user['username']) && $user['admin'] == 1) {
         $stmt->execute();
         $activeAuctions = $stmt->fetchColumn();
         if ($activeAuctions > 0) {
-        ?>
+                if($activeAuctions == 1) {
+                ?>
+                <div class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er
+                    is <strong><?= $activeAuctions; ?></strong> actieve veiling.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <?php
+            }
+            else {
+            ?>
+                <div class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er
+                    zijn: <strong><?= $activeAuctions; ?></strong> actieve veilingen.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <?php
+            }
+            ?>
+        <script>$(".alert").alert('close')</script>
         <div class="activeAds" style="overflow-x: auto; overflow-y: auto; height: 15em;">
             <table class="table table-sm table-striped table-bordered" style="overflow-x: auto; overflow-y: auto; height: 15em;">
                 <tbody>
@@ -74,7 +95,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
                 $stmt->execute();
                 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if ($activeAuctions > 0) {
-                    foreach ($data as $d) { ?>
+                    foreach (array_slice($data, (($_GET['page']??1) - 1) * 10, 10) as $d) { ?>
                         <tr>
                             <td> <?php echo $d['productid']; ?></td>
                             <td> <?php echo $d['title']; ?></td>
@@ -153,7 +174,28 @@ if (isset($user['username']) && $user['admin'] == 1) {
         $stmt->execute();
         $closedAuctions = $stmt->fetchColumn();
         if ($closedAuctions > 0) {
-        ?>
+
+            if($closedAuctions ==1) {
+                ?>
+                <div class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er
+                    is <strong><?= $closedAuctions; ?></strong> actieve veiling.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <?php
+            }
+            else {
+                ?>
+                <div class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er
+                    is <strong><?= $closedAuctions; ?></strong> actieve veilingen.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <?php
+            }
+            ?>
         <div class="closedAds" style="overflow-x: auto; overflow-y: auto; height: 15em;">
             <table class="table table-sm table-striped table-bordered"
                    style="height: 15em; overflow-x: auto; overflow-y: auto;">
