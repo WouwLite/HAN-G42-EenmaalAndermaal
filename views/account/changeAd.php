@@ -193,21 +193,19 @@ if ($date1 <= $date2){
             <div <?php print((!empty($errors['startprice'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
                 <label class="col-2 col-form-label">Prijs*</label>
                 <div class="input-inline col-10">
-                    <div class="form-check">
-            <span class="inline-input">
-            <input onclick="check()" type="radio" value="1" name="radio" id="radio1" class="minimum-bid-price"
-                   value="<?php echo $dataAd['shippingcosts']; ?>">
-                            <label for="minimum-bid-price">Start bieden vanaf:</label>
-                    </div>
-                    </span>
-
-                    <div class="form-check">
-                    <span class="inline-input">
-                <input onclick="uncheck()" type="radio" value="2" name="radio" id="radio2" class="minimum-bid-price">
-                <label>Geen minimale prijs</label>
-                    </span>
-                    </div>
-                    <input id="minimum-bid-price" placeholder="€ 0,00" name="startprice"
+                    <label class="custom-control custom-radio">
+                        <input onclick="uncheck()" id="radio2" name="radio" type="radio" class="custom-control-input"
+                               value="2">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Geen minimale prijs</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input onclick="check()" id="radio2" name="radio" type="radio" class="custom-control-input"
+                               value="1">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Start bieden vanaf:</span>
+                    </label>
+                    <input id="minimum-bid-price" placeholder="€ 0.00" name="startprice"
                            value="<?php echo $dataAd['startprice']; ?>" type="number" step="0.01" class="form-control"
                            disabled>
                     <div class="form-control-feedback"><?php global $errors;
@@ -271,12 +269,12 @@ if ($date1 <= $date2){
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label class="col-2 col-form-label"></label>
-                <div class="form-check col-10">
-                    <input type="checkbox" required>
-                    Ik ga akkoord met de algemene voorwaarden
-                </div>
+            <div class="form-group row form-check col-10">
+                <label class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" required>
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">Ik ga akkoord met de algemene voorwaarden</span>
+                </label>
             </div>
             <div class="form-group row">
                 <div class="col-10">

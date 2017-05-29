@@ -9,7 +9,7 @@ from Object o left outer join productPhoto pp on o.productid=pp.productid";
     $result = $pdo->query($sql);
     $Ads = array();
     while ($row = $result->fetch()) {
-        $Ad = array($row['Title'], $row['description'], $row['Categories'], $row['filename']);
+        $Ad = array($row['Title'], $row['description'], $row['productid'], $row['filename']);
         $Ads[] = $Ad;
     }
     return $Ads;
@@ -79,10 +79,11 @@ echo "</div>";
                     ?>
                     <div class="col-sm-4 col-lg-4 col-md-4">
                         <div class="img-thumbnail">
-                            <img src="http://placehold.it/320x150" class="img-fluid" alt="">
+                            <img src="http://placehold.it/300x200"
+                           class="img-fluid" alt="<?php echo $value[3]?>">
                             <div class="figure-caption">
-                                <h4><a href="#"><?php echo substr($value[0], 0, 30) ?></a></h4>
-                                <p><?php echo substr($value[1], 0, 100) ?>... </p>
+                                <h4><a href="<?= $app_url ?>/views/public/<?php echo $value[2] ?>"><?php echo substr($value[0], 0, 30) ?></a></h4>
+                                <p><?php echo substr($value[1], 0, 50) ?>... </p>
                             </div>
                             <div class="ratings">
                                 <p class="pull-rigght">15 reviews</p>

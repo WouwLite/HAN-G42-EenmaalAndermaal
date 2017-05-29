@@ -1,7 +1,6 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . '/app/getpost.php');
 require_once ($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
-session_start();
 function getAds()
 {
     global $pdo;
