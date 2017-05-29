@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </head>
 
     <body>
-        <div class="bg-overlay">
+        <div class="bg-overlay" style="height: 100%;">
             <div class="container col-md-8 col-xs-6 jumbotron" style="background: rgba(236, 240, 241, 0.9);">
                 <a href="<?=$app_url?>" class="btn btn-default" role="button" aria-pressed="true"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Terug</a>
                 <form class="form-horizontal sign-up-form" method="post" action="#">
