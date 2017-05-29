@@ -713,8 +713,8 @@ function checkNoErrors()
 
                 <!-- Foutmelding -->
                 <?php
-                if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors()) {
-                    print("<div class='alert alert-danger'><strong>Oei!</strong> er ging iets mis tijdens het registreren, 
+                if ($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['final-submit'])) {
+                    if (!checkNoErrors()) print("<div class='alert alert-danger'><strong>Oei!</strong> er ging iets mis tijdens het registreren, 
                             controleer en pas de rode velden aan en probeer het daarna opniew</div>");
                 }
                 ?>
