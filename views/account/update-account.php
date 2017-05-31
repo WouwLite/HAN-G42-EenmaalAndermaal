@@ -33,7 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 function checkEmptyFields()
 {
     global $errors;
-    $errors['username'] = ($_POST['username'] == "") ? "Vul aub een gebruikersnaam in." : '';
     $errors['firstname'] = ($_POST['firstname'] == "") ? "Vul aub uw voornaam in." : '';
     $errors['lastname'] = ($_POST['lastname'] == "") ? "Vul aub uw achternaam in." : '';
     $errors['address1'] = ($_POST['address1'] == "") ? "Vul aubuw adres  in." : '';
@@ -130,13 +129,13 @@ function updateUserData()
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         print '<h4>Je zit in de updateUserData()</h4>';
         $stmt = "UPDATE Users
-                  SET username = ?, firstname = ?, lastname = ?, address1 = ?, address2 = ?, zipcode = ?, city = ?, country = ?, birthday = ?, email = ?, password = ?, questionnumber = ?, answer
-                  WHERE username = $gebruikersnaam";
+                  SET firstname = ?, lastname = ?, address1 = ?, address2 = ?, zipcode = ?, city = ?, country = ?, birthday = ?, email = ?, password = ?, questionnumber = ?, answer = ?
+                  WHERE username = '$gebruikersnaam'";
 
         print 'Gebruikersnaam:  ' . $gebruikersnaam . '<br>';
 
         $updateUserInfo = $pdo->prepare($stmt);
-        if ($updateUserInfo->execute(array($_POST['username'], $_POST['firstname'], $_POST['lastname'], $_POST['address1'], $_POST['address2'],
+        if ($updateUserInfo->execute(array($_POST['firstname'], $_POST['lastname'], $_POST['address1'], $_POST['address2'],
             $_POST['zipcode'], $_POST['city'], $_POST['country'], $_POST['birthday'], $_POST['email'], $finalPassword, $_POST['securityquestion'], $_POST['answer']))) {
             header('location: index.php');
         }
@@ -186,16 +185,16 @@ if(isset($_SESSION['username'])){
                             controleer en pas de rode velden aan en probeer het daarna opnieuw</div>");
             }
             ?>
-            <div <?php print((!empty($errors['username'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                <label for="title" class="col-2 col-form-label">Gebruikersnaam:*</label>
-                <div class="col-10">
-                    <input id="title" type="text" id="username" name="username" class="form-control" placeholder="Gebruikersnaam"
-                           value="<?php echo $dataUser['username']; ?>"
-                           autofocus>
-                    <div class="form-control-feedback"><?php global $errors;
-                        echo $errors['username'] ?></div>
-                </div>
-            </div>
+<!--            <div --><?php //print((!empty($errors['username'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?><!-->-->
+<!--                <label for="title" class="col-2 col-form-label">Gebruikersnaam:*</label>-->
+<!--                <div class="col-10">-->
+<!--                    <input id="title" type="text" id="username" name="username" class="form-control" placeholder="Gebruikersnaam"-->
+<!--                           value="--><?php //echo $dataUser['username']; ?><!--"-->
+<!--                           autofocus>-->
+<!--                    <div class="form-control-feedback">--><?php //global $errors;
+//                        echo $errors['username'] ?><!--</div>-->
+<!--                </div>-->
+<!--            </div>-->
 
             <div <?php print((!empty($errors['firstname'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
                 <label class="col-2 col-form-label">Voornaam:*</label>
