@@ -263,7 +263,7 @@ if (isset($_SESSION['username'])) {
                                 ?>
 
                                 <td>
-                                    <form action="changeAd.php" method="post">
+                                    <form action="update-advertisement.php" method="post">
                                         <button class="btn btn-default btn-sm" name="changeid"
                                                 value="<?= $d['productid'] ?>"><i
                                                     class="fa fa-wrench"
@@ -289,7 +289,7 @@ if (isset($_SESSION['username'])) {
     include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/include/delete-modal.php');
-    include($_SERVER['DOCUMENT_ROOT'] . '/views/account/removeAd.php');
+    include($_SERVER['DOCUMENT_ROOT'] . '/views/account/delete-advertisement.php');
 } else {
     include($_SERVER['DOCUMENT_ROOT'] . '/include/login-message.inc.php');
 }

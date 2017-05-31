@@ -1,3 +1,5 @@
+<!-- /views/account/login.php -->
+
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . "/config/app.php");
 

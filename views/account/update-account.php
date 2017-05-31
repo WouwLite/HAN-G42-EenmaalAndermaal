@@ -1,3 +1,5 @@
+<!-- /views/account/update-account.php -->
+
 <?php
 require($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 
