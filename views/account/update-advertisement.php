@@ -1,3 +1,5 @@
+<!-- /views/account/update-advertisement.php -->
+
 <?php
 require($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 

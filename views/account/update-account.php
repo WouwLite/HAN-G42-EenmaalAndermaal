@@ -1,3 +1,5 @@
+<!-- /views/account/update-account.php -->
+
 <?php
 require($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 
@@ -8,8 +10,6 @@ if ($debug == false) {
 
 include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
-
-
 if(isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
     $stmt = $pdo->prepare("SELECT * FROM Users WHERE username = ?");
@@ -17,10 +17,9 @@ if(isset($_SESSION['username'])) {
     $dataUser = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-$_POST = array();
+
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    global $_POST, $errors;
-    $_POST = getRealPOST();
+    global $errors;
     if (isset($_POST['final-submit'])) {
         checkEmptyFields();
         checkDuplicates();
@@ -31,24 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
 }
 
-$username       = $_POST['username'] ?? "";
-$firstname      = $_POST['firstname'] ?? "";
-$lastname       = $_POST['lastname'] ?? "";
-$address1       = $_POST['address1'] ?? "";
-$address2       = $_POST['address2'] ?? "";
-$zipcode     = $_POST['zipcode'] ?? "";
-$city       = $_POST['city'] ?? "";
-$country       = $_POST['country'] ?? "";
-$birthday        = $_POST['birthday'] ?? "";
-$email           = $_POST['email'] ?? "";
-$password        = $_POST['password'] ?? "";
-$password2       = $_POST['password2'] ?? "";
-$questionNumber       = $_POST['questionnumber'] ?? "";
-$answer   = $_POST['answer'] ?? "";
-
 function checkEmptyFields()
 {
-    global $errors, $_POST;
+    global $errors;
     $errors['username'] = ($_POST['username'] == "") ? "Vul aub een gebruikersnaam in." : '';
     $errors['firstname'] = ($_POST['firstname'] == "") ? "Vul aub uw voornaam in." : '';
     $errors['lastname'] = ($_POST['lastname'] == "") ? "Vul aub uw achternaam in." : '';
@@ -65,33 +49,52 @@ function checkEmptyFields()
 
 function checkDuplicates()
 {
-    global $user;
-    foreach($user as $us){
-        if($us['username'] != $_SESSION['username']){
-            return true;
+    global $errors, $pdo;
+    if (isset($_POST['username']) and usernameValid()) {
+        $username = $_POST['username'];
+        $stmt = $pdo->prepare("SELECT username FROM Users");
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+        foreach ($data as $d) {
+            if ($d == $username) {
+                $errors['username'] = "Deze gebruikersnaam bestaat al";
+                break;
+            }
         }
-        else {
-            return false;
+    }
+
+    if (isset($_POST['email'])) {
+        $email = $_POST['email'];
+        $stmt = $pdo->prepare("SELECT email FROM Users");
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+        foreach ($data as $d) {
+            if ($d == $email) {
+                $errors['email'] = "Dit email adres bestaat al";
+                break;
+            }
         }
     }
 }
 
 function checkAndHashPasswords()
 {
-    global $_POST, $errors;
-    $password = $_POST['password1'];
+    global $errors, $finalPassword;
+    $password = $_POST['password'];
     $password2 = $_POST['password2'];
     if ($password != $password2) {
-        $errors['password1'] = "De wachtwoorden moeten gelijk zijn aan elkaar";
+        $errors['password'] = "De wachtwoorden moeten gelijk zijn aan elkaar";
         $errors['password2'] = " ";
     } else if (passValid() === true) {
-        $_POST['hashedpassword'] = password_hash($password, PASSWORD_DEFAULT);
+        $finalPassword = password_hash($password, PASSWORD_DEFAULT);
     }
 }
 
 function passValid()
 {
-    global $_POST, $errors;
+    global $errors;
     if (preg_match("/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{5,}$/", $_POST['password'])) {
         return true;
     } else {
@@ -103,7 +106,7 @@ function passValid()
 
 function usernameValid()
 {
-    global $_POST, $errors;
+    global $errors;
     if (strlen($_POST['username']) >= 3 and strlen($_POST['username']) <= 20) {
         return true;
     } else {
@@ -122,25 +125,32 @@ function checkNoErrors()
 
 function updateUserData()
 {
-    global $_SESSION, $pdo;
+    global $_SESSION, $pdo, $finalPassword;
+    $gebruikersnaam = $_SESSION['username'];
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        print '<h4>Je zit in de updateUserData()</h4>';
         $stmt = "UPDATE Users
-                  SET username = ?, firstname = ?, lastname = ?, address1 = ?, address2 = ?,
-                      zipcode = ?, city = ?, country = ?, birthday = ?,
-                      email = ?, password = ?, questionnumber = ?, answer = ?
-                  WHERE username = ?";
+                  SET username = ?, firstname = ?, lastname = ?, address1 = ?, address2 = ?, zipcode = ?, city = ?, country = ?, birthday = ?, email = ?, password = ?, questionnumber = ?, answer
+                  WHERE username = $gebruikersnaam";
+
+        print 'Gebruikersnaam:  ' . $gebruikersnaam . '<br>';
 
         $updateUserInfo = $pdo->prepare($stmt);
-        $updateUserInfo->execute(array($_POST['username'], $_POST['firstname'], $_POST['lastname'], $_POST['address1'], $_POST['address2'],
-            $_POST['zipcode'], $_POST['city'], $_POST['country'], $_POST['birthday'], $_POST['email'], $_POST['password'], $_POST['questionnumber'],
-            $_POST['answer']));
-        print_r($pdo->errorInfo());
-
+        if ($updateUserInfo->execute(array($_POST['username'], $_POST['firstname'], $_POST['lastname'], $_POST['address1'], $_POST['address2'],
+            $_POST['zipcode'], $_POST['city'], $_POST['country'], $_POST['birthday'], $_POST['email'], $finalPassword, $_POST['securityquestion'], $_POST['answer']))) {
+            header('location: index.php');
+        }
+        else {
+            print_r($pdo->errorInfo());
+            var_dump($_POST);
+            var_dump($finalPassword);
+            print '<h4>Oei er ging iets mis maar wat!?!? <br></h4>';
+        }
     }
 }
 
 if(isset($_SESSION['username'])){
-?>
+    ?>
     <!DOCTYPE html>
     <html>
     <head>
@@ -169,7 +179,7 @@ if(isset($_SESSION['username'])){
                 </div>
             </div>
             <?php
-            if ($_SERVER['REQUEST_METHOD'] == "POST" and checkNoErrors() and checkUserExist()) {
+            if ($_SERVER['REQUEST_METHOD'] == "POST" and checkNoErrors()) {
                 print("<div class='alert alert-success'><strong>Gelukt<br></strong> Uw account is succesvol bijgewerkt.</div>");
             } else if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors()) {
                 print("<div class='alert alert-danger'><strong>Oei!</strong> Er ging iets mis tijdens het bijwerken van uw account, 
@@ -319,7 +329,7 @@ if(isset($_SESSION['username'])){
             <div class="form-group row">
                 <div class="input-group inputform">
                     <label class="col-2 col-form-label">Vraag:*</label>
-                    <select class="form-control" id="securityquestion" name="sequrityquestion">
+                    <select class="form-control" id="securityquestion" name="securityquestion">
                         <?php
                         $stmtForQuestions = $pdo->prepare("SELECT * FROM Question");
                         $stmtForQuestions->execute();

@@ -140,7 +140,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
                             <td><?php echo $d['sellingprice']; ?></td>
                             <td><?php echo $d['Categories']; ?></td>
                             <td>
-                                <a class="btn btn-default btn-sm" href="../account/changeAd.php?id=<?= $d['productid']; ?>"><i
+                                <a class="btn btn-default btn-sm" href="../account/update-advertisement.php?id=<?= $d['productid']; ?>"><i
                                             class="fa fa-wrench"
                                             style="width: 12px"></i></a>
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
@@ -261,7 +261,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
                             <td><?php echo $d['sellingprice']; ?></td>
                             <td><?php echo $d['Categories']; ?></td>
                             <td>
-                                <a class="btn btn-default btn-sm" href="../account/changeAd.php?id=<?= $d['productid']; ?>"><i
+                                <a class="btn btn-default btn-sm" href="../account/update-advertisement.php?id=<?= $d['productid']; ?>"><i
                                             class="fa fa-wrench"
                                             style="width: 12px"></i></a>
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"

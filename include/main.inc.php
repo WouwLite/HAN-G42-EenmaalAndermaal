@@ -1,14 +1,11 @@
 <!-- /resources/include/main.inc.php -->
 <?php
+// Required files
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/style.inc.php');
-include($_SERVER['DOCUMENT_ROOT'] . '/dev/functions.dev.php');
 
-if ($debug) {
-    ini_set('display_errors', 'On');
-    error_reporting(E_ALL | E_STRICT);
-}
-
+// When debugging is enabled, show errors.
+include($_SERVER['DOCUMENT_ROOT'] . '/app/debug.php');
 
 if (!isset($_SESSION)) {
     session_start();
