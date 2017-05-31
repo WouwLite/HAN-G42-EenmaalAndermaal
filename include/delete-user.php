@@ -39,11 +39,11 @@ SQL;
             </div>
             <form action="" method="post">
                 <div class="modal-body">
-                    <p>Weet je zeker dat je het geselecteerde account <span class="username">test</span> wilt verwijderen?<br>
+                    <p>Weet je zeker dat je het geselecteerde account <strong><span class="username">"Onbekend"</span></strong> wilt verwijderen?<br>
                         Dit kan niet ongedaan worden!</p>
-                    <div class="form-group">
+                    <div class="form-group has-danger">
                         <label for="reason" class="form-control-label">Reden voor verwijdering</label>
-                        <input type="text" class="form-control" name="reason">
+                        <input type="text" class="form-control form-control-danger" name="reason" required>
                     </div>
                 </div>
                 <div class="modal-footer">
