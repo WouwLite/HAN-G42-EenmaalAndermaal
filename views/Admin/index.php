@@ -90,6 +90,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
               }
                 ?>
 
+
                 <?php
                 $stmt = $pdo->prepare("SELECT * FROM Object WHERE auctionClosed = 0");
                 $stmt->execute();
@@ -132,6 +133,17 @@ if (isset($user['username']) && $user['admin'] == 1) {
                                 $productidToDelete = $d['productid'];
                                 $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 1 WHERE productid = ?");
                                 $stmt->execute([$productidToDelete]);
+
+                                $stmt2 = $pdo->prepare("SELECT email FROM Users WHERE username in (SELECT username FROM Bidding WHERE productid = ?)");
+                                $stmt2->execute([$productidToDelete]);
+                                $emails = $stmt2->fetchColumn();
+
+                                $subject = "De aanbieding waar je op geboden hebt is beeindigd";
+                                $message = "De aanbieding voor " . $d['title'] . "is afgelopen op " . $d['durationendDay'];
+                                $headers = 'From: noreply@iproject42.icasites.nl';
+                                foreach ($emails as $usermail) {
+                                    mail($useremail, $subject, $message, $headers);
+                                }
                                 ?>
                                 <td><span class="badge badge-danger">Gesloten</span></td>
                                 <?php
@@ -157,9 +169,9 @@ if (isset($user['username']) && $user['admin'] == 1) {
             </table>
         </div>
         <a class="btn btn-primary"
-           href="<?= $app_url ?>/views/Admin/adminPanel.php?page=<?php echo ($_GET['page']??1) - 1 ?>">Vorige pagina</a>
+           href="<?= $app_url ?>/views/Admin/index.php?page=<?php echo ($_GET['page']??1) - 1 ?>">Vorige pagina</a>
         <a class="btn btn-primary"
-           href="<?= $app_url ?>/views/Admin/adminPanel.php?page=<?php echo ($_GET['page']??1) + 1 ?>">Volgende
+           href="<?= $app_url ?>/views/Admin/index.php?page=<?php echo ($_GET['page']??1) + 1 ?>">Volgende
             pagina</a>
 
 
