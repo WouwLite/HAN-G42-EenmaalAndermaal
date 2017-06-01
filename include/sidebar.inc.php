@@ -11,7 +11,7 @@
 <div id="sidebar">
     <ul>
         <li>
-            <form>
+            <form action="<?= $app_url ?>/views/public/browse.php" method="get">
                 <input class="form-control sm-2" type="search" id="search" name="Search"
                        placeholder="Zoek naar veiling..."/>
             </form>
