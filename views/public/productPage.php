@@ -73,7 +73,7 @@ function getPhotos()
                         <?php
                         foreach ($getPhotos as $i => $value) {
                             if (substr($value[0], 0, 2) == 'dt') {
-                                $piclocation = "/pic/";
+                                $piclocation = "/pics/";
                             } else {
                                 $piclocation = "/uploads/";
                             }
