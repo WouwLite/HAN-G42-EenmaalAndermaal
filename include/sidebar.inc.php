@@ -118,12 +118,12 @@ HTML;
             if (array_key_exists('children', $parent)) {
                 echo <<<HTML
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion{$parent['ID']}" href="#collapse{$parent['ID']}children" >
-                            {$parent['Name']} <!--<span class="badge badge-pill badge-default" > 69</span > -->
+                            {$parent['Name']}
                         </a>
 HTML;
             } else {
                 echo <<<HTML
-                <a href="index.php?cat={$parent['Name']}">{$parent['Name']}</a>
+                <a href="?cat={$parent['ID']}">{$parent['Name']}</a>
 HTML;
 
             }
