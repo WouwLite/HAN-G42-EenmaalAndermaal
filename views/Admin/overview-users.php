@@ -133,10 +133,9 @@ if (isset($user['username']) && $user['admin'] == 1) {
                         }
                         ?>
                         <td>
-<!--                            <a href="http://#"><span class="badge badge-pill badge-primary"><i class="fa fa-wrench fa-sm"></i></span></a>-->
-<!--                            <a href="http://#"><span class="badge badge-pill badge-danger"><i class="fa fa-trash-o fa-sm"></i></span></a>-->
+<!--                            <a href=""><span class="badge badge-pill badge-success" style="width: 30px;"><i class="fa fa-wrench fa-sm"></i></span></a>-->
                             <form action="<?=$app_url?>/views/account/update-account.php" method="post" style="display:inline;">
-                                <button class="btn btn-default btn-sm" name="changeusername" value="<?= $d['username']?>"><i class="fa fa-wrench" style="width: 12px"></i></button>
+                                <button class="btn btn-success btn-sm" name="changeusername" value="<?= $d['username']?>"><i class="fa fa-wrench" style="width: 12px"></i></button>
                             </form>
 
 
