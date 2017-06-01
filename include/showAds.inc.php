@@ -4,40 +4,24 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
 function getAds()
 {
     global $pdo;
-    $sql = "select top 24 o.productid, Title, description, durationbeginDay, durationbeginTime, durationendDay, durationendTime, Categories, productPhoto.filename
+    $sql = "select DISTINCT top 24 o.productid, Title, description, durationendDay, durationendTime, Categories, productPhoto.filename, startprice, (select max(biddingprice)
+																																from Bidding b
+																																where o.productid = b.productid) as biddingprice
 From Object o
 CROSS APPLY
 (SELECT TOP 1 productid, filename
-From productPhoto pp where o.productid=pp.productid) productPhoto";
+From productPhoto pp where o.productid=pp.productid) productPhoto left outer join Bidding b on o.productid = b.productid
+order by durationendDay, durationendTime";
     $result = $pdo->query($sql);
     $Ads = array();
     while ($row = $result->fetch()) {
-        $Ad = array($row['Title'], $row['description'], $row['productid'], $row['filename']);
+        $Ad = array($row['Title'], $row['description'], $row['productid'], $row['filename'], $row['biddingprice'], $row['startprice']);
         $Ads[] = $Ad;
     }
     return $Ads;
 }
 
-/*
-$Ads = getAds();
-$i = 0;
-echo "<div class='container'>";
-foreach ($Ads as $Adverts) {
-    if ($i == 0) {
-        echo "<div class='row'>";
-    }
-    $i++;
-    echo "<div class='col-sm-4'>";
-    echo "<h2>" . $Adverts[0] . "</h2>";
-    if ($i == 5) {
-        $i = 0;
-        echo "</div>";
-    }
-    echo "</div>";
-}
-echo "</div>";
-echo "</div>";
-*/
+
 ?>
 <!-- Page Content -->
 
@@ -49,36 +33,41 @@ echo "</div>";
     </header>
 
 
-        <div class="row text-center">
-            <?php
-            $ads = getAds();
-            foreach ($ads as $value) {
-                ?>
-                <div class="col-md-3 col-sm-6 hero-feature">
-                    <div class="img-thumbnail">
-                        <img src="http://placehold.it/800x500"
-                             class="img-fluid"
-                             alt="<?php echo $value[3] ?>">
-                        <div class="figure-caption">
-                            <h3>
-                                <?php echo substr($value[0], 0, 30) ?>
-                            </h3>
-                            <p><?php echo substr($value[1], 0, 50) ?>... </p>
-                            <p>
-                                <a class="btn btn-primary"
-                                   href="<?= $app_url ?>/views/public/productPage.php?<?php echo $value[2] ?>">Bied
-                                    Nu</a>
-                                <a class="btn btn-secondary"
-                                   href="<?= $app_url ?>/views/public/productPage.php?<?php echo $value[2] ?>">Meer
-                                    Info</a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <?php
-            }
+    <div class="row text-center">
+        <?php
+        $ads = getAds();
+        foreach ($ads as $value) {
             ?>
-        </div>
+            <div class="col-md-3 col-sm-6 hero-feature">
+                <div class="img-thumbnail">
+                    <img src="http://placehold.it/800x500"
+                         class="img-fluid"
+                         alt="<?php echo $value[3] ?>">
+                    <div class="figure-caption">
+                        <h3>
+                            <?php echo substr($value[0], 0, 30) ?>
+                        </h3>
+                        <p><?php echo substr($value[1], 0, 50) ?>... </p>
+                        <p>
+                            <a class="btn btn-primary"
+                               href="<?= $app_url ?>/views/public/productPage.php?link=<?php echo $value[2] ?>">Bied
+                                Nu</a>
+                            <a class="btn btn-secondary"
+                               href="<?= $app_url ?>/views/public/productPage.php?link=<?php echo $value[2] ?>">Meer
+                                Info</a>
+                        </p>
+                    </div>
+                    <p><?php if (!empty($value[4])) {
+                            echo "<span class='badge badge-pill badge-success'>Huidig bod: € " . $value[4] . "</span>";
+                        } else {
+                            echo "<span class='badge badge-pill badge-warning'>Begin bieden vanaf: € " . $value[5] . "</span>";
+                        } ?></p>
+                </div>
+            </div>
+            <?php
+        }
+        ?>
     </div>
+</div>
 </div>
 
