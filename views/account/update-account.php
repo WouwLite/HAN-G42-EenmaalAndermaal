@@ -15,13 +15,14 @@ if(isset($_SESSION['username'])) {
 //    var_dump($_POST['username']);
 //    $userChange = $_POST['username'] ?? $_SESSION['username'];
     $username = $_SESSION['username'];
-    $stmt = $pdo->prepare("SELECT * FROM Users WHERE username = ?");
-    $stmt->execute([$_POST['username'] ?? $username]);
+    $stmt = $pdo->prepare("SELECT * FROM Users
+                                     WHERE username = ?");
+    $stmt->execute([$_POST['changeusername'] ?? $username]);
     $dataUser = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-//print '<h4>De gebruiker die je wilt veranderen is:  ' . $_POST['username'] . '</h4><br>';
-//print 'Gebruikersnaam is: ' . $_POST['username'];
+print '<h4>De gebruiker die je wilt veranderen is:  ' . $_POST['changeusername'] . '</h4><br>';
+print 'Gebruikersnaam is: ' . $username;
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     global $errors;
@@ -106,7 +107,7 @@ function updateUserData()
         $updateUserInfo = $pdo->prepare($stmt);
         if ($updateUserInfo->execute(array($_POST['firstname'], $_POST['lastname'], $_POST['address1'], $_POST['address2'],
             $_POST['zipcode'], $_POST['city'], $_POST['country'], $_POST['birthday'], $_POST['email'], $finalPassword,
-            $_POST['securityquestion'], $_POST['answer'], $_POST['username']))) {
+            $_POST['securityquestion'], $_POST['answer'], [$_POST['changeusername'] ?? $username]))) {
             global $updateSuccess;
             $updateSuccess = true;
         }
@@ -132,7 +133,7 @@ if(isset($_SESSION['username'])){
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="<?= $app_url ?>">Thuis</a></li>
             <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-            <li class="breadcrumb-item active">Acount wijzigen</li>
+            <li class="breadcrumb-item active">Acount wijzigen123</li>
         </ol>
     </div>
     <div class="col-10">
@@ -167,7 +168,8 @@ if(isset($_SESSION['username'])){
                 </div>
             </div>
 
-            <intput type="hidden" value="<?= $_POST['username'] ?? $_SESSION['username']?>" name="username"></intput>
+            <input type="hidden" value="<?php echo $_POST['username']??$_SESSION['username']; ?>" name="changeusername"
+                   id="changeusername">
 
             <div <?php print((!empty($errors['lastname'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
                 <label class="col-2 col-form-label">Achternaam:*</label>
