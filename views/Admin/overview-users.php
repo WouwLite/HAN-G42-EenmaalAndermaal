@@ -74,19 +74,19 @@ if (isset($user['username']) && $user['admin'] == 1) {
                    style="overflow-x: auto; overflow-y: auto; height: 100%;">
 
                 <thead>
-                    <th></th>
                     <th>Gebruikersnaam</th>
                     <th>Voornaam</th>
                     <th>Achternaam</th>
-                    <th>Adres 1</th>
-                    <th>Adres 2</th>
-                    <th>Postcode</th>
+<!--                    <th>Adres 1</th>-->
+<!--                    <th>Adres 2</th>-->
+<!--                    <th>Postcode</th>-->
                     <th>Stad</th>
                     <th>Land</th>
-                    <th>Geboortedatum</th>
+<!--                    <th>Geboortedatum</th>-->
                     <th>Email</th>
                     <th>Functie</th>
                     <th>Beheerder</th>
+                    <th></th>
                 </thead>
          <?php }
         elseif ($aantalGebruikers == 0) {
@@ -98,41 +98,15 @@ if (isset($user['username']) && $user['admin'] == 1) {
             foreach ($data as $d) { ?>
                 <tbody>
                     <tr>
-                        <td>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-primary"><i class="fa fa-wrench fa-sm"></i></button>
-                                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">Blokkeren</a>
-                                    <a class="dropdown-item" href="#">Verwijderen</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Separated link</a>
-                                </div>
-                            </div>
-
-
-<!--                            <a class="btn btn-default btn-sm" href="overview-users.php?id=--><?//= $d['username']; ?><!--"><i-->
-<!--                                        class="fa fa-wrench"-->
-<!--                                        style="width: 12px"></i></a>-->
-<!--                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"-->
-<!--                                    data-target="#deleteModal" data-user="--><?php //echo $d['username']; ?><!--"><i-->
-<!--                                        class="fa fa-trash-o fa-sm"></i></button>-->
-<!--                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"-->
-<!--                                    data-target="#deleteModal" data-user="--><?php //echo $d['username']; ?><!--"><i-->
-<!--                                        class="fa fa-ban fa-sm"></i></button>-->
-                        </td>
                         <td> <?php echo $d['username']; ?></td>
                         <td> <?php echo $d['firstname']; ?></td>
                         <td> <?php echo $d['lastname']; ?></td>
-                        <td> <?php echo $d['address1']; ?></td>
-                        <td> <?php echo $d['address2']; ?></td>
-                        <td> <?php echo $d['zipcode']; ?></td>
+<!--                        <td> --><?php //echo $d['address1']; ?><!--</td>-->
+<!--                        <td> --><?php //echo $d['address2']; ?><!--</td>-->
+<!--                        <td> --><?php //echo $d['zipcode']; ?><!--</td>-->
                         <td> <?php echo $d['city']; ?></td>
                         <td> <?php echo $d['country']; ?></td>
-                        <td> <?php echo $d['birthday']; ?></td>
+<!--                        <td> --><?php //echo $d['birthday']; ?><!--</td>-->
                         <td> <?php echo $d['email']; ?></td>
                         <?php
                             if($d['merchant'] == 1){
@@ -158,6 +132,19 @@ if (isset($user['username']) && $user['admin'] == 1) {
                             <?php
                         }
                         ?>
+                        <td>
+<!--                            <a href="http://#"><span class="badge badge-pill badge-primary"><i class="fa fa-wrench fa-sm"></i></span></a>-->
+<!--                            <a href="http://#"><span class="badge badge-pill badge-danger"><i class="fa fa-trash-o fa-sm"></i></span></a>-->
+                            <form action="<?=$app_url?>/views/account/update-account.php" method="post" style="display:inline;">
+                                <button class="btn btn-default btn-sm" name="changeusername" value="<?= $d['username']?>"><i class="fa fa-wrench" style="width: 12px"></i></button>
+                            </form>
+
+
+
+<!--                            <a class="btn btn-default btn-sm" href="overview-users.php?id=--><?//= $d['username']; ?><!--"><i class="fa fa-wrench" style="width: 12px"></i></a>-->
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" data-user="<?php echo $d['username']; ?>"><i class="fa fa-trash-o fa-sm"></i></button>
+                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#banModal" data-user="<?php echo $d['username']; ?>"><i class="fa fa-ban fa-sm"></i></button>
+                        </td>
                     </tr>
                 </tbody>
                 <?php
