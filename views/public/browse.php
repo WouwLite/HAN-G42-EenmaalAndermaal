@@ -97,10 +97,10 @@ echo "</div>";
                         <p><?php echo substr($value[2], 0, 50) ?>... </p>
                         <p>
                             <a class="btn btn-primary"
-                               href="<?= $app_url ?>/views/public/productPage.php?<?php echo $value[0] ?>">Bied
+                               href="<?= $app_url ?>/views/public/productPage.php?link=<?php echo $value[0] ?>">Bied
                                 Nu</a>
                             <a class="btn btn-secondary"
-                               href="<?= $app_url ?>/views/public/productPage.php?<?php echo $value[0] ?>">Meer
+                               href="<?= $app_url ?>/views/public/productPage.php?link=<?php echo $value[0] ?>">Meer
                                 Info</a>
                         </p>
                     </div>

@@ -134,6 +134,7 @@
 
         function printParentAndChildren($parent)
         {
+            global $app_url;
 //            var_dump($parent);
             echo <<<HTML
             <div class="accordion nav-item" id="accordion{$parent['ID']}">
@@ -148,7 +149,7 @@ HTML;
 HTML;
             } else {
                 echo <<<HTML
-                <a href="?cat={$parent['ID']}">{$parent['Name']}</a>
+                <a href="{$app_url}/views/public/browse.php?cat={$parent['ID']}">{$parent['Name']}</a>
 HTML;
 
             }
