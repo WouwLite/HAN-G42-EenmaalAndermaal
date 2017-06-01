@@ -135,7 +135,7 @@ if(isset($_SESSION['username'])){
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="<?= $app_url ?>">Thuis</a></li>
             <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-            <li class="breadcrumb-item active">Acount wijzigen123</li>
+            <li class="breadcrumb-item active">Acount wijzigen</li>
         </ol>
     </div>
     <div class="col-10">
