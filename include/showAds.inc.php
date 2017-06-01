@@ -60,7 +60,14 @@ echo "</div>";
                 ?>
                 <div class="col-md-3 col-sm-6 hero-feature">
                     <div class="img-thumbnail">
-                        <img src="http://iproject42.icasites.nl/pics/<?= $thumbnail; ?>"
+                        <?php
+                        if (substr($thumbnail, 0, 3) === "dt_") {
+                            $picsource = "http://iproject42.icasites.nl/pics/";
+                        } else {
+                            $picsource = "http://iproject42.icasites.nl/uploads/";
+                        }
+                        ?>
+                        <img src="<?= $picsource ?><?= $thumbnail; ?>"
                              class="img-fluid"
                              alt="<?php echo $value[3] ?>">
                         <div class="figure-caption">

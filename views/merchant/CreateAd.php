@@ -100,7 +100,9 @@ function saveProductData()
                  VALUES (?, ?)";
         $adInfo = $pdo->prepare($stmt);
         $photoInfo = $pdo->prepare($stmt2);
-        $destdir = $app_url . "/pics/";
+        define('SITE_ROOT', realpath(dirname(__FILE__, 3)));
+        $destdir = SITE_ROOT . "\\uploads\\";
+
         if ($foto1) {
             $ext = pathinfo($foto1['name'], PATHINFO_EXTENSION);
             $uniquefilename = uniqid('EAImg') . "." . $ext;
