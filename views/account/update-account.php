@@ -101,13 +101,15 @@ function updateUserData()
 {
     global $_SESSION, $pdo, $finalPassword, $userChange, $username;
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $userChange = $_POST['changeusername'] ?? $_SESSION['username'];
+
         $stmt = "UPDATE Users
                   SET firstname = ?, lastname = ?, address1 = ?, address2 = ?, zipcode = ?, city = ?, country = ?, birthday = ?, email = ?, password = ?, questionnumber = ?, answer = ?
                   WHERE username = ?";
         $updateUserInfo = $pdo->prepare($stmt);
         if ($updateUserInfo->execute(array($_POST['firstname'], $_POST['lastname'], $_POST['address1'], $_POST['address2'],
             $_POST['zipcode'], $_POST['city'], $_POST['country'], $_POST['birthday'], $_POST['email'], $finalPassword,
-            $_POST['securityquestion'], $_POST['answer'], [$_POST['changeusername'] ?? $username]))) {
+            $_POST['securityquestion'], $_POST['answer'], $userChange))) {
             global $updateSuccess;
             $updateSuccess = true;
         }
@@ -168,7 +170,7 @@ if(isset($_SESSION['username'])){
                 </div>
             </div>
 
-            <input type="hidden" value="<?php echo $_POST['username']??$_SESSION['username']; ?>" name="changeusername"
+            <input type="hidden" value="<?php echo $_POST['changeusername']??$_SESSION['username']; ?>" name="changeusername"
                    id="changeusername">
 
             <div <?php print((!empty($errors['lastname'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>

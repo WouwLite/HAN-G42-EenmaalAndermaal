@@ -14,8 +14,8 @@ include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
 if(isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
-    $stmt = $pdo->prepare("SELECT * FROM Object WHERE seller = ? AND productid = ? ");
-    $stmt->execute([$username, ($_POST['changeid'] ?? $_POST['productid'])]);
+    $stmt = $pdo->prepare("SELECT * FROM Object WHERE productid = ? ");
+    $stmt->execute([($_POST['changeid'] ?? $_POST['productid'])]);
     $dataAd = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
