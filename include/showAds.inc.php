@@ -53,10 +53,21 @@ echo "</div>";
             <?php
             $ads = getAds();
             foreach ($ads as $value) {
+                $picsql = "SELECT TOP 1 filename FROM productPhoto WHERE productid = ?";
+                $stmt = $pdo->prepare($picsql);
+                $stmt->execute([$value[2]]);
+                $thumbnail = $stmt->fetchColumn();
                 ?>
                 <div class="col-md-3 col-sm-6 hero-feature">
                     <div class="img-thumbnail">
-                        <img src="http://placehold.it/800x500"
+                        <?php
+                        if (substr($thumbnail, 0, 3) === "dt_") {
+                            $picsource = "http://iproject42.icasites.nl/pics/";
+                        } else {
+                            $picsource = "http://iproject42.icasites.nl/views/merchant/AdImages/";
+                        }
+                        ?>
+                        <img src="<?= $picsource ?><?= $thumbnail; ?>"
                              class="img-fluid"
                              alt="<?php echo $value[3] ?>">
                         <div class="figure-caption">
@@ -66,10 +77,10 @@ echo "</div>";
                             <p><?php echo substr($value[1], 0, 50) ?>... </p>
                             <p>
                                 <a class="btn btn-primary"
-                                   href="<?= $app_url ?>/views/public/productPage.php?<?php echo $value[2] ?>">Bied
+                                   href="<?= $app_url ?>/views/public/productPage.php?link=<?php echo $value[2] ?>">Bied
                                     Nu</a>
                                 <a class="btn btn-secondary"
-                                   href="<?= $app_url ?>/views/public/productPage.php?<?php echo $value[2] ?>">Meer
+                                   href="<?= $app_url ?>/views/public/productPage.php?link=<?php echo $value[2] ?>">Meer
                                     Info</a>
                             </p>
                         </div>

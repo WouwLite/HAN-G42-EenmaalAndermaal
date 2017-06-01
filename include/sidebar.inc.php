@@ -55,16 +55,28 @@
 
         <!-- View account -->
         <li><strong>Account</strong></li>
+
+        <?php
+        $sql = "SELECT COUNT(productid) FROM Object WHERE Seller = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$user['username']]);
+        $ADamount = $stmt->fetchColumn();
+
+        $sql = "SELECT COUNT(productid) FROM Bidding WHERE user = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$user['username']]);
+        $BIDamount = $stmt->fetchColumn();
+        ?>
         <li class="nav-item">
             <a class="nav-link" href="<?= $app_url ?>/views/account/index.php"><i class="fa fa-gavel"
                                                                                   aria-hidden="true"></i> Mijn biedingen
-                <span class="badge badge-default"><?= $testBiedingNo ?></span></a>
+                <span class="badge badge-default"><?= $BIDamount ?></span></a>
         </li>
         <!-- Create IF statement. If user is merchant, show this link, else hide -->
         <li class="nav-item">
             <a class="nav-link" href="<?= $app_url ?>/views/account/index.php"><i class="fa fa-shopping-cart"
                                                                                   aria-hidden="true"></i> Mijn
-                advertenties <span class="badge badge-default"><?= $testAdvertNo ?></span></a>
+                advertenties <span class="badge badge-default"><?= $ADamount ?></span></a>
         </li>
 
         <!-- View business info -->
@@ -134,6 +146,7 @@
 
         function printParentAndChildren($parent)
         {
+            global $app_url;
 //            var_dump($parent);
             echo <<<HTML
             <div class="accordion nav-item" id="accordion{$parent['ID']}">
@@ -148,7 +161,7 @@ HTML;
 HTML;
             } else {
                 echo <<<HTML
-                <a href="?cat={$parent['ID']}">{$parent['Name']}</a>
+                <a href="{$app_url}/views/public/browse.php?cat={$parent['ID']}">{$parent['Name']}</a>
 HTML;
 
             }
