@@ -101,11 +101,11 @@ if(empty($_SESSION['username'])){
 }
 
 
-$date1 = new DateTime(date("Y-m-d h:i:s"));
-$date2 = new DateTime($d['durationendDay'] . ' ' . $d['durationendTime']);
-if ($date1 <= $date2){
+$date1 = date("Y-m-d H:i:s");
+$date2 = $dataAd['durationendDay'] . ' ' . $dataAd['durationendTime'];
+if (strtotime($date1) <= strtotime($date2)) {
 
-    ?>
+?>
     <!DOCTYPE html>
     <html>
     <head>
@@ -307,10 +307,9 @@ if ($date1 <= $date2){
 }
 else {
     print("<div class='alert alert-danger'><strong>Oei!</strong> Het lijkt erop dat deze advertentie al is verlopen</div>");
+    header("Refresh: 2; url=index.php");
 }
 
 include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
 ?>
-
-
