@@ -2,8 +2,13 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="483847a6-fb7c-4103-aa97-18cb91efa48c" name="XAMPP" url="http://localhost">
-        <fileTransfer port="0" mountedRoot="C:\xampp\htdocs" accessType="MOUNT" />
+      <webServer id="444c065c-fa57-4e28-84fd-7813c49c8f18" name="iproject42" url="http://iproject42.icasites.nl">
+        <fileTransfer host="iproject42.icasites.nl" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
       </webServer>
     </option>
   </component>

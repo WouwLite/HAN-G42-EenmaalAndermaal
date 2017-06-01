@@ -85,8 +85,8 @@ if (isset($user['username']) && $user['admin'] == 1) {
                     <th>Land</th>
                     <th>Geboortedatum</th>
                     <th>Email</th>
-                    <th>Verkoper</th>
-                    <th>Admin</th>
+                    <th>Functie</th>
+                    <th>Beheerder</th>
                 </thead>
          <?php }
         elseif ($aantalGebruikers == 0) {
@@ -99,12 +99,30 @@ if (isset($user['username']) && $user['admin'] == 1) {
                 <tbody>
                     <tr>
                         <td>
-                            <a class="btn btn-default btn-sm" href="overview-users.php?id=<?= $d['username']; ?>"><i
-                                        class="fa fa-wrench"
-                                        style="width: 12px"></i></a>
-                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                    data-target="#deleteModal" data-user="<?php echo $d['username']; ?>"><i
-                                        class="fa fa-trash-o fa-sm"></i></button>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary"><i class="fa fa-wrench fa-sm"></i></button>
+                                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">Blokkeren</a>
+                                    <a class="dropdown-item" href="#">Verwijderen</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Separated link</a>
+                                </div>
+                            </div>
+
+
+<!--                            <a class="btn btn-default btn-sm" href="overview-users.php?id=--><?//= $d['username']; ?><!--"><i-->
+<!--                                        class="fa fa-wrench"-->
+<!--                                        style="width: 12px"></i></a>-->
+<!--                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"-->
+<!--                                    data-target="#deleteModal" data-user="--><?php //echo $d['username']; ?><!--"><i-->
+<!--                                        class="fa fa-trash-o fa-sm"></i></button>-->
+<!--                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"-->
+<!--                                    data-target="#deleteModal" data-user="--><?php //echo $d['username']; ?><!--"><i-->
+<!--                                        class="fa fa-ban fa-sm"></i></button>-->
                         </td>
                         <td> <?php echo $d['username']; ?></td>
                         <td> <?php echo $d['firstname']; ?></td>
@@ -119,24 +137,24 @@ if (isset($user['username']) && $user['admin'] == 1) {
                         <?php
                             if($d['merchant'] == 1){
                                 ?>
-                                <td style="background-color: #2ecc71; color: white; text-align: center;"> Ja </td>
+                                <td><span class="badge badge-primary">Verkoper</span></td>
                                 <?php
                             }
                             else {
                                 ?>
-                                <td style="background-color: #e74c3c; color: white; text-align: center;"> Nee </td>
+                                <td><span class="badge badge-default">Bezoeker</span></td>
                                 <?php
                             }
                         ?>
                         <?php
                         if($d['admin'] == 1){
                             ?>
-                            <td style="background-color: #2ecc71; color: white; text-align: center;"> Ja </td>
+                            <td><span class="badge badge-success">Beheerder</span></td>
                             <?php
                         }
                         else {
                             ?>
-                            <td style="background-color: #e74c3c; color: white; text-align: center;"> Nee </td>
+                            <td><span class="badge badge-default">Nee</span></td>
                             <?php
                         }
                         ?>

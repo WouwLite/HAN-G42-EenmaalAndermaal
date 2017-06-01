@@ -29,6 +29,7 @@
             </li>
         <?php endif; ?>
 
+        <!-- Add admin menu when user is admin -->
         <?php
         global $user;
         if ($user['admin'] == 1) {
@@ -41,6 +42,8 @@
             </li>');
         }
         ?>
+
+        <!-- View dashboard -->
         <li><strong>Dashboard</strong></li>
         <li class="nav-item">
             <a class="nav-link active" href="/views/public/"><i class="fa fa-home" aria-hidden="true"></i> Thuis</a>
@@ -49,6 +52,8 @@
             <a class="nav-link disabled" href="#"><i class="fa fa-star" aria-hidden="true"></i> Populair</a>
         </li>
         <li><span class="sidebar-span"></span></li>
+
+        <!-- View account -->
         <li><strong>Account</strong></li>
         <li class="nav-item">
             <a class="nav-link" href="<?= $app_url ?>/views/account/index.php"><i class="fa fa-gavel"
@@ -61,6 +66,26 @@
                                                                                   aria-hidden="true"></i> Mijn
                 advertenties <span class="badge badge-default"><?= $testAdvertNo ?></span></a>
         </li>
+
+        <!-- View business info -->
+        <li><strong>Bedrijf</strong></li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= $app_url ?>/views/business/about.php"><i class="fa fa-briefcase" aria-hidden="true"></i> Over ons</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= $app_url ?>/views/business/terms.php"><i class="fa fa-file-text" aria-hidden="true"></i> Algemene Voorwaarden</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= $app_url ?>/views/business/privacy.php"><i class="fa fa-file-text" aria-hidden="true"></i> Privacy</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= $app_url ?>/views/business/service.php"><i class="fa fa-question-circle" aria-hidden="true"></i> Servicedesk</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= $app_url ?>/views/business/contact.php"><i class="fa fa-envelope" aria-hidden="true"></i> Contact</a>
+        </li>
+
+        <!-- View categories (dynamic) -->
         <li><span class="sidebar-span"></span></li>
         <li><strong>Rubrieken</strong></li>
         <!--        --><?php
@@ -118,12 +143,12 @@ HTML;
             if (array_key_exists('children', $parent)) {
                 echo <<<HTML
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion{$parent['ID']}" href="#collapse{$parent['ID']}children" >
-                            {$parent['Name']} <!--<span class="badge badge-pill badge-default" > 69</span > -->
+                            {$parent['Name']}
                         </a>
 HTML;
             } else {
                 echo <<<HTML
-                <a href="index.php?cat={$parent['Name']}">{$parent['Name']}</a>
+                <a href="?cat={$parent['ID']}">{$parent['Name']}</a>
 HTML;
 
             }
