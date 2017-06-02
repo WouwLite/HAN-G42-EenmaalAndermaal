@@ -10,6 +10,29 @@ if ($debug == false) {
 
 include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
+//Zorgt voor alle advertenties die verlopen zijn dit ook wordt geregistreerd.
+$stmt = $pdo->prepare("SELECT * FROM Object WHERE auctionClosed = 0");
+$stmt->execute();
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$date1 = date("Y-m-d H:i:s");
+foreach($data as $d) {
+    $date2 = $d['durationendDay'] . ' ' . $d['durationendTime'];
+    if (strtotime($date1) <= strtotime($date2)) {
+        $productidActive = $d['productid'];
+        $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 0 WHERE productid = ?");
+        $stmt->execute([$productidActive]);
+    }
+    else {
+        $productidClosed = $d['productid'];
+        $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 1 WHERE productid = ?");
+        $stmt->execute([$productidClosed]);
+    }
+}
+
+
+
+
 /*
  * Voer hieronder eventuele extra PHP variables toe
  */
@@ -57,7 +80,6 @@ if (isset($user['username']) && $user['admin'] == 1) {
             <?php
             }
             ?>
-        <script>$(".alert").alert('close')</script>
         <div class="activeAds" style="overflow-x: auto; overflow-y: auto; height: 15em;">
             <table class="table table-sm table-striped table-bordered" style="overflow-x: auto; overflow-y: auto; height: 15em;">
                 <tbody>
@@ -96,10 +118,17 @@ if (isset($user['username']) && $user['admin'] == 1) {
                 $stmt->execute();
                 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if ($activeAuctions > 0) {
-                    foreach (array_slice($data, (($_GET['page']??1) - 1) * 10, 10) as $d) { ?>
+
+                    foreach (array_slice($data, (($_GET['page']??1) - 1) * 10, 10) as $d) {
+                        ?>
+
+         <!-- Regel hierboven veroorzaakt een bug waarbij er alleen maar bij de eerste 10 advertenties wordt
+              gekeken of die verlopen is !-->
+
+
                         <tr>
                             <td> <?php echo $d['productid']; ?></td>
-                            <td> <?php echo $d['title']; ?></td>
+                            <td> <?php echo substr($d['title'], 0, 20) . "..."; ?></td>
                             <td> <?php echo substr($d['description'], 0, 20) . "..."; ?></td>
                             <td> <?php echo $d['startprice']; ?></td>
                             <td> <?php echo $d['paymentmethodNumber']; ?></td>
@@ -115,46 +144,16 @@ if (isset($user['username']) && $user['admin'] == 1) {
                             <td> <?php echo $d['Buyer']; ?></td>
                             <td> <?php echo $d['durationendDay']; ?></td>
                             <td> <?php echo $d['durationendTime']; ?></td>
-                            <?php
-
-
-                            //                    $date1 = new DateTime(date("Y-m-d h:i:s"));
-                            //                    $date2 = new DateTime($d['durationendDay'] . ' ' . $d['durationendTime']);
-                            //                    if ($date1 <= $date2){
-
-                            $date1 = date("Y-m-d H:i:s");
-                            $date2 = $d['durationendDay'] . ' ' . $d['durationendTime'];
-                            if (strtotime($date1) <= strtotime($date2)) {
-                                ?>
-                                <td><span class="badge badge-success">Actief</span></td>
-                                <?php
-
-                            } else {
-                                $productidToDelete = $d['productid'];
-                                $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 1 WHERE productid = ?");
-                                $stmt->execute([$productidToDelete]);
-
-                                $stmt2 = $pdo->prepare("SELECT email FROM Users WHERE username in (SELECT username FROM Bidding WHERE productid = ?)");
-                                $stmt2->execute([$productidToDelete]);
-                                $emails = $stmt2->fetchColumn();
-
-                                $subject = "De aanbieding waar je op geboden hebt is beeindigd";
-                                $message = "De aanbieding voor " . $d['title'] . "is afgelopen op " . $d['durationendDay'];
-                                $headers = 'From: noreply@iproject42.icasites.nl';
-                                foreach ($emails as $usermail) {
-                                    mail($useremail, $subject, $message, $headers);
-                                }
-                                ?>
-                                <td><span class="badge badge-danger">Gesloten</span></td>
-                                <?php
-                            }
-                            ?>
+                            <td><span class="badge badge-success">Actief</span></td>
                             <td><?php echo $d['sellingprice']; ?></td>
                             <td><?php echo $d['Categories']; ?></td>
                             <td>
-                                <a class="btn btn-default btn-sm" href="../account/update-advertisement.php?id=<?= $d['productid']; ?>"><i
-                                            class="fa fa-wrench"
-                                            style="width: 12px"></i></a>
+                                <form action="../account/update-advertisement.php" method="post" style="display:inline;">
+                                    <button class="btn btn-default btn-sm" name="changeid"
+                                            value="<?= $d['productid'] ?>"><i
+                                                class="fa fa-wrench"
+                                                style="width: 12px"></i></button>
+                                </form>
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                         data-target="#deleteModal" data-ad="<?php echo $d['productid']; ?>"><i
                                             class="fa fa-trash-o fa-sm"></i></button>
@@ -194,7 +193,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
             if($closedAuctions ==1) {
                 ?>
                 <div class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er
-                    is <strong><?= $closedAuctions; ?></strong> actieve veiling.
+                    is <strong><?= $closedAuctions; ?></strong> gesloten veiling.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -204,7 +203,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
             else {
                 ?>
                 <div class="alert alert-info alert-dismissible fade show" data-dismissal="alert" role="alert">Er
-                    is <strong><?= $closedAuctions; ?></strong> actieve veilingen.
+                    zijn <strong><?= $closedAuctions; ?></strong> gesloten veilingen.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -250,13 +249,13 @@ if (isset($user['username']) && $user['admin'] == 1) {
                 $stmt->execute();
                 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if ($closedAuctions > 0) {
-                    foreach ($data as $d) { ?>
+                    foreach (array_slice($data, (($_GET['page']??1) - 1) * 10, 10) as $d) { ?>
                         <tr>
                             <td> <?php echo $d['productid']; ?></td>
-                            <td> <?php echo $d['title']; ?></td>
-                            <td> <?php echo $d['description']; ?></td>
+                            <td> <?php echo substr($d['title'], 0, 20) . "..."; ?></td>
+                            <td> <?php echo substr($d['description'], 0, 20) . "..."; ?></td>
                             <td> <?php echo $d['startprice']; ?></td>
-                            <td> <?php echo $d['paymentMethodNumber']; ?></td>
+                            <td> <?php echo $d['paymentmethodNumber']; ?></td>
                             <td> <?php echo $d['paymentinstruction']; ?></td>
                             <td> <?php echo $d['city']; ?></td>
                             <td> <?php echo $d['country']; ?></td>
@@ -273,9 +272,12 @@ if (isset($user['username']) && $user['admin'] == 1) {
                             <td><?php echo $d['sellingprice']; ?></td>
                             <td><?php echo $d['Categories']; ?></td>
                             <td>
-                                <a class="btn btn-default btn-sm" href="../account/update-advertisement.php?id=<?= $d['productid']; ?>"><i
-                                            class="fa fa-wrench"
-                                            style="width: 12px"></i></a>
+                                <form action="update-advertisement.php" method="post" style="display: inline;">
+                                    <button class="btn btn-default btn-sm" name="changeid"
+                                            value="<?= $d['productid'] ?>"><i
+                                                class="fa fa-wrench"
+                                                style="width: 12px"></i></button>
+                                </form>
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                         data-target="#deleteModal" data-ad="<?php echo $d['productid']; ?>"><i
                                             class="fa fa-trash-o fa-sm"></i></button>
@@ -288,6 +290,11 @@ if (isset($user['username']) && $user['admin'] == 1) {
                 </tbody>
             </table>
         </div>
+        <a class="btn btn-primary"
+           href="<?= $app_url ?>/views/Admin/index.php?page=<?php echo ($_GET['page']??1) - 1 ?>">Vorige pagina</a>
+        <a class="btn btn-primary"
+           href="<?= $app_url ?>/views/Admin/index.php?page=<?php echo ($_GET['page']??1) + 1 ?>">Volgende
+            pagina</a>
 
     </div>
 

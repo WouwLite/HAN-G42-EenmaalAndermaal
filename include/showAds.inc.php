@@ -64,7 +64,7 @@ echo "</div>";
                         if (substr($thumbnail, 0, 3) === "dt_") {
                             $picsource = "http://iproject42.icasites.nl/pics/";
                         } else {
-                            $picsource = "http://iproject42.icasites.nl/views/merchant/AdImages/";
+                            $picsource = "http://iproject42.icasites.nl/uploads/";
                         }
                         ?>
                         <img src="<?= $picsource ?><?= $thumbnail; ?>"

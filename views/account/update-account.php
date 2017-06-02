@@ -11,18 +11,23 @@ if ($debug == false) {
 include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
 if(isset($_SESSION['username'])) {
+    global $userChange;
+//    var_dump($_POST['username']);
+//    $userChange = $_POST['username'] ?? $_SESSION['username'];
     $username = $_SESSION['username'];
-    $stmt = $pdo->prepare("SELECT * FROM Users WHERE username = ?");
-    $stmt->execute([$username]);
+    $stmt = $pdo->prepare("SELECT * FROM Users
+                                     WHERE username = ?");
+    $stmt->execute([$_POST['changeusername'] ?? $username]);
     $dataUser = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+print '<h4>De gebruiker die je wilt veranderen is:  ' . $_POST['changeusername'] . '</h4><br>';
+print 'Gebruikersnaam is: ' . $username;
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     global $errors;
     if (isset($_POST['final-submit'])) {
         checkEmptyFields();
-        checkDuplicates();
         checkAndHashPasswords();
         if (checkNoErrors()) {
             updateUserData();
@@ -46,37 +51,7 @@ function checkEmptyFields()
     $errors['answer'] = ($_POST['answer'] == "") ? "Vul aub een antwooord in." : '';
 }
 
-function checkDuplicates()
-{
-    global $errors, $pdo;
-    if (isset($_POST['username']) and usernameValid()) {
-        $username = $_POST['username'];
-        $stmt = $pdo->prepare("SELECT username FROM Users");
-        $stmt->execute();
-        $data = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
-        foreach ($data as $d) {
-            if ($d == $username) {
-                $errors['username'] = "Deze gebruikersnaam bestaat al";
-                break;
-            }
-        }
-    }
-
-    if (isset($_POST['email'])) {
-        $email = $_POST['email'];
-        $stmt = $pdo->prepare("SELECT email FROM Users");
-        $stmt->execute();
-        $data = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-
-        foreach ($data as $d) {
-            if ($d == $email) {
-                $errors['email'] = "Dit email adres bestaat al";
-                break;
-            }
-        }
-    }
-}
 
 function checkAndHashPasswords()
 {
@@ -116,7 +91,7 @@ function usernameValid()
 function checkNoErrors()
 {
     global $errors;
-    foreach ($errors as $err) {
+    foreach ($errors ?? array() as $err) {
         if (!empty($err)) return false;
     }
     return true;
@@ -124,31 +99,29 @@ function checkNoErrors()
 
 function updateUserData()
 {
-    global $_SESSION, $pdo, $finalPassword;
-    $gebruikersnaam = $_SESSION['username'];
+    global $_SESSION, $pdo, $finalPassword, $userChange, $username;
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        print '<h4>Je zit in de updateUserData()</h4>';
+        $userChange = $_POST['changeusername'] ?? $_SESSION['username'];
+
         $stmt = "UPDATE Users
                   SET firstname = ?, lastname = ?, address1 = ?, address2 = ?, zipcode = ?, city = ?, country = ?, birthday = ?, email = ?, password = ?, questionnumber = ?, answer = ?
-                  WHERE username = '$gebruikersnaam'";
-
-        print 'Gebruikersnaam:  ' . $gebruikersnaam . '<br>';
-
+                  WHERE username = ?";
         $updateUserInfo = $pdo->prepare($stmt);
         if ($updateUserInfo->execute(array($_POST['firstname'], $_POST['lastname'], $_POST['address1'], $_POST['address2'],
-            $_POST['zipcode'], $_POST['city'], $_POST['country'], $_POST['birthday'], $_POST['email'], $finalPassword, $_POST['securityquestion'], $_POST['answer']))) {
-            header('location: index.php');
+            $_POST['zipcode'], $_POST['city'], $_POST['country'], $_POST['birthday'], $_POST['email'], $finalPassword,
+            $_POST['securityquestion'], $_POST['answer'], $userChange))) {
+            global $updateSuccess;
+            $updateSuccess = true;
         }
         else {
-            print_r($pdo->errorInfo());
-            var_dump($_POST);
-            var_dump($finalPassword);
-            print '<h4>Oei er ging iets mis maar wat!?!? <br></h4>';
+            global $updateSucces;
+            $updateSuccess = false;
         }
     }
 }
 
 if(isset($_SESSION['username'])){
+
     ?>
     <!DOCTYPE html>
     <html>
@@ -178,24 +151,14 @@ if(isset($_SESSION['username'])){
                 </div>
             </div>
             <?php
-            if ($_SERVER['REQUEST_METHOD'] == "POST" and checkNoErrors()) {
+            global $updateSuccess;
+            if ($_SERVER['REQUEST_METHOD'] == "POST" and checkNoErrors() and $updateSuccess == true) {
                 print("<div class='alert alert-success'><strong>Gelukt<br></strong> Uw account is succesvol bijgewerkt.</div>");
-            } else if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors()) {
+            } else if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors() and $updateSuccess == false) {
                 print("<div class='alert alert-danger'><strong>Oei!</strong> Er ging iets mis tijdens het bijwerken van uw account, 
                             controleer en pas de rode velden aan en probeer het daarna opnieuw</div>");
             }
             ?>
-<!--            <div --><?php //print((!empty($errors['username'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?><!-->-->
-<!--                <label for="title" class="col-2 col-form-label">Gebruikersnaam:*</label>-->
-<!--                <div class="col-10">-->
-<!--                    <input id="title" type="text" id="username" name="username" class="form-control" placeholder="Gebruikersnaam"-->
-<!--                           value="--><?php //echo $dataUser['username']; ?><!--"-->
-<!--                           autofocus>-->
-<!--                    <div class="form-control-feedback">--><?php //global $errors;
-//                        echo $errors['username'] ?><!--</div>-->
-<!--                </div>-->
-<!--            </div>-->
-
             <div <?php print((!empty($errors['firstname'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
                 <label class="col-2 col-form-label">Voornaam:*</label>
                 <div class="col-10">
@@ -206,6 +169,9 @@ if(isset($_SESSION['username'])){
                         echo $errors['firstname'] ?></div>
                 </div>
             </div>
+
+            <input type="hidden" value="<?php echo $_POST['changeusername']??$_SESSION['username']; ?>" name="changeusername"
+                   id="changeusername">
 
             <div <?php print((!empty($errors['lastname'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
                 <label class="col-2 col-form-label">Achternaam:*</label>

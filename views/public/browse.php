@@ -87,9 +87,16 @@ echo "</div>";
             ?>
             <div class="col-md-3 col-sm-6 hero-feature">
                 <div class="img-thumbnail">
-                    <img src="http://iproject42.icasites.nl/pics/<?= $thumbnail; ?>"
+                    <?php
+                    if (substr($thumbnail, 0, 3) === "dt_") {
+                        $picsource = "http://iproject42.icasites.nl/pics/";
+                    } else {
+                        $picsource = "http://iproject42.icasites.nl/views/merchant/AdImages/";
+                    }
+                    ?>
+                    <img src="<?= $picsource ?><?= $thumbnail; ?>"
                          class="img-fluid"
-                         alt="<?php echo $thumbnail ?>">
+                         alt="<?php echo $value[1] ?>">
                     <div class="figure-caption">
                         <h3>
                             <?php echo substr($value[1], 0, 30) ?>

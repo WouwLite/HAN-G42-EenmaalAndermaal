@@ -78,7 +78,7 @@ function checkNoErrors()
 
 function saveProductData()
 {
-    global $user, $pdo;
+    global $user, $pdo, $app_url;
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $productid = getHighestId();
         $duration = $_POST['duration'];
@@ -100,7 +100,9 @@ function saveProductData()
                  VALUES (?, ?)";
         $adInfo = $pdo->prepare($stmt);
         $photoInfo = $pdo->prepare($stmt2);
-        $destdir = "AdImages\\";
+        define('SITE_ROOT', realpath(dirname(__FILE__, 3)));
+        $destdir = SITE_ROOT . "\\uploads\\";
+
         if ($foto1) {
             $ext = pathinfo($foto1['name'], PATHINFO_EXTENSION);
             $uniquefilename = uniqid('EAImg') . "." . $ext;

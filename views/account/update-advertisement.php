@@ -14,8 +14,8 @@ include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
 if(isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
-    $stmt = $pdo->prepare("SELECT * FROM Object WHERE seller = ? AND productid = ? ");
-    $stmt->execute([$username, ($_POST['changeid'] ?? $_POST['productid'])]);
+    $stmt = $pdo->prepare("SELECT * FROM Object WHERE productid = ? ");
+    $stmt->execute([($_POST['changeid'] ?? $_POST['productid'])]);
     $dataAd = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
@@ -68,7 +68,7 @@ function checkNoErrors()
 
 function updateProductData()
 {
-    global $_SESSION, $pdo;
+    global $_SESSION, $pdo, $changeProduct;
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $duration = $_POST['duration'];
         $durationbeginDay = date("Y-m-d");
@@ -81,11 +81,11 @@ function updateProductData()
                       duration = ?, durationbeginDay = ?, durationbeginTime = ?, shippingcosts = ?,
                       shippinginstructions = ?, durationendDay = ?, durationendTime = ?, Categories = ?
                   WHERE productid = ?";
-
+        $changeProduct = $_POST['productid'] ?? $_POST['changeid'];
         $updateAdInfo = $pdo->prepare($stmt);
         if ($updateAdInfo->execute(array($_POST['title'], $_POST['description'], $_POST['startprice']??0, $_POST['paymentmethod'], $_POST['paymentinstruction'],
             (int)$duration, $durationbeginDay, $durationbeginTime,
-            (int)$_POST['shippingcosts']??0, $_POST['shippinginstruction'], $durationendDay, $durationendTime, (int)$_POST['categories'], $_POST['productid']))
+            (int)$_POST['shippingcosts']??0, $_POST['shippinginstruction'], $durationendDay, $durationendTime, (int)$_POST['categories'], $changeProduct))
         ) {
             //header('location: ../account/index.php');
         } else {
@@ -96,16 +96,18 @@ function updateProductData()
     }
 }
 
+print '<h3>Deze advertentienummer: ' . $changeProduct . '</h3>';
+
 if(empty($_SESSION['username'])){
     include($_SERVER['DOCUMENT_ROOT'] . '/include/login-message.inc.php');
 }
 
 
-$date1 = new DateTime(date("Y-m-d h:i:s"));
-$date2 = new DateTime($d['durationendDay'] . ' ' . $d['durationendTime']);
-if ($date1 <= $date2){
+$date1 = date("Y-m-d H:i:s");
+$date2 = $dataAd['durationendDay'] . ' ' . $dataAd['durationendTime'];
+if (strtotime($date1) <= strtotime($date2)) {
 
-    ?>
+?>
     <!DOCTYPE html>
     <html>
     <head>
@@ -307,10 +309,9 @@ if ($date1 <= $date2){
 }
 else {
     print("<div class='alert alert-danger'><strong>Oei!</strong> Het lijkt erop dat deze advertentie al is verlopen</div>");
+    header("Refresh: 2; url=index.php");
 }
 
 include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
 ?>
-
-

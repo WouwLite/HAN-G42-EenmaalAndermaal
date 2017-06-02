@@ -11,7 +11,7 @@
 <div id="sidebar">
     <ul>
         <li>
-            <form>
+            <form action="<?= $app_url ?>/views/public/browse.php" method="get">
                 <input class="form-control sm-2" type="search" id="search" name="Search"
                        placeholder="Zoek naar veiling..."/>
             </form>
@@ -55,16 +55,28 @@
 
         <!-- View account -->
         <li><strong>Account</strong></li>
+
+        <?php
+        $sql = "SELECT COUNT(productid) FROM Object WHERE Seller = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$user['username']]);
+        $ADamount = $stmt->fetchColumn();
+
+        $sql = "SELECT COUNT(productid) FROM Bidding WHERE user = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$user['username']]);
+        $BIDamount = $stmt->fetchColumn();
+        ?>
         <li class="nav-item">
             <a class="nav-link" href="<?= $app_url ?>/views/account/index.php"><i class="fa fa-gavel"
                                                                                   aria-hidden="true"></i> Mijn biedingen
-                <span class="badge badge-default"><?= $testBiedingNo ?></span></a>
+                <span class="badge badge-default"><?= $BIDamount ?></span></a>
         </li>
         <!-- Create IF statement. If user is merchant, show this link, else hide -->
         <li class="nav-item">
             <a class="nav-link" href="<?= $app_url ?>/views/account/index.php"><i class="fa fa-shopping-cart"
                                                                                   aria-hidden="true"></i> Mijn
-                advertenties <span class="badge badge-default"><?= $testAdvertNo ?></span></a>
+                advertenties <span class="badge badge-default"><?= $ADamount ?></span></a>
         </li>
 
         <!-- View business info -->
