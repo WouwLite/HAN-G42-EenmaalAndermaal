@@ -3,32 +3,31 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . '/app/getpost.php');
 require_once ($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
-if ($_SERVER['REQUEST_METHOD'] == 'POST' and isset($_POST['deleteUser'])) {
-    $vars = getRealPOST();
+if ($_SERVER['REQUEST_METHOD'] == 'POST' and isset($_POST['banUser'])) {
     $sql = <<<SQL
 SELECT email FROM Users WHERE username = ?
 SQL;
 
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$_POST['deleteUser']]);
+    $stmt->execute([$_POST['banUser']]);
     $useremail = $stmt->fetchColumn();
     print("<!-- " . $useremail . " -->");
 
-    $subject = "Je account is verwijderd";
-    $message = "Om de volgende reden is je account verwijderd: " . $_POST['reason'];
+    $subject = "Je account is geblokkeerd";
+    $message = "Om de volgende reden is je account geblokkeerd: " . $_POST['reason'];
     $headers = 'From: noreply@iproject42.icasites.nl';
     mail($useremail, $subject, $message, $headers);
 
     $delsql = <<<SQL
-DELETE FROM Users WHERE username = ?
+UPDATE Users SET banned = 1 WHERE username = ?
 SQL;
     $delstmt = $pdo->prepare($delsql);
-    $delstmt->execute([$_POST['deleteUser']]);
+    $delstmt->execute([$_POST['banUser']]);
 }
 ?>
 
 
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteAdModal" aria-hidden="true">
+<div class="modal fade" id="banModal" tabindex="-1" role="dialog" aria-labelledby="deleteAdModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -39,17 +38,17 @@ SQL;
             </div>
             <form action="" method="post">
                 <div class="modal-body">
-                    <p>Weet je zeker dat je het geselecteerde account <strong><span class="username">"Onbekend"</span></strong> wilt verwijderen?<br>
+                    <p>Weet je zeker dat je het geselecteerde account <strong><span class="username">"Onbekend"</span></strong> wilt blokkeren?<br>
                         Dit kan niet ongedaan worden!</p>
                     <div class="form-group has-danger">
-                        <label for="reason" class="form-control-label">Reden voor verwijdering</label>
+                        <label for="reason" class="form-control-label">Reden voor blokkering</label>
                         <input type="text" class="form-control form-control-danger" name="reason" required>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuleren</button>
-                    <button type="submit" id="deleteButton" name="deleteUser" value="" class="btn btn-danger">Ja,
-                        verwijder het account.
+                    <button type="submit" id="banButton" name="banUser" value="" class="btn btn-danger">Ja,
+                        blokkeer het account.
                     </button>
                 </div>
             </form>
@@ -58,16 +57,16 @@ SQL;
 </div>
 
 <script>
-    $('#deleteModal').modal({
+    $('#banModal').modal({
         show: false,
         keyboard: true
     });
 
-    $('#deleteModal').on('show.bs.modal', function (event) {
+    $('#banModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         var username = button.data('user');
         var modal = $(this);
         modal.find('.username').text(username);
-        $('#deleteButton').val(username);
+        $('#banButton').val(username);
     })
 </script>

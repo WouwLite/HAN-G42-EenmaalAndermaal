@@ -21,8 +21,7 @@ if(isset($_SESSION['username'])) {
     $dataUser = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-print '<h4>De gebruiker die je wilt veranderen is:  ' . $_POST['changeusername'] . '</h4><br>';
-print 'Gebruikersnaam is: ' . $username;
+
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     global $errors;
