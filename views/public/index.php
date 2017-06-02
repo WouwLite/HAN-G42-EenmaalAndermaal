@@ -4,13 +4,6 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
-/*
- * Voer hieronder eventuele extra PHP variables toe
- */
-
-// Start session
-//session_start();
-
 ?>
 <div class="container-float">
     <ol class="breadcrumb">
