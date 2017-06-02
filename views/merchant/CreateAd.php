@@ -78,7 +78,7 @@ function checkNoErrors()
 
 function saveProductData()
 {
-    global $user, $pdo, $app_url;
+    global $user, $pdo, $app_url, $errors;
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $productid = getHighestId();
         $duration = $_POST['duration'];
@@ -102,39 +102,57 @@ function saveProductData()
         $photoInfo = $pdo->prepare($stmt2);
         define('SITE_ROOT', realpath(dirname(__FILE__, 3)));
         $destdir = SITE_ROOT . "\\uploads\\";
+        $allowedtypes = array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP);
 
         if ($foto1) {
-            $ext = pathinfo($foto1['name'], PATHINFO_EXTENSION);
-            $uniquefilename = uniqid('EAImg') . "." . $ext;
-            $photoInfo->execute(array($productid, $uniquefilename));
-            move_uploaded_file($foto1['tmp_name'], $destdir . $uniquefilename);
+            if (in_array(exif_imagetype($foto1['tmp_name']), $allowedtypes)) {
+                $ext = pathinfo($foto1['name'], PATHINFO_EXTENSION);
+                $uniquefilename = uniqid('EAImg') . "." . $ext;
+                $photoInfo->execute(array($productid, $uniquefilename));
+                move_uploaded_file($foto1['tmp_name'], $destdir . $uniquefilename);
+            } else {
+                $errors['files'] = "Je mag alleen bestanden met de bestandtype: .gif, .png, .jpg/.jpeg en .bmp uploaden";
+            }
         }
         if ($foto2) {
-            $ext = pathinfo($foto2['name'], PATHINFO_EXTENSION);
-            $uniquefilename = uniqid('EAImg') . "." . $ext;
-            $photoInfo->execute(array($productid, $uniquefilename));
-            move_uploaded_file($foto2['tmp_name'], $destdir . $uniquefilename);
+            if (in_array(exif_imagetype($foto2['tmp_name']), $allowedtypes)) {
+                $ext = pathinfo($foto2['name'], PATHINFO_EXTENSION);
+                $uniquefilename = uniqid('EAImg') . "." . $ext;
+                $photoInfo->execute(array($productid, $uniquefilename));
+                move_uploaded_file($foto2['tmp_name'], $destdir . $uniquefilename);
+            } else {
+                $errors['files'] = "Je mag alleen bestanden met de bestandtype: .gif, .png, .jpg/.jpeg en .bmp uploaden";
+            }
         }
         if ($foto3) {
-            $ext = pathinfo($foto3['name'], PATHINFO_EXTENSION);
-            $uniquefilename = uniqid('EAImg') . "." . $ext;
-            $photoInfo->execute(array($productid, $uniquefilename));
-            move_uploaded_file($foto3['tmp_name'], $destdir . $uniquefilename);
+            if (in_array(exif_imagetype($foto3['tmp_name']), $allowedtypes)) {
+                $ext = pathinfo($foto3['name'], PATHINFO_EXTENSION);
+                $uniquefilename = uniqid('EAImg') . "." . $ext;
+                $photoInfo->execute(array($productid, $uniquefilename));
+                move_uploaded_file($foto3['tmp_name'], $destdir . $uniquefilename);
+            } else {
+                $errors['files'] = "Je mag alleen bestanden met de bestandtype: .gif, .png, .jpg/.jpeg en .bmp uploaden";
+            }
         }
         if ($foto4) {
-            $ext = pathinfo($foto4['name'], PATHINFO_EXTENSION);
-            $uniquefilename = uniqid('EAImg') . "." . $ext;
-            $photoInfo->execute(array($productid, $uniquefilename));
-            move_uploaded_file($foto4['tmp_name'], $destdir . $uniquefilename);
+            if (in_array(exif_imagetype($foto4['tmp_name']), $allowedtypes)) {
+                $ext = pathinfo($foto4['name'], PATHINFO_EXTENSION);
+                $uniquefilename = uniqid('EAImg') . "." . $ext;
+                $photoInfo->execute(array($productid, $uniquefilename));
+                move_uploaded_file($foto4['tmp_name'], $destdir . $uniquefilename);
+            } else {
+                $errors['files'] = "Je mag alleen bestanden met de bestandtype: .gif, .png, .jpg/.jpeg en .bmp uploaden";
+            }
         }
-
-        if ($adInfo->execute(array($productid, $_POST['title'], $_POST['description'], $_POST['startprice']??0, (int)$_POST['paymentmethod'], $_POST['paymentinstruction'],
-            $user['city'], $user['country'], (int)$duration, $durationbeginDay, $durationbeginTime,
-            (int)$_POST['shippingcosts']??0, $_POST['shippinginstruction'], $_SESSION['username'], $durationendDay, $durationendTime, (int)$_POST['Categories']))
-        ) {
-            //header('location: ../account/index.php');
-        } else {
-            print_r($adInfo->errorInfo());
+        if (checkNoErrors()) {
+            if ($adInfo->execute(array($productid, $_POST['title'], $_POST['description'], $_POST['startprice']??0, (int)$_POST['paymentmethod'], $_POST['paymentinstruction'],
+                $user['city'], $user['country'], (int)$duration, $durationbeginDay, $durationbeginTime,
+                (int)$_POST['shippingcosts']??0, $_POST['shippinginstruction'], $_SESSION['username'], $durationendDay, $durationendTime, (int)$_POST['Categories']))
+            ) {
+                //header('location: ../account/index.php');
+            } else {
+                print_r($adInfo->errorInfo());
+            }
         }
 
     }
@@ -211,13 +229,14 @@ function saveProductData()
                     <div class="form-control-feedback"><?= $errors['description']??'' ?></div>
                 </div>
             </div>
-            <div class="form-group row">
+            <div <?php print((!empty($errors['files'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
                 <label class="col-2 col-form-label">Upload tot 4 fotos:</label>
                 <div class="col-10">
                     <input type="file" name="foto1" id="foto1" class="form-control">
                     <input type="file" name="foto2" id="foto1" class="form-control">
                     <input type="file" name="foto3" id="foto3" class="form-control">
                     <input type="file" name="foto4" id="foto4" class="form-control">
+                    <div class="form-control-feedback"><?= $errors['files']??'' ?></div>
                 </div>
             </div>
             <div <?php print((!empty($errors['startprice'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>

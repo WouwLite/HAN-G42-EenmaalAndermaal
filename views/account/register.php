@@ -4,7 +4,6 @@ require($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/config/cdn.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/style.inc.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
-require_once($_SERVER['DOCUMENT_ROOT'] . '/app/getpost.php');
 
 // Debugging
 if ($debug) {
@@ -19,14 +18,11 @@ session_start();
 if (isset($_SESSION['username'])) {
     header("Location: index.php");
 }
-
-$vars = array();
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    global $vars, $errors;
-    $vars = getRealPOST();
-    if (isset($vars['email-submit'])) {
+    global $errors;
+    if (isset($_POST['email-submit'])) {
         sendmail();
-    } elseif (isset($vars['final-submit'])) {
+    } elseif (isset($_POST['final-submit'])) {
         checkEmptyFields();
         checkDuplicates();
         checkAndHashPasswords();
@@ -37,42 +33,41 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
 }
 
-$username = $vars['username'] ?? "";
-$firstname = $vars['firstname'] ?? "";
-$lastname = $vars['lastname'] ?? "";
-$email = $vars['email'] ?? "";
-$secretcode = $vars['secretcode'] ?? "";
-$address1 = $vars['address1'] ?? "";
-$address2 = $vars['address2'] ?? "";
-$zipcode = $vars['zipcode'] ?? "";
-$city = $vars['city'] ?? "";
-$country = $vars['country'] ?? "";
-$birthday = $vars['birthday'] ?? "";
-$secretanswer = $vars['secretanswer'] ?? "";
+$username = $_POST['username'] ?? "";
+$firstname = $_POST['firstname'] ?? "";
+$lastname = $_POST['lastname'] ?? "";
+$email = $_POST['email'] ?? "";
+$secretcode = $_POST['secretcode'] ?? "";
+$address1 = $_POST['address1'] ?? "";
+$address2 = $_POST['address2'] ?? "";
+$zipcode = $_POST['zipcode'] ?? "";
+$city = $_POST['city'] ?? "";
+$country = $_POST['country'] ?? "";
+$birthday = $_POST['birthday'] ?? "";
+$secretanswer = $_POST['secretanswer'] ?? "";
 
 function checkEmptyFields()
 {
     global $errors;
-    global $vars;
-    $errors['username'] = ($vars['username'] == "") ? "vul je gebruikersnaam in aub." : '';
-    $errors['firstname'] = ($vars['firstname'] == "") ? "vul je voornaam in aub." : '';
-    $errors['lastname'] = ($vars['lastname'] == "") ? "vul je achternaam in aub." : '';
-    $errors['email'] = ($vars['email'] == "") ? "vul je email in aub." : '';
-    $errors['secretcode'] = ($vars['secretcode'] == "") ? "vul je geheime code in aub." : '';
-    $errors['password1'] = ($vars['password1'] == "") ? "vul je wachtwoord in aub." : '';
-    $errors['password2'] = ($vars['password2'] == "") ? "vul je wachtwoord nog een keer in aub." : '';
-    $errors['address1'] = ($vars['address1'] == "") ? "vul je adres in aub." : '';
-    $errors['zipcode'] = ($vars['zipcode'] == "") ? "vul je postcode in aub." : '';
-    $errors['city'] = ($vars['city'] == "") ? "vul je stad in aub." : '';
-    $errors['country'] = ($vars['country'] == "") ? "vul je land in aub." : '';
-    $errors['birthday'] = ($vars['birthday'] == "") ? "vul je geboorte datum in aub." : '';
-    $errors['secretanswer'] = ($vars['secretanswer'] == "") ? "vul je antwoord in aub." : '';
+    $errors['username'] = ($_POST['username'] == "") ? "vul je gebruikersnaam in aub." : '';
+    $errors['firstname'] = ($_POST['firstname'] == "") ? "vul je voornaam in aub." : '';
+    $errors['lastname'] = ($_POST['lastname'] == "") ? "vul je achternaam in aub." : '';
+    $errors['email'] = ($_POST['email'] == "") ? "vul je email in aub." : '';
+    $errors['secretcode'] = ($_POST['secretcode'] == "") ? "vul je geheime code in aub." : '';
+    $errors['password1'] = ($_POST['password1'] == "") ? "vul je wachtwoord in aub." : '';
+    $errors['password2'] = ($_POST['password2'] == "") ? "vul je wachtwoord nog een keer in aub." : '';
+    $errors['address1'] = ($_POST['address1'] == "") ? "vul je adres in aub." : '';
+    $errors['zipcode'] = ($_POST['zipcode'] == "") ? "vul je postcode in aub." : '';
+    $errors['city'] = ($_POST['city'] == "") ? "vul je stad in aub." : '';
+    $errors['country'] = ($_POST['country'] == "") ? "vul je land in aub." : '';
+    $errors['birthday'] = ($_POST['birthday'] == "") ? "vul je geboorte datum in aub." : '';
+    $errors['secretanswer'] = ($_POST['secretanswer'] == "") ? "vul je antwoord in aub." : '';
 }
 
 $secretCode = uniqid();
 function sendmail()
 {
-    global $vars, $secretCode;
+    global $secretCode;
     $secretCode = uniqid();
     $subject = "EenmaalAndermaal email activatiecode";
     $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -568,7 +563,7 @@ function sendmail()
     $headers = 'From: noreply@iproject42.icasites.nl' . "\r\n";
     $headers .= "MIME-Version: 1.0" . "\r\n";
     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-    mail($vars['email'], $subject, $message, $headers);
+    mail($_POST['email'], $subject, $message, $headers);
     $_SESSION['secretCode'] = password_hash($secretCode, PASSWORD_DEFAULT);
 }
 
@@ -576,8 +571,8 @@ function sendmail()
 function checkDuplicates()
 {
     global $errors, $pdo;
-    if (isset($vars['username']) and usernameValid()) {
-        $username = $vars['username'];
+    if (isset($_POST['username']) and usernameValid()) {
+        $username = $_POST['username'];
         $stmt = $pdo->prepare("SELECT username FROM Users");
         $stmt->execute();
         $data = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
@@ -590,8 +585,8 @@ function checkDuplicates()
         }
     }
 
-    if (isset($vars['email'])) {
-        $email = $vars['email'];
+    if (isset($_POST['email'])) {
+        $email = $_POST['email'];
         $stmt = $pdo->prepare("SELECT email FROM Users");
         $stmt->execute();
         $data = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
@@ -607,20 +602,20 @@ function checkDuplicates()
 
 function passValid()
 {
-    global $vars, $errors;
-    if (preg_match("/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{5,}$/", $vars['password1'])) {
+    global $errors;
+    if (preg_match("/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{5,}$/", $_POST['password1'])) {
         return true;
     } else {
         $errors['password1'] = 'je wachtwoord moet 5 tekens of langer zijn en er moet minstens 1 hoofdletter en 1 speciale teken in zitten';
-        print($vars['password1']);
+        print($_POST['password1']);
         return false;
     }
 }
 
 function usernameValid()
 {
-    global $vars, $errors;
-    if (strlen($vars['username']) >= 3 and strlen($vars['username']) <= 20) {
+    global $errors;
+    if (strlen($_POST['username']) >= 3 and strlen($_POST['username']) <= 20) {
         return true;
     } else {
         $errors['username'] = "je gebruikersnaam moet tussen de 3 en 20 tekens lang zijn";
@@ -629,21 +624,21 @@ function usernameValid()
 
 function checkAndHashPasswords()
 {
-    global $vars, $errors;
-    $password1 = $vars['password1'];
-    $password2 = $vars['password2'];
+    global $errors;
+    $password1 = $_POST['password1'];
+    $password2 = $_POST['password2'];
     if ($password1 != $password2) {
         $errors['password1'] = "De wachtwoorden moeten gelijk zijn aan elkaar";
         $errors['password2'] = " ";
     } else if (passValid() === true) {
-        $vars['hashedpassword'] = password_hash($password1, PASSWORD_DEFAULT);
+        $_POST['hashedpassword'] = password_hash($password1, PASSWORD_DEFAULT);
     }
 }
 
 function checksecretCode()
 {
-    global $vars, $errors;
-    if (password_verify($vars['secretcode'], $_SESSION['secretCode'])) {
+    global $errors;
+    if (password_verify($_POST['secretcode'], $_SESSION['secretCode'])) {
         return true;
     } else {
         $errors['secretcode'] = "De code klopt niet, controleer of je de juiste code hebt ingevoerd";
@@ -652,15 +647,15 @@ function checksecretCode()
 
 function saveData()
 {
-    global $vars, $pdo;
-    $stmt = "INSERT INTO Users (username, firstname, lastname, address1, address2, zipcode, city, country, birthday, email, password, questionnumber, answer, merchant)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,0)";
+    global $pdo;
+    $stmt = "INSERT INTO Users (username, firstname, lastname, address1, address2, zipcode, city, country, birthday, email, password, questionnumber, answer, merchant, admin, banned)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,0,0,0)";
 
     $processRegistration = $pdo->prepare($stmt);
-    if ($processRegistration->execute([$vars['username'], $vars['firstname'], $vars['lastname'], $vars['address1'],
-        $vars['address2'], $vars['zipcode'], $vars['city'], $vars['country'],
-        $vars['birthday'], $vars['email'], $vars['hashedpassword'], $vars['sequrityquestion'],
-        $vars['secretanswer']])
+    if ($processRegistration->execute([$_POST['username'], $_POST['firstname'], $_POST['lastname'], $_POST['address1'],
+        $_POST['address2'], $_POST['zipcode'], $_POST['city'], $_POST['country'],
+        $_POST['birthday'], $_POST['email'], $_POST['hashedpassword'], $_POST['sequrityquestion'],
+        $_POST['secretanswer']])
     ) {
         header('location: http://iproject42.icasites.nl/views/account/login.php');
     } else {
@@ -706,7 +701,7 @@ function checkNoErrors()
 
             <!-- Foutmelding -->
             <?php
-            if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors()) {
+            if ($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['final-submit'])) {
                 print("<div class='alert alert-danger'><strong>Oei!</strong> er ging iets mis tijdens het registreren, 
                             controleer en pas de rode velden aan en probeer het daarna opniew</div>");
             }
@@ -724,22 +719,6 @@ function checkNoErrors()
                     <input type="text" id="username" class="form-control" name="username"
                            placeholder="Gebruikersnaam" <?php print("value=\"$GLOBALS[username]\"") ?> autofocus>
                 </div>
-<<<<<<< Updated upstream
-
-                <!-- Debugbericht -->
-                <?php if ($debug): ?>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <strong>Let op!</strong> Debug staat enabled in the config/app.php !
-                    </div>
-                <?php endif; ?>
-
-                <!-- Melding voor registreren -->
-                <div class="alert alert-info" role="alert">
-                    Heb je al een account? klik dan <a href="<?=$app_url?>/views/account/login.php"><strong>hier</strong></a> om in te loggen.
-=======
                 <div class="form-control-feedback"><?php global $errors;
                     echo $errors['username'] ?></div>
                 <small class="form-text text-muted">Een unieke naam om mee in te loggen (3-20 alfanumerieke karakters
@@ -753,24 +732,10 @@ function checkNoErrors()
                     <span class="input-group-addon width50 fa fa-user" id="basicaddon1"></span>
                     <input type="text" id="firstname" class="form-control" name="firstname" placeholder="Voornaam"
                         <?php print("value=\"$GLOBALS[firstname]\"") ?> >
->>>>>>> Stashed changes
                 </div>
                 <!-- Foutmelding -->
-<<<<<<< Updated upstream
-                <?php
-                if ($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['final-submit'])) {
-                    if (!checkNoErrors()) print("<div class='alert alert-danger'><strong>Oei!</strong> er ging iets mis tijdens het registreren, 
-                            controleer en pas de rode velden aan en probeer het daarna opniew</div>");
-                }
-                ?>
-
-                <!-- Blok titel -->
-                <div class="col-md-12">
-                    <h3 style="color: black">Account aanmaken</h3>
-=======
                 <div class="form-control-feedback"><?php global $errors;
                     echo $errors['firstname'] ?>
->>>>>>> Stashed changes
                 </div>
             </div>
 
@@ -871,12 +836,6 @@ function checkNoErrors()
                             <input type="password" id="password1" class="form-control" name="password1"
                                    placeholder="Wachtwoord">
                         </div>
-<<<<<<< Updated upstream
-
-                        <small class="form-text text-muted">U dient eerst uw emailadres te verifiëren alvorens u verder kan gaan met het registratieproces. Vul hiernaast de ontvangen geheime code in:
-                        </small>
-=======
->>>>>>> Stashed changes
                         <!-- Foutmelding -->
                         <div class="form-control-feedback"><?php global $errors;
                             echo $errors['password1'] ?>
@@ -1009,7 +968,7 @@ function checkNoErrors()
                     <span class="input-group-addon fa fa-cog" id="basicaddon1"></span>
                     <input type="text" id="secretanswer" class="form-control" name="secretanswer"
                            placeholder="Antwoord..."
-                        <?php print("value=\"$GLOBALS[secretanswer]\"") ?>>
+                        <?php print("value=\"" . $GLOBALS['secretanswer'] . "\"") ?>>
                 </div>
                 <!-- Foutmelding -->
                 <div class="form-control-feedback"><?php global $errors;
