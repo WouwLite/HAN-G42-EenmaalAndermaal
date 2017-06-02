@@ -1,7 +1,7 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
-
+include($_SERVER['DOCUMENT_ROOT'] . '/include/style.inc.php');
 function getAd()
 {
     global $url;
@@ -87,7 +87,7 @@ function saveBid()
              VALUES (?, ?, ?, ?, ?)";
     $addBid = $pdo->prepare($stmt);
     if ($addBid->execute([$url, $_POST['bod'], $_SESSION['username'], date("Y-m-d"), date("H:i:s")])) {
-        header("Refresh:0");
+        //header("Refresh:0");
     } else {
         print_r($addBid->errorInfo());
     }
@@ -121,7 +121,14 @@ function saveBid()
                         <div class="carousel-item <?php if ($i == 0) {
                             echo "active";
                         } ?>">
-                            <img class="d-block img-fluid" src="<?= $app_url ?>/pics/<?php echo $value[0] ?>">
+                            <?php
+                            if (substr($value[0], 0, 3) === "dt_") {
+                                $picsource = "http://iproject42.icasites.nl/pics/";
+                            } else {
+                                $picsource = "http://iproject42.icasites.nl/uploads/";
+                            }
+                            ?>
+                            <img class="d-block img-fluid size" src="<?= $picsource ?>/<?php echo $value[0] ?>">
                         </div>
                         <?php
                     }
@@ -166,7 +173,7 @@ function saveBid()
                     <div class="input-inline col-10">
 
                         <input placeholder="€ 0,00" id="bod" name="bod" type="number"
-                               step="1.00"
+                               step="0.01"
                                class="form-control">
                         <div class="form-control-feedback"><?php global $errors;
                             echo $errors['bod'];

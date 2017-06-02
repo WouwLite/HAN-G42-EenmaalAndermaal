@@ -4,15 +4,19 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
 function getAds()
 {
     global $pdo;
-    $sql = "select top 24 o.productid, Title, description, durationbeginDay, durationbeginTime, durationendDay, durationendTime, Categories, productPhoto.filename
+    $sql = "select DISTINCT top 24 o.productid, Title, description, durationendDay, durationendTime, Categories, productPhoto.filename, startprice, (select max(biddingprice)
+																																from Bidding b
+																																where o.productid = b.productid) as biddingprice
 From Object o
 CROSS APPLY
 (SELECT TOP 1 productid, filename
-From productPhoto pp where o.productid=pp.productid) productPhoto";
+From productPhoto pp where o.productid=pp.productid) productPhoto left outer join Bidding b on o.productid = b.productid
+where durationendDay >= getDate()
+order by durationendDay, durationendTime";
     $result = $pdo->query($sql);
     $Ads = array();
     while ($row = $result->fetch()) {
-        $Ad = array($row['Title'], $row['description'], $row['productid'], $row['filename']);
+        $Ad = array($row['Title'], $row['description'], $row['productid'], $row['filename'], $row['biddingprice'], $row['startprice']);
         $Ads[] = $Ad;
     }
     return $Ads;
@@ -83,7 +87,13 @@ echo "</div>";
                                    href="<?= $app_url ?>/views/public/productPage.php?link=<?php echo $value[2] ?>">Meer
                                     Info</a>
                             </p>
+
                         </div>
+                        <?php if (!empty($value[4])) {
+                            echo "<span class='badge badge-pill badge-success'>Huidig bod: € " . $value[4]."</span>";
+                        } else{
+                            echo "<span class='badge badge-pill badge-warning'>Begin bieden vanaf: € ". $value[5]."</span>";
+                        }?>
                     </div>
                 </div>
                 <?php
