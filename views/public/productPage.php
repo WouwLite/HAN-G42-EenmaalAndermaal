@@ -4,6 +4,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
 function getAd()
 {
+    global $url;
     $url = $_GET['link'];
     global $pdo;
     $result = $pdo->query("select o.productid, Title, description, durationbeginDay, durationbeginTime, durationendDay, durationendTime, Categories, pp.filename, (select max(biddingprice)
@@ -20,12 +21,36 @@ where o.productid like '%$url%'");
 }
 
 $value = getAd();
+function checkBod()
+{
+    global $errors;
+    $errors['bod'] = ($_POST['bod'] == "") && ($_POST['bod'] < selectHighestBid())? "Vul aub een geldig bod in" : '';
+}
+
+function checkNoErrorBod()
+{
+    global $errors;
+    if (!empty($errors['bod'])) return false;
+    return true;
+}
+
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    global $errors;
+    if (isset($_POST['submit'])) {
+        checkBod();
+    }
+    if (checkNoErrorBod()  && $_POST['bod'] > selectHighestBid()) {
+        saveBid();
+    } else {
+        echo $errors['bod'];
+    }
+}
 
 function getBids()
 {
-    $url = $_GET['link'];
+    global $url;
     global $pdo;
-    $result = $pdo->query("select biddingprice as biddingprice, [user], productid from Bidding where productid like '%$url%'");
+    $result = $pdo->query("select top 5 biddingprice as biddingprice, [user], productid from Bidding where productid like '%$url%' order by biddingprice DESC");
     $bids = array();
     while ($row = $result->fetch()) {
         $bid = array($row['biddingprice'], $row['user']);
@@ -34,9 +59,17 @@ function getBids()
     return $bids;
 }
 
+function selectHighestBid()
+{
+    global $url, $pdo;
+    $result = $pdo->query("select max(biddingprice) as biddingprice from Bidding where productid = '$url'");
+    $row = $result->fetch();
+    return $row['biddingprice'];
+}
+
 function getPhotos()
 {
-    $url = $_GET['link'];
+    global $url;
     global $pdo;
     $result = $pdo->query("select filename from productPhoto where productid like '%$url%'");
     $photos = array();
@@ -47,135 +80,161 @@ function getPhotos()
     return $photos;
 }
 
+function saveBid()
+{
+    global $pdo, $url;
+    $stmt = "INSERT INTO Bidding(productid, biddingprice, [user], biddingday, biddingtime)
+             VALUES (?, ?, ?, ?, ?)";
+    $addBid = $pdo->prepare($stmt);
+    if ($addBid->execute([$url, $_POST['bod'], $_SESSION['username'], date("Y-m-d"), date("H:i:s")])) {
+        header("Refresh:0");
+    } else {
+        print_r($addBid->errorInfo());
+    }
+}
 
 ?>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-9">
-                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                    <ol class="carousel-indicators">
-                        <?php
-                        $getPhotos = getPhotos();
-                        foreach ($getPhotos as $i => $value) {
-                            ?>
-                            <li class="<?php if ($i == 0) {
-                                echo "active";
-                            } else {
-                                echo "";
-                            } ?>" data-target="#carourselExampleIndicators" data-slide-to="<?php echo $i ?>"></li>
-                            <?php
-                        }
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <?php
+                    $getPhotos = getPhotos();
+                    foreach ($getPhotos as $i => $value) {
                         ?>
-
-                    </ol>
-                    <div class="carousel-inner" role="listbox">
-                        <?php
-                        foreach ($getPhotos as $i => $value) {
-                            if (substr($value[0], 0, 2) == 'dt') {
-                                $piclocation = "/pics/";
-                            } else {
-                                $piclocation = "/uploads/";
-                            }
-                            ?>
-                            <div class="carousel-item <?php if ($i == 0) {
-                                echo "active";
-                            } ?>">
-                                <img class="d-block img-fluid"
-                                     src="<?= $app_url ?><?= $piclocation ?><?php echo $value[0] ?>">
-                            </div>
-                            <?php
-                        }
-                        ?>
-                    </div>
-                    <?php if (count(getPhotos()) > 1) {
-                        ?>
-                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
-                           data-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
-                           data-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
+                        <li class="<?php if ($i == 0) {
+                            echo "active";
+                        } else {
+                            echo "";
+                        } ?>" data-target="#carourselExampleIndicators" data-slide-to="<?php echo $i ?>"></li>
                         <?php
                     }
                     ?>
 
-                </div>
-                <div class="well">
-                    <div class="text-right">
-                        <button onclick="showInput()" name="paymentBtn" id="paymentBtn" type="submit"
-                                class="btn btn-success">Bied nu!
-                        </button>
-                    </div>
-                </div>
-                <form method="post">
-                    <div id="showInput"
-                         style="display: none" <?php print((!empty($errors['bod'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                        <label class="col-2 col-form-label"></label>
-                        <div class="input-inline col-10">
-
-                            <input id="minimum-bid-price" placeholder="€ 0,00" name="bod" type="number"
-                                   step="0.01"
-                                   class="form-control">
-                            <div class="form-control-feedback"><?= $errors['startprice']??'' ?></div>
-                            <button class="btn btn-secondary">Plaats bod!</button>
+                </ol>
+                <div class="carousel-inner" role="listbox">
+                    <?php
+                    foreach ($getPhotos as $i => $value) {
+                        ?>
+                        <div class="carousel-item <?php if ($i == 0) {
+                            echo "active";
+                        } ?>">
+                            <img class="d-block img-fluid" src="<?= $app_url ?>/pics/<?php echo $value[0] ?>">
                         </div>
-                    </div>
-                </form>
-                <hr>
+                        <?php
+                    }
+                    ?>
+                </div>
+                <?php if (count(getPhotos()) > 1) {
+                    ?>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
+                       data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
+                       data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                    <?php
+                }
+                ?>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star-empty"></span>
-                        Anonymous
-                        <span class="pull-right">10 days ago</span>
-                        <p>This product was great in terms of quality. I would definitely buy another!</p>
+            </div>
+            <div class="well">
+                <div class="text-right">
+                    <button onclick="showInput()" name="paymentBtn" id="paymentBtn"
+                            class="btn btn-success">Bied nu!
+                    </button>
+                </div>
+            </div>
+            <form method="post">
+                <div id="showInput"
+                     style="display: none" <?php
+                if (!empty($errors['bod'])) {
+                    echo "class=\"form-group row has-danger\"";
+                } else if (isset($_POST['bod']) && $_POST['bod'] < selectHighestBid()) {
+                    echo "class=\"form-group row has-danger\"";
+                } else {
+                    echo "class=form-group row";
+                }
+                //  print((!empty($errors['bod'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <label class="col-2 col-form-label"></label>
+                    <div class="input-inline col-10">
+
+                        <input placeholder="€ 0,00" id="bod" name="bod" type="number"
+                               step="1.00"
+                               class="form-control">
+                        <div class="form-control-feedback"><?php global $errors;
+                            echo $errors['bod'];
+
+                            ?></div>
+
+                        <?php if (isset($_SESSION['username'])) {
+                            ?>
+                            <button name="submit" id="submit" class="btn btn-secondary">Plaats bod!</button>
+                            <?php echo selectHighestBid();
+                        } else {
+                            ?>
+                            <h4>Meld u eerst aan om een bod te plaatsen!</h4>
+                            <?php
+                        } ?>
                     </div>
                 </div>
+            </form>
+            <hr>
 
-                <hr>
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star-empty"></span>
-                        Anonymous
-                        <span class="pull-right">12 days ago</span>
-                        <p>I've alredy ordered another one!</p>
-                    </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                    Anonymous
+                    <span class="pull-right">10 days ago</span>
+                    <p>This product was great in terms of quality. I would definitely buy another!</p>
                 </div>
+            </div>
 
-                <hr>
+            <hr>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star-empty"></span>
-                        Anonymous
-                        <span class="pull-right">15 days ago</span>
-                        <p>I've seen some better than this, but not at this price. I definitely recommend this
-                            item.</p>
-                    </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                    Anonymous
+                    <span class="pull-right">12 days ago</span>
+                    <p>I've alredy ordered another one!</p>
                 </div>
+            </div>
 
+            <hr>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                    Anonymous
+                    <span class="pull-right">15 days ago</span>
+                    <p>I've seen some better than this, but not at this price. I definitely recommend this
+                        item.</p>
+                </div>
             </div>
 
         </div>
-        <ul class="list-group">
+
+
+        <div class="list-group">
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -200,31 +259,35 @@ function getPhotos()
 
                 </tbody>
             </table>
-        </ul>
+        </div>
     </div>
-    </div>
 
-    <!-- /.container -->
+</div>
+
+<!-- /.container -->
 
 
-    <!-- /.container -->
+<!-- /.container -->
 
-    <!-- jQuery -->
-    <script>
-        function showInput() {
-            var x = 1;
-            var y = 0;
-            if (x > y) {
-                document.getElementById("showInput").style.display = 'block';
-                x = -1;
-            } else if (x < y) {
-                document.getElementById("showInput").style.display = 'none';
-                x = 1;
-            }
-        }
-    </script>
+<!-- jQuery -->
+
 
 <?php
 include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
 ?>
+
+<script>
+
+    var x = 1;
+    var y = 0;
+    function showInput() {
+        if (x > y) {
+            document.getElementById("showInput").style.display = 'block';
+            x = -1;
+        } else if (x < y) {
+            document.getElementById("showInput").style.display = 'none';
+            x = 1;
+        }
+    }
+</script>
