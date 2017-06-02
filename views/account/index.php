@@ -158,43 +158,45 @@ if (isset($_SESSION['username'])) {
             <div class="col-md-6">
                 <h3>Laatste biedingen</h3>
                 <table class="table table-striped table-bordered">
-                    <thead>
-                    <th>ID</th>
-                    <th>Datum</th>
-                    <th>Bedrag</th>
-                    <th>Status</th>
-                    <th></th>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>
-                            Dummy data 1234567890-3456
-                        </td>
-                        <td>empty</td>
-                        <td>empty</td>
-                        <td><span class="badge badge-success">Veiling gewonnen</span></td>
-                        <td>
-                            <a class="btn btn-info btn-sm" href="#"><i class="fa fa-info"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>empty</td>
-                        <td>10-03-2017</td>
-                        <td>€7,75</td>
-                        <td><span class="badge badge-danger">Veiling verloren</span></td>
-                        <td>
-                            <a class="btn btn-info btn-sm" href="#"><i class="fa fa-info"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>20164987</td>
-                        <td>24-12-2016</td>
-                        <td>€66,60</td>
-                        <td><span class="badge badge-success">Veiling gewonnen</span></td>
-                        <td>
-                            <a class="btn btn-info btn-sm" href="#"><i class="fa fa-info"></i></a>
-                        </td>
-                    </tr>
+                    <?php
+                    $username = $_SESSION['username'];
+                    $stmt = $pdo->prepare("SELECT COUNT([user]) FROM bidding WHERE [user] = ?");
+                    $stmt->execute([$username]);
+                    $aantalBiedingen = $stmt->fetchColumn();
+                    if($aantalBiedingen == 0){
+                        print'<tr>
+                              <thead>
+                                  <th class="table-danger">U heeft nog geen veilingen geplaatst.</th>
+                              </thead>
+                              </tr>';
+                    }
+
+                    else if($aantalBiedingen >= 1){
+                        print '<tr>
+                                <thead>
+                                    <th>ID</th>
+                                    <th>Datum</th>
+                                    <th>Bedrag</th>
+                                    <th>Tijd</th>
+                               </thead>
+                               </tr>';
+                    }
+                    print '</tr>';
+                    ?>
+                    <?php
+                    $stmt = $pdo->prepare("SELECT * FROM bidding WHERE [user] = ?");
+                    $stmt->execute([$username]);
+                    $dataBiedingen = $stmt->fetchAll();
+                    foreach($dataBiedingen as $d){ ?>
+                        <tr>
+                        <?php echo '<td>' . $d['productid'] . '</td>'; ?>
+                        <?php echo '<td>' . $d['biddingday'] . '</td>'; ?>
+                        <?php echo '<td> € ' . $d['biddingprice'] . '</td>'; ?>
+                        <?php echo '<td>' . $d['biddingtime'] . '</td>'; ?>
+                        </tr>
+                    <?php
+                    }
+                    ?>
                     </tbody>
                 </table>
             </div>
