@@ -38,7 +38,7 @@ function getPhotos()
 {
     $url = $_GET['link'];
     global $pdo;
-    $result = $pdo->query("select filename from Productphotos where product id like '%$url%'");
+    $result = $pdo->query("select filename from productPhoto where productid like '%$url%'");
     $photos = array();
     while ($row = $result->fetch()) {
         $photo = array($row['filename']);
@@ -47,47 +47,91 @@ function getPhotos()
     return $photos;
 }
 
+
 ?>
 
     <div class="container">
         <div class="row">
             <div class="col-md-9">
-                <div class="card">
-                    <img class="card-img-top img-fluid" src="http://placehold.it/800x300" alt="">
-                    <div class="card-block">
-                        <h4 class="pull-right"><?php if (!empty(getAd()[0][4])) {
-                                echo "€" . getAd()[0][4];
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <?php
+                        $getPhotos = getPhotos();
+                        foreach ($getPhotos as $i=>$value) {
+                            ?>
+                            <li class="<?php if($i == 0){
+                                echo "active";
                             } else {
-                                echo "Nog geen bod geplaatst";
-                            } ?></h4>
-                        <h4><?php echo getAd()[0][0] ?>
-                        </h4>
-                        <p><?php echo getAd()[0][1] ?></p>
+                                echo "";
+                            }?>" data-target="#carourselExampleIndicators" data-slide-to="<?php echo $i?>"></li>
+                        <?php
+                        }
+                        ?>
+
+                    </ol>
+                    <div class="carousel-inner" role="listbox">
+                    <?php
+                    foreach($getPhotos as $i=>$value){
+                        ?>
+                    <div class="carousel-item <?php if($i == 0){
+                        echo "active";
+                    }?>">
+                        <img class="d-block img-fluid" src="<?= $app_url ?>/pics/<?php echo $value[0]?>">
                     </div>
+                    <?php
+                    }
+                    ?>
+                    </div>
+                    <? if(count(getPhotos()) > 1){
+                        ?>
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    <?php
+                    } ?>
+
                 </div>
 
-                <?php
-                if (isset($_POST['biednu'])) {
-                    echo "oke mooi man";
-                }
-                ?>
-
-                <div class="well">
-
-                    <div class="text-right">
-                        <button onclick="showInput()" name="paymentBtn" id="paymentBtn" type="submit"
-                                class="btn btn-success">Bied nu!
-                        </button>
-                    </div>
-                    <div id="showInput" style="display: none" <?php print((!empty($errors['startprice'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                        <label class="col-2 col-form-label">Prijs*</label>
-                        <div class="input-inline col-10">
-
-                            <input id="minimum-bid-price" placeholder="€ 0,00" name="startprice" type="number" step="0.01"
-                                   class="form-control">
-                            <div class="form-control-feedback"><?= $errors['startprice']??'' ?></div>
+                    <div class="card">
+                        <img class="card-img-top img-fluid" src="http://placehold.it/800x300" alt="">
+                        <div class="card-block">
+                            <h4 class="pull-right"><?php if (!empty(getAd()[0][4])) {
+                                    echo "€" . getAd()[0][4];
+                                } else {
+                                    echo "Nog geen bod geplaatst";
+                                } ?></h4>
+                            <h4><?php echo getAd()[0][0] ?>
+                            </h4>
+                            <p><?php echo getAd()[0][1] ?></p>
                         </div>
                     </div>
+
+                    <div class="well">
+                        <div class="text-right">
+                            <button onclick="showInput()" name="paymentBtn" id="paymentBtn" type="submit"
+                                    class="btn btn-success">Bied nu!
+                            </button>
+                        </div>
+                    </div>
+                    <form method="post">
+                        <div id="showInput"
+                             style="display: none" <?php print((!empty($errors['bod'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                            <label class="col-2 col-form-label"></label>
+                            <div class="input-inline col-10">
+
+                                <input id="minimum-bid-price" placeholder="€ 0,00" name="bod" type="number"
+                                       step="0.01"
+                                       class="form-control">
+                                <div class="form-control-feedback"><?= $errors['startprice']??'' ?></div>
+                                <button class="btn btn-secondary">Plaats bod!</button>
+                            </div>
+                        </div>
+                    </form>
                     <hr>
 
                     <div class="row">
@@ -173,28 +217,19 @@ function getPhotos()
 
     <!-- jQuery -->
     <script>
-        function showInput(){
-            document.getElementById("showInput").style.display = block;
+        function showInput() {
+            var x = 1;
+            var y = 0;
+            if (x > y) {
+                document.getElementById("showInput").style.display = 'block';
+                x = -1;
+            } else if (x < y) {
+                document.getElementById("showInput").style.display = 'none';
+                x = 1;
+            }
         }
     </script>
 
-<?php
-function showInputPayment()
-{
-    ?>
-    <div <?php print((!empty($errors['startprice'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-        <label class="col-2 col-form-label">Prijs*</label>
-        <div class="input-inline col-10">
-
-            <input id="minimum-bid-price" placeholder="€ 0,00" name="startprice" type="number" step="0.01"
-                   class="form-control">
-            <div class="form-control-feedback"><?= $errors['startprice']??'' ?></div>
-        </div>
-
-    <?php
-}
-
-?>
 <?php
 include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
