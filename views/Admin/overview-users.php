@@ -86,7 +86,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
                     <th>Email</th>
                     <th>Functie</th>
                     <th>Beheerder</th>
-                    <th></th>
+                    <th>Bewerk</th>
                 </thead>
          <?php }
         elseif ($aantalGebruikers == 0) {
@@ -166,6 +166,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
     include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/include/delete-user.php');
+    include($_SERVER['DOCUMENT_ROOT'] . '/include/ban-user.php');
 }
 else {
     header ('location: ../account/login.php');
