@@ -62,7 +62,7 @@
         $stmt->execute([$user['username']]);
         $ADamount = $stmt->fetchColumn();
 
-        $sql = "SELECT COUNT(productid) FROM Bidding WHERE user = ?";
+        $sql = "SELECT COUNT([user]) FROM Bidding WHERE [user] = ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$user['username']]);
         $BIDamount = $stmt->fetchColumn();

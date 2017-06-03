@@ -296,5 +296,10 @@ if (isset($_SESSION['username'])) {
     include($_SERVER['DOCUMENT_ROOT'] . '/include/login-message.inc.php');
 }
 
+//if($user['banned'] == 1){
+//    session_destroy();
+//    header('location: login.php');
+//}
+
 
 ?>

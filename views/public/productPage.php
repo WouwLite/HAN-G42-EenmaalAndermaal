@@ -128,7 +128,7 @@ function saveBid()
                                 $picsource = "http://iproject42.icasites.nl/uploads/";
                             }
                             ?>
-                            <img class="d-block img-fluid size" src="<?= $picsource ?>/<?php echo $value[0] ?>">
+                            <img class="d-block img-fluid size" src="<?= $picsource ?>/<?php echo $value[0] ?>" style="max-height: 40em;">
                         </div>
                         <?php
                     }

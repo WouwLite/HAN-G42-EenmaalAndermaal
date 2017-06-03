@@ -9,13 +9,10 @@ if ($debug) {
     error_reporting(E_ALL | E_STRICT);
 }
 
-// Start a session
-session_start();
-
-// Check if user is already logged on. If yes, redirect to accountpage.
-if (isset($_SESSION['username'])) {
-    header("Location: index.php");
-}
+//// Check if user is already logged on. If yes, redirect to accountpage.
+//if (isset($_SESSION['username'])) {
+//    header("Location: index.php");
+//}
 
 function checkEmptyFields()
 {
@@ -54,9 +51,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($data) {
             $password_ok = password_verify($vars['password'], $data['password']);
             if ($password_ok) {
+                $username = $vars['username'];
+                $stmt = $pdo->prepare("SELECT banned FROM Users WHERE username = ?");
+                $stmt->execute([$vars['username']]);
+                $dataUserBanned = $stmt->fetchColumn();
+
+                if($dataUserBanned == 0){
                 session_start();
                 $_SESSION['username'] = $username;
                 header('location: index.php');
+                }
+                else{
+                    $errors['username'] = "Dit account is geblokkeerd.";
+                    $errors['password'] = " ";
+                }
             } else {
                 $errors['password'] = "Onjuist wachtwoord";
                 $errors['username'] = " ";
