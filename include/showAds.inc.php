@@ -47,9 +47,8 @@ echo "</div>";
 
 <div class="container">
     <header class="jumbotron hero-spacer">
-        <h1>Our Latest Items!</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non
-            incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>
+        <h1>Nieuwe veilingen</h1>
+        <p>Gaaf, de aller nieuwste veiligingen staan op deze pagina! Kijk snel of het product wat je zoekt in dit overzicht staat of gebruik de zoekfunctie als je opzoek bent naar iets specifieks.</p>
     </header>
 
 
