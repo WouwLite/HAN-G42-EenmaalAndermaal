@@ -40,15 +40,14 @@ SQL;
 DELETE FROM productPhoto WHERE productid = ?
 SQL;
 
-
-    $pdo->prepare($delimg)->execute([$_POST['deleteItem']]);
-    $pdo->prepare($delobj)->execute([$_POST['deleteItem']]);
-
-
     $delbid = <<<SQL
 DELETE FROM Bidding WHERE productid = ?
 SQL;
+
     $pdo->prepare($delbid)->execute([$_POST['deleteItem']]);
+    $pdo->prepare($delimg)->execute([$_POST['deleteItem']]);
+    $pdo->prepare($delobj)->execute([$_POST['deleteItem']]);
+
 
 }
 ?>
