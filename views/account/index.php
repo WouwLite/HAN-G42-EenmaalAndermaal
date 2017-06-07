@@ -26,7 +26,8 @@ $merchantStatus = false;
 
 GLOBAL $User;
 
-$stmt = $pdo-> prepare ("UPDATE Object SET Auctionclosed = 1 WHERE seller IN (SELECT username FROM Users WHERE banned = 1))");
+$stmt = $pdo-> prepare ("update object set auctionClosed = 1 
+                                   where Seller IN (select username from users where banned = 1)");
 $stmt-> execute();
 
 
