@@ -14,6 +14,7 @@
             <form action="<?= $app_url ?>/views/public/browse.php" method="get">
                 <input class="form-control sm-2" type="search" id="search" name="Search"
                        placeholder="Zoek naar veiling..."/>
+                <input type="hidden" name="cat" value="<?= $_GET['cat']??'' ?>">
             </form>
         </li>
 
@@ -161,7 +162,7 @@ HTML;
 HTML;
             } else {
                 echo <<<HTML
-                <a href="{$app_url}/views/public/browse.php?cat={$parent['ID']}">{$parent['Name']}</a>
+                <a id="catlink" href="{$app_url}/views/public/browse.php?cat={$parent['ID']}">{$parent['Name']}</a>
 HTML;
 
             }
