@@ -12,6 +12,7 @@ CROSS APPLY
 (SELECT TOP 1 productid, filename
 From productPhoto pp where o.productid=pp.productid) productPhoto left outer join Bidding b on o.productid = b.productid
 where durationendDay >= getDate()
+AND auctionclosed = 0
 order by durationendDay, durationendTime";
     $result = $pdo->query($sql);
     $Ads = array();
@@ -22,26 +23,7 @@ order by durationendDay, durationendTime";
     return $Ads;
 }
 
-/*
-$Ads = getAds();
-$i = 0;
-echo "<div class='container'>";
-foreach ($Ads as $Adverts) {
-    if ($i == 0) {
-        echo "<div class='row'>";
-    }
-    $i++;
-    echo "<div class='col-sm-4'>";
-    echo "<h2>" . $Adverts[0] . "</h2>";
-    if ($i == 5) {
-        $i = 0;
-        echo "</div>";
-    }
-    echo "</div>";
-}
-echo "</div>";
-echo "</div>";
-*/
+
 ?>
 <!-- Page Content -->
 
@@ -50,8 +32,6 @@ echo "</div>";
         <h1>Nieuwe veilingen</h1>
         <p>Gaaf, de aller nieuwste veiligingen staan op deze pagina! Kijk snel of het product wat je zoekt in dit overzicht staat of gebruik de zoekfunctie als je opzoek bent naar iets specifieks.</p>
     </header>
-
-
         <div class="row text-center">
             <?php
             $ads = getAds();
@@ -70,7 +50,7 @@ echo "</div>";
                             $picsource = "http://iproject42.icasites.nl/uploads/";
                         }
                         ?>
-                        <img src="<?= $picsource ?><?= $thumbnail; ?>"
+                        <img style="max-width: 80%; height: 200px;" src="<?= $picsource ?><?= $thumbnail; ?>"
                              class="img-fluid"
                              alt="<?php echo $value[3] ?>">
                         <div class="figure-caption">

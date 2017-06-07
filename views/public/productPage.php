@@ -11,7 +11,7 @@ function getAd()
 																																from Bidding b
 																																where o.productid = b.productid) as biddingprice
 from Object o left outer join productPhoto pp on o.productid=pp.productid
-where o.productid like '%$url%'");
+where o.productid = '$url'");
     $content = array();
     while ($row = $result->fetch()) {
         $ad = array($row['Title'], $row['description'], $row['Categories'], $row['filename'], $row['biddingprice']);
@@ -24,7 +24,7 @@ $value = getAd();
 function checkBod()
 {
     global $errors;
-    $errors['bod'] = ($_POST['bod'] == "") && ($_POST['bod'] < selectHighestBid())? "Vul aub een geldig bod in" : '';
+    $errors['bod'] = ($_POST['bod'] == "") && ($_POST['bod'] < selectHighestBid()) ? "Vul aub een geldig bod in" : '';
 }
 
 function checkNoErrorBod()
@@ -39,11 +39,23 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if (isset($_POST['submit'])) {
         checkBod();
     }
-    if (checkNoErrorBod()  && $_POST['bod'] > selectHighestBid()) {
+    if (checkNoErrorBod() && $_POST['bod'] >= selectHighestBid() && $_POST['bod'] > selectStartPrice()) {
         saveBid();
-    } else {
-        echo $errors['bod'];
+    } else if (!empty(selectHighestBid()) && $_POST['bod'] < selectHighestBid()) {
+        $errors['bod'] = "Vul aub een hoger bod in dan het huidige bod";
+    } else if (!empty(selectHighestBid()) && $_POST['bod'] < selectStartPrice()) {
+        $errors['bod'] = "Vul aub een hoger bod in de startprijs";
+    } else if($_POST['bod'] > 9999){
+        $errors['bod'] = "Uw account zal nu worden geblokkeerd";
     }
+}
+
+function selectStartPrice()
+{
+    global $url, $pdo;
+    $result = $pdo->query("select startprice from Object where productid like '%$url%'");
+    $row = $result->fetch();
+    return $row['startprice'];
 }
 
 function getBids()
@@ -88,8 +100,6 @@ function saveBid()
     $addBid = $pdo->prepare($stmt);
     if ($addBid->execute([$url, $_POST['bod'], $_SESSION['username'], date("Y-m-d"), date("H:i:s")])) {
         //header("Refresh:0");
-    } else {
-        print_r($addBid->errorInfo());
     }
 }
 
@@ -99,7 +109,7 @@ function saveBid()
     <div class="row">
         <div class="col-md-9">
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators">
+                <ol class="carousel-indicators"">
                     <?php
                     $getPhotos = getPhotos();
                     foreach ($getPhotos as $i => $value) {
@@ -128,11 +138,15 @@ function saveBid()
                                 $picsource = "http://iproject42.icasites.nl/uploads/";
                             }
                             ?>
-                            <img class="d-block img-fluid size" src="<?= $picsource ?>/<?php echo $value[0] ?>" style="max-height: 40em;">
+                            <img class="d-block img-fluid size" src="<?= $picsource ?>/<?php echo $value[0] ?>" style="max-height: 400px; max-width:50%;">
+
                         </div>
+
                         <?php
                     }
+
                     ?>
+
                 </div>
                 <?php if (count(getPhotos()) > 1) {
                     ?>
@@ -150,6 +164,19 @@ function saveBid()
                 }
                 ?>
 
+                <div class="img-thumbnail">
+                    <div class="figure-caption">
+                        <h4 class="pull-right"><?php
+                            if (empty(selectHighestBid())) {
+                                echo selectStartPrice();
+                            } else {
+                                echo selectHighestBid();
+                            }
+                            ?></h4>
+                        <h4><?php echo getAd()[0][0] ?></h4>
+                        <p><?php echo getAd()[0][1] ?></p>
+                    </div>
+                </div>
             </div>
             <div class="well">
                 <div class="text-right">

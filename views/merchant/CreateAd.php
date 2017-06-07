@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 require($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 include_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
@@ -19,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         checkEmptyFields();
         if (checkNoErrors()) {
             saveProductData();
+            echo $_POST['Categories'];
         }
     }
 }
@@ -91,6 +93,7 @@ function saveProductData()
         $foto2 = ($_FILES['foto2']['error'] == UPLOAD_ERR_NO_FILE) ? null : $_FILES['foto2'];
         $foto3 = ($_FILES['foto3']['error'] == UPLOAD_ERR_NO_FILE) ? null : $_FILES['foto3'];
         $foto4 = ($_FILES['foto4']['error'] == UPLOAD_ERR_NO_FILE) ? null : $_FILES['foto4'];
+
         $stmt = "INSERT INTO Object(productid, title, description, startprice, paymentmethodNumber, paymentinstruction,
                   city, country, duration, durationbeginDay, durationbeginTime, shippingcosts, shippinginstructions, seller,
                   durationendDay, durationendTime, auctionclosed, Categories)
@@ -104,6 +107,13 @@ function saveProductData()
         $destdir = SITE_ROOT . "\\uploads\\";
         $allowedtypes = array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP);
 
+        if (empty($_FILES)) {
+            $foto1['name'] = 'http://www.fertiplus.nl/img/Geen-foto-beschikbaar.jpg';
+            $ext = pathinfo($foto1['name'], PATHINFO_EXTENSION);
+            $uniquefilename = uniqid('EAIMG') . "." . $ext;
+            $photoInfo->execute(array($productid, $uniquefilename));
+            move_uploaded_file($foto1['tmp_name'], $destdir . $uniquefilename);
+        }
         if ($foto1) {
             if (in_array(exif_imagetype($foto1['tmp_name']), $allowedtypes)) {
                 $ext = pathinfo($foto1['name'], PATHINFO_EXTENSION);
@@ -218,7 +228,7 @@ SQL;
                     $stmt->execute();
                     $children = $stmt->fetchAll();
                     ?>
-                    <input list="categories" class="form-control" name="cat" value="<?= $_GET['cat']??'' ?>">
+                    <input list="categories" class="form-control" name="Categories">
                     <datalist id="categories">
                             <?php
                             foreach ($children as $child) {
