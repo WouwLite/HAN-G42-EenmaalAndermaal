@@ -26,11 +26,23 @@ $merchantStatus = false;
 
 GLOBAL $User;
 
+//Zet alle advertenties op gesloten van de gebande gebruikers
 $stmt = $pdo-> prepare ("update object set auctionClosed = 1 
-                                   where Seller IN (select username from users where banned = 1)");
+                                  where Seller IN (select username from users where banned = 1)");
 $stmt-> execute();
 
+//mailUsers();
 
+function mailUsers(){
+    global $pdo;
+    $stmt = $pdo-> prepare("SELECT email FROM users WHERE username IN(SELECT [user] FROM BIDDING WHERE  )");
+
+
+    $headers = 'From: noreply@iproject42.icasites.nl' . "\r\n";
+    $headers .= "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+    mail($_POST['email'], $subject, $message, $headers);
+}
 
 /*
  * Einde PHP variable-area
@@ -161,52 +173,54 @@ if (isset($_SESSION['username'])) {
         </div>
     </div>
     <br>
-    <div class="container-float"><h1>Veilingen</h1>
+<div class="container-float"><h1>Veilingen</h1>
         <div class="row">
             <div class="col-md-6">
                 <h3>Laatste biedingen</h3>
-                <table class="table table-striped table-bordered">
-                    <?php
-                    $username = $_SESSION['username'];
-                    $stmt = $pdo->prepare("SELECT COUNT([user]) FROM bidding WHERE [user] = ?");
-                    $stmt->execute([$username]);
-                    $aantalBiedingen = $stmt->fetchColumn();
-                    if($aantalBiedingen == 0){
-                        print'<tr>
-                              <thead>
-                                  <th class="table-danger">U heeft nog geen veilingen geplaatst.</th>
-                              </thead>
-                              </tr>';
-                    }
+                <div class="myBids" style="overflow: auto; height: 20em;">
+                    <table class="table table-striped table-bordered">
+                        <?php
+                        $username = $_SESSION['username'];
+                        $stmt = $pdo->prepare("SELECT COUNT([user]) FROM bidding WHERE [user] = ?");
+                        $stmt->execute([$username]);
+                        $aantalBiedingen = $stmt->fetchColumn();
+                        if($aantalBiedingen == 0){
+                            print'<tr>
+                                  <thead>
+                                      <th class="table-danger">U heeft nog geen biedingen geplaatst.</th>
+                                  </thead>
+                                  </tr>';
+                        }
 
-                    else if($aantalBiedingen >= 1){
-                        print '<tr>
-                                <thead>
-                                    <th>ID</th>
-                                    <th>Datum</th>
-                                    <th>Bedrag</th>
-                                    <th>Tijd</th>
-                               </thead>
-                               </tr>';
-                    }
-                    print '</tr>';
-                    ?>
-                    <?php
-                    $stmt = $pdo->prepare("SELECT * FROM bidding WHERE [user] = ?");
-                    $stmt->execute([$username]);
-                    $dataBiedingen = $stmt->fetchAll();
-                    foreach($dataBiedingen as $d){ ?>
-                        <tr>
-                        <?php echo '<td>' . $d['productid'] . '</td>'; ?>
-                        <?php echo '<td>' . $d['biddingday'] . '</td>'; ?>
-                        <?php echo '<td> € ' . $d['biddingprice'] . '</td>'; ?>
-                        <?php echo '<td>' . $d['biddingtime'] . '</td>'; ?>
-                        </tr>
-                    <?php
-                    }
-                    ?>
-                    </tbody>
-                </table>
+                        else if($aantalBiedingen >= 1){
+                            print '<tr>
+                                    <thead>
+                                        <th>ID</th>
+                                        <th>Datum</th>
+                                        <th>Bedrag</th>
+                                        <th>Tijd</th>
+                                   </thead>
+                                   </tr>';
+                        }
+                        print '</tr>';
+                        ?>
+                        <?php
+                        $stmt = $pdo->prepare("SELECT * FROM bidding WHERE [user] = ?");
+                        $stmt->execute([$username]);
+                        $dataBiedingen = $stmt->fetchAll();
+                        foreach($dataBiedingen as $d){ ?>
+                            <tr>
+                            <?php echo '<td>' . $d['productid'] . '</td>'; ?>
+                            <?php echo '<td>' . $d['biddingday'] . '</td>'; ?>
+                            <?php echo '<td> € ' . $d['biddingprice'] . '</td>'; ?>
+                            <?php echo '<td>' . $d['biddingtime'] . '</td>'; ?>
+                            </tr>
+                        <?php
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="col-md-6">
@@ -258,17 +272,22 @@ if (isset($_SESSION['username'])) {
                                     }
                                     ?>
                                     <?php
-                                    $date1 = date("Y-m-d H:i:s");
-                                    $date2 = $d['durationendDay'] . ' ' . $d['durationendTime'];
-                                    if (strtotime($date1) <= strtotime($date2)) {
-                                        ?>
-                                        <td><span class="badge badge-success">Actief</span></td>
-                                        <?php
-                                    } else {
-                                        ?>
-                                        <td><span class="badge badge-danger">Gesloten</span></td>
-                                        <?php
+                                    if($d['auctionClosed'] == 1){
+                                        print '<td><span class="badge badge-danger">Gesloten</span></td>';
+                                    }
+                                    else {
+                                        $date1 = date("Y-m-d H:i:s");
+                                        $date2 = $d['durationendDay'] . ' ' . $d['durationendTime'];
+                                        if (strtotime($date1) <= strtotime($date2)) {
+                                            ?>
+                                            <td><span class="badge badge-success">Actief</span></td>
+                                            <?php
+                                        } else {
+                                            ?>
+                                            <td><span class="badge badge-danger">Gesloten</span></td>
+                                            <?php
 
+                                        }
                                     }
                                     ?>
 
