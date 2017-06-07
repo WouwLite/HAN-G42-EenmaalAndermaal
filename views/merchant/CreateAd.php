@@ -199,17 +199,36 @@ function saveProductData()
             <div class="form-group row">
                 <label class="col-2 col-form-label">Categorie*</label>
                 <div class="col-10">
-                    <select class="form-control" id="Categories" name="Categories">
-                        <?php
-                        $stmt = $pdo->prepare("SELECT * FROM Categories");
-                        $stmt->execute();
-                        $data = $stmt->fetchAll();
-                        foreach ($data as $row) { ?>
-                            <option value="<?= $row['ID'] ?>"><?= $row['Name'] ?></option>
+                    <?php
+                    $getchild = <<<SQL
+WITH CTE (ID, Parent, Name) AS (
+    SELECT ID, Parent, Name
+    FROM Categories
+    WHERE Parent = -1
+    UNION ALL
+    SELECT parent.ID, parent.Parent, parent.Name
+    FROM Categories parent
+    INNER JOIN CTE child ON parent.Parent = child.ID
+)
+SELECT *
+FROM CTE
+WHERE NOT EXISTS(SELECT * from Categories WHERE Parent = CTE.ID)
+SQL;
+                    $stmt = $pdo->prepare($getchild);
+                    $stmt->execute();
+                    $children = $stmt->fetchAll();
+                    ?>
+                    <input list="categories" class="form-control" name="cat" value="<?= $_GET['cat']??'' ?>">
+                    <datalist id="categories">
                             <?php
-                        }
-                        ?>
-                    </select>
+                            foreach ($children as $child) {
+                                echo <<<HTML
+                    <option value='{$child['ID']}'>{$child['Name']}</option>
+HTML;
+                            }
+                            ?>
+
+                    </datalist>
                 </div>
             </div>
             <div <?php print((!empty($errors['title'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>

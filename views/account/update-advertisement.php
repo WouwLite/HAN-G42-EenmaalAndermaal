@@ -96,8 +96,6 @@ function updateProductData()
     }
 }
 
-print '<h3>Deze advertentienummer: ' . $changeProduct . '</h3>';
-
 if(empty($_SESSION['username'])){
     include($_SERVER['DOCUMENT_ROOT'] . '/include/login-message.inc.php');
 }

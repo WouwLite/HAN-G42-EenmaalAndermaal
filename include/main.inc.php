@@ -35,7 +35,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
             <!-- ml-auto >> margin left auto, aligns the div to right -->
         <ul class="navbar-nav ml-auto">
             <!-- ADD IF STATEMENT TO SHOW ADD-NEW BUTTON. ELSE HIDE -->
-            <?php if (!empty($_SESSION['username']) || $debug) { ?>
+            <?php if (!empty($_SESSION['username'])) { ?>
                 <?php if ($user['merchant']) {
                     echo <<<HTML
                     <li class="nav-item">

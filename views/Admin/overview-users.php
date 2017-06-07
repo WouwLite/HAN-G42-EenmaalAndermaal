@@ -59,7 +59,6 @@ if (isset($user['username']) && $user['admin'] == 1) {
             <?php
         }
         ?>
-        <script>$(".alert").alert('close')</script>
 
         <!-- jQuery Live Searchform -->
         <form id="live-search" action="" class="styled" method="post">
