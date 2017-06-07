@@ -80,5 +80,7 @@ order by durationendDay, durationendTime";
             ?>
         </div>
     </div>
+<br>
+<br>
 </div>
 
