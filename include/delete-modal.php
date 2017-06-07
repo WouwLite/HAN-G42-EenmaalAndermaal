@@ -25,6 +25,7 @@ SQL;
 SELECT filename FROM productPhoto WHERE productid = ?
 SQL;
 
+
     $getimgstmt = $pdo->prepare($getimgsql);
     $getimgstmt->execute([$_POST['deleteItem']]);
     $filenames = $getimgstmt->fetchAll(PDO::FETCH_COLUMN);
@@ -42,6 +43,13 @@ SQL;
 
     $pdo->prepare($delimg)->execute([$_POST['deleteItem']]);
     $pdo->prepare($delobj)->execute([$_POST['deleteItem']]);
+
+
+    $delbid = <<<SQL
+DELETE FROM Bidding WHERE productid = ?
+SQL;
+    $pdo->prepare($delbid)->execute([$_POST['deleteItem']]);
+
 }
 ?>
 

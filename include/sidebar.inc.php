@@ -17,18 +17,8 @@
         </li>
             <?php
             $getchild = <<<SQL
-WITH CTE (ID, Parent, Name) AS (
-    SELECT ID, Parent, Name
-    FROM Categories
-    WHERE Parent = -1
-    UNION ALL
-    SELECT parent.ID, parent.Parent, parent.Name
-    FROM Categories parent
-    INNER JOIN CTE child ON parent.Parent = child.ID
-)
 SELECT *
-FROM CTE
-WHERE NOT EXISTS(SELECT * from Categories WHERE Parent = CTE.ID)
+FROM [bottom level categories]
 SQL;
             $stmt = $pdo->prepare($getchild);
             $stmt->execute();
