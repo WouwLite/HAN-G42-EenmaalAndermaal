@@ -25,7 +25,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
 function getAds()
 {
     global $pdo;
-    if (isset($_GET['Search']) and !empty($_GET['cat'])) {
+    if (!empty($_GET['Search']) and !empty($_GET['cat'])) {
         $sql = "select *
 From Object o
 WHERE FREETEXT(title,?) and Categories = ?";
