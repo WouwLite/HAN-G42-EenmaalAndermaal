@@ -10,12 +10,46 @@
 <!-- Add sidebarmenu -->
 <div id="sidebar">
     <ul>
-        <li>
-            <form action="<?= $app_url ?>/views/public/browse.php" method="get">
+        <form action="<?= $app_url ?>/views/public/browse.php" method="get">
+            <li>
                 <input class="form-control sm-2" type="search" id="search" name="Search"
                        placeholder="Zoek naar veiling..."/>
-            </form>
         </li>
+            <?php
+            $getchild = <<<SQL
+WITH CTE (ID, Parent, Name) AS (
+    SELECT ID, Parent, Name
+    FROM Categories
+    WHERE Parent = -1
+    UNION ALL
+    SELECT parent.ID, parent.Parent, parent.Name
+    FROM Categories parent
+    INNER JOIN CTE child ON parent.Parent = child.ID
+)
+SELECT *
+FROM CTE
+WHERE NOT EXISTS(SELECT * from Categories WHERE Parent = CTE.ID)
+SQL;
+            $stmt = $pdo->prepare($getchild);
+            $stmt->execute();
+            $children = $stmt->fetchAll();
+            ?>
+            <li>
+                <input class="form-control" list="categories" name="cat" value="<?= $_GET['cat']??'' ?>">
+                <datalist id="categories">
+                    <?php
+                    foreach ($children as $child) {
+                        echo <<<HTML
+                    <option value='{$child['ID']}'>{$child['Name']}</option>
+HTML;
+                    }
+                    ?>
+
+                </datalist>
+                <!--            <input type="hidden" name="cat" value="--><? //= $_GET['cat']??'' ?><!--">-->
+            </li>
+            <input type="submit" style="display: none"/>
+        </form>
 
         <!-- Add debug alert when debugging is enabled -->
         <?php if ($debug): ?>
@@ -62,7 +96,7 @@
         $stmt->execute([$user['username']]);
         $ADamount = $stmt->fetchColumn();
 
-        $sql = "SELECT COUNT(productid) FROM Bidding WHERE user = ?";
+        $sql = "SELECT COUNT([user]) FROM Bidding WHERE [user] = ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$user['username']]);
         $BIDamount = $stmt->fetchColumn();
@@ -161,7 +195,7 @@ HTML;
 HTML;
             } else {
                 echo <<<HTML
-                <a href="{$app_url}/views/public/browse.php?cat={$parent['ID']}">{$parent['Name']}</a>
+                <a id="catlink" href="{$app_url}/views/public/browse.php?cat={$parent['ID']}">{$parent['Name']}</a>
 HTML;
 
             }

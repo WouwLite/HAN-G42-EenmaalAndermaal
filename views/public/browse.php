@@ -25,12 +25,18 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
 function getAds()
 {
     global $pdo;
-    if (isset($_GET['Search'])) {
+    if (!empty($_GET['Search']) and !empty($_GET['cat'])) {
         $sql = "select *
 From Object o
-WHERE FREETEXT(title,?) or Categories = ?";
+WHERE FREETEXT(title,?) and Categories = ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$_GET['Search']??' ', $_GET['cat']??'']);
+    } elseif (!empty($_GET['Search'])) {
+        $sql = "select *
+From Object o
+WHERE FREETEXT(title,?)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$_GET['Search']??' ']);
     } else {
         $sql = "select *
 From Object o
@@ -91,7 +97,7 @@ echo "</div>";
                     if (substr($thumbnail, 0, 3) === "dt_") {
                         $picsource = "http://iproject42.icasites.nl/pics/";
                     } else {
-                        $picsource = "http://iproject42.icasites.nl/views/merchant/AdImages/";
+                        $picsource = "http://iproject42.icasites.nl/uploads/";
                     }
                     ?>
                     <img src="<?= $picsource ?><?= $thumbnail; ?>"

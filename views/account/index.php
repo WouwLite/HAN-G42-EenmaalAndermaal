@@ -24,6 +24,26 @@ include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
 $merchantStatus = false;
 
+GLOBAL $User;
+
+//Zet alle advertenties op gesloten van de gebande gebruikers
+$stmt = $pdo-> prepare ("update object set auctionClosed = 1 
+                                  where Seller IN (select username from users where banned = 1)");
+$stmt-> execute();
+
+//mailUsers();
+
+function mailUsers(){
+    global $pdo;
+    $stmt = $pdo-> prepare("SELECT email FROM users WHERE username IN(SELECT [user] FROM BIDDING WHERE  )");
+
+
+    $headers = 'From: noreply@iproject42.icasites.nl' . "\r\n";
+    $headers .= "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+    mail($_POST['email'], $subject, $message, $headers);
+}
+
 /*
  * Einde PHP variable-area
  */
@@ -153,50 +173,54 @@ if (isset($_SESSION['username'])) {
         </div>
     </div>
     <br>
-    <div class="container-float"><h1>Veilingen</h1>
+<div class="container-float"><h1>Veilingen</h1>
         <div class="row">
             <div class="col-md-6">
                 <h3>Laatste biedingen</h3>
-                <table class="table table-striped table-bordered">
-                    <thead>
-                    <th>ID</th>
-                    <th>Datum</th>
-                    <th>Bedrag</th>
-                    <th>Status</th>
-                    <th></th>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>
-                            Dummy data 1234567890-3456
-                        </td>
-                        <td>empty</td>
-                        <td>empty</td>
-                        <td><span class="badge badge-success">Veiling gewonnen</span></td>
-                        <td>
-                            <a class="btn btn-info btn-sm" href="#"><i class="fa fa-info"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>empty</td>
-                        <td>10-03-2017</td>
-                        <td>€7,75</td>
-                        <td><span class="badge badge-danger">Veiling verloren</span></td>
-                        <td>
-                            <a class="btn btn-info btn-sm" href="#"><i class="fa fa-info"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>20164987</td>
-                        <td>24-12-2016</td>
-                        <td>€66,60</td>
-                        <td><span class="badge badge-success">Veiling gewonnen</span></td>
-                        <td>
-                            <a class="btn btn-info btn-sm" href="#"><i class="fa fa-info"></i></a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div class="myBids" style="overflow: auto; height: 20em;">
+                    <table class="table table-striped table-bordered">
+                        <?php
+                        $username = $_SESSION['username'];
+                        $stmt = $pdo->prepare("SELECT COUNT([user]) FROM bidding WHERE [user] = ?");
+                        $stmt->execute([$username]);
+                        $aantalBiedingen = $stmt->fetchColumn();
+                        if($aantalBiedingen == 0){
+                            print'<tr>
+                                  <thead>
+                                      <th class="table-danger">U heeft nog geen biedingen geplaatst.</th>
+                                  </thead>
+                                  </tr>';
+                        }
+
+                        else if($aantalBiedingen >= 1){
+                            print '<tr>
+                                    <thead>
+                                        <th>ID</th>
+                                        <th>Datum</th>
+                                        <th>Bedrag</th>
+                                        <th>Tijd</th>
+                                   </thead>
+                                   </tr>';
+                        }
+                        print '</tr>';
+                        ?>
+                        <?php
+                        $stmt = $pdo->prepare("SELECT * FROM bidding WHERE [user] = ?");
+                        $stmt->execute([$username]);
+                        $dataBiedingen = $stmt->fetchAll();
+                        foreach($dataBiedingen as $d){ ?>
+                            <tr>
+                            <?php echo '<td>' . $d['productid'] . '</td>'; ?>
+                            <?php echo '<td>' . $d['biddingday'] . '</td>'; ?>
+                            <?php echo '<td> € ' . $d['biddingprice'] . '</td>'; ?>
+                            <?php echo '<td>' . $d['biddingtime'] . '</td>'; ?>
+                            </tr>
+                        <?php
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="col-md-6">
@@ -248,17 +272,22 @@ if (isset($_SESSION['username'])) {
                                     }
                                     ?>
                                     <?php
-                                    $date1 = date("Y-m-d H:i:s");
-                                    $date2 = $d['durationendDay'] . ' ' . $d['durationendTime'];
-                                    if (strtotime($date1) <= strtotime($date2)) {
-                                        ?>
-                                        <td><span class="badge badge-success">Actief</span></td>
-                                        <?php
-                                    } else {
-                                        ?>
-                                        <td><span class="badge badge-danger">Gesloten</span></td>
-                                        <?php
+                                    if($d['auctionClosed'] == 1){
+                                        print '<td><span class="badge badge-danger">Gesloten</span></td>';
+                                    }
+                                    else {
+                                        $date1 = date("Y-m-d H:i:s");
+                                        $date2 = $d['durationendDay'] . ' ' . $d['durationendTime'];
+                                        if (strtotime($date1) <= strtotime($date2)) {
+                                            ?>
+                                            <td><span class="badge badge-success">Actief</span></td>
+                                            <?php
+                                        } else {
+                                            ?>
+                                            <td><span class="badge badge-danger">Gesloten</span></td>
+                                            <?php
 
+                                        }
                                     }
                                     ?>
 
@@ -293,6 +322,11 @@ if (isset($_SESSION['username'])) {
 } else {
     include($_SERVER['DOCUMENT_ROOT'] . '/include/login-message.inc.php');
 }
+
+//if($user['banned'] == 1){
+//    session_destroy();
+//    header('location: login.php');
+//}
 
 
 ?>

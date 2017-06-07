@@ -35,7 +35,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
             <!-- ml-auto >> margin left auto, aligns the div to right -->
         <ul class="navbar-nav ml-auto">
             <!-- ADD IF STATEMENT TO SHOW ADD-NEW BUTTON. ELSE HIDE -->
-            <?php if (!empty($_SESSION['username']) || $debug) { ?>
+            <?php if (!empty($_SESSION['username'])) { ?>
                 <?php if ($user['merchant']) {
                     echo <<<HTML
                     <li class="nav-item">
@@ -45,7 +45,7 @@ HTML;
                 }
                 echo <<<HTML
                     <li class="nav-item">
-                    <a class="nav-link text-white" href="{$app_url}/views/account"><i class="fa fa-user fa-inverse" aria-hidden="true"></i> Account</a>
+                    <a class="nav-link text-white" href="{$app_url}/views/account"><i class="fa fa-user fa-inverse" aria-hidden="true"></i> Hi {$user['firstname']}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="{$app_url}/views/account/logout.php"><i class="fa fa-power-off fa-inverse" aria-hidden="true"></i> Afmelden</a>
