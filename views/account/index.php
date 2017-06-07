@@ -24,6 +24,13 @@ include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
 $merchantStatus = false;
 
+GLOBAL $User;
+
+$stmt = $pdo-> prepare ("UPDATE Object SET Auctionclosed = 1 WHERE seller IN (SELECT username FROM Users WHERE banned = 1))");
+$stmt-> execute();
+
+
+
 /*
  * Einde PHP variable-area
  */
