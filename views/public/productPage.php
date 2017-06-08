@@ -1111,12 +1111,6 @@ function mailUser()
 
 <div class="container">
     <div class="row">
-        <form action="changeAd.php" method="post">
-            <button class="btn btn-default btn-sm" name="changeid"
-                    value="<?= $d['productid'] ?>"><i
-                        class="fa fa-wrench"
-                        style="width: 48px; height: 48px;"></i></button>
-        </form>
         <div class="col-md-9">
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators"
@@ -1190,92 +1184,118 @@ function mailUser()
                 </div>
             </div>
 
-            <?php if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5]) {
-                ?>
-                <div class="well">
-                    <div class="text-right">
-                        <button onclick="showInput()" name="paymentBtn" id="paymentBtn"
-                                class="btn btn-success btn-lg">Bied nu!
-                        </button>
-                    </div>
-                </div>
-                <form method="post">
-            <div id="showInput"
-                 style="display: none" <?php
-            if (!empty($errors['bod'])) {
-                echo "class=\"form-group row has-danger\"";
-            } else if (isset($_POST['bod']) && $_POST['bod'] < selectHighestBid()) {
-                echo "class=\"form-group row has-danger\"";
-            } else {
-                echo "class=form-group row";
+            <?php
+            GLOBAL $pdo;
+            $stmt = $pdo->prepare("SELECT auctionClosed FROM Object WHERE productid=?");
+            $stmt->execute([getAd()[0][6]]);
+            $auctionBanned = $stmt->fetchColumn();
+            if ($auctionBanned == 1) {
+                print("<div class='alert alert-danger'><strong>Oei!</strong> Deze advertentie is al afgelopen, hierdoor
+                kan er nietmeer geboden worden.</div>");
             }
-            //  print((!empty($errors['bod'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                <label class="col-2 col-form-label"></label>
-                <div class="input-inline col-10">
+            else if ($auctionBanned == 0) {
 
-                <input placeholder="€ 0,00" id="bod" name="bod" type="number"
-                       step="0.01"
-                       class="form-control">
-                <div class="form-control-feedback"><?php global $errors;
-                    echo $errors['bod'];
 
-                    ?></div>
-
-                <?php if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5]) {
+                if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5]) {
                     ?>
-                    <button name="submit" id="submit" class="btn btn-lg btn-secondary">Plaats bod!</button>
-                    <hr style="width: auto;">
+                    <div class="well">
+                        <div class="text-right">
+                            <button onclick="showInput()" name="paymentBtn" id="paymentBtn"
+                                    class="btn btn-success btn-lg">Bied nu!
+                            </button>
+                        </div>
+                    </div>
+                    <form method="post">
+                <div id="showInput"
+                     style="display: none" <?php
+                if (!empty($errors['bod'])) {
+                    echo "class=\"form-group row has-danger\"";
+                } else if (isset($_POST['bod']) && $_POST['bod'] < selectHighestBid()) {
+                    echo "class=\"form-group row has-danger\"";
+                } else {
+                    echo "class=form-group row";
+                }
+                //  print((!empty($errors['bod'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <label class="col-2 col-form-label"></label>
+                    <div class="input-inline col-10">
 
-                    </div>
-                    </div>
+                    <input placeholder="€ 0,00" id="bod" name="bod" type="number"
+                           step="0.01"
+                           class="form-control">
+                    <div class="form-control-feedback"><?php global $errors;
+                        echo $errors['bod'];
+
+                        ?></div>
+
+                    <?php if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5]) {
+                        ?>
+                        <button name="submit" id="submit" class="btn btn-lg btn-secondary">Plaats bod!</button>
+                        <hr style="width: auto;">
+
+                        </div>
+                        </div>
+                        </form>
+                        <?php
+                    }
+                } else if (isset($_SESSION['username']) && $_SESSION['username'] == getAd()[0][5]) {
+                    ?>
+                    <h4>U kunt niet op uw eigen product bieden!</h4>
+                    <hr style="width: auto;">
+                    <form action=<?= $app_url . '/views/account/update-advertisement.php' ?> method="post">
+                        <button class="btn btn-default btn-sm" name="changeid"
+                            <?php
+
+                            ?>
+                                value="<?= getAd()[0][6] ?>"><i
+                                    class="fa fa-wrench"
+                                    style="width: 16px; height: 16px;"></i></button>
                     </form>
                     <?php
-                }
-            } else if (isset($_SESSION['username']) && $_SESSION['username'] == getAd()[0][5]) {
-                ?>
-                <h4>U kunt niet op uw eigen product bieden!</h4>
-                <hr style="width: auto;">
-                <?php
 
-            } else {
-                ?>
-                <h4>Meld u eerst aan om een bod te plaatsen!</h4>
-                <hr style="width: auto;">
-                <?php
-            } ?>
+                } else {
+                    ?>
+                    <h4>Meld u eerst aan om een bod te plaatsen!</h4>
+                    <hr style="width: auto;">
+                    <?php
+                } ?>
 
+            </div>
+
+
+            <div class="list-group">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Bod</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    $Bids = getBids();
+                    $i = 0;
+                    foreach ($Bids as $value) {
+                        $i++;
+                        echo "<tr>";
+                        echo "<td>" . $i . "</td>";
+                        echo "<td>" . $value[1] . "</td>";
+                        echo "<td>" . $value[0] . "</td>";
+                        echo "</tr>";
+                    }
+                    ?>
+
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-
-        <div class="list-group">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>User</th>
-                    <th>Bod</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                $Bids = getBids();
-                $i = 0;
-                foreach ($Bids as $value) {
-                    $i++;
-                    echo "<tr>";
-                    echo "<td>" . $i . "</td>";
-                    echo "<td>" . $value[1] . "</td>";
-                    echo "<td>" . $value[0] . "</td>";
-                    echo "</tr>";
-                }
-                ?>
-
-                </tbody>
-            </table>
-        </div>
     </div>
-
 </div>
+<?php
+}
+
+?>
 
 <!-- /.container -->
 
