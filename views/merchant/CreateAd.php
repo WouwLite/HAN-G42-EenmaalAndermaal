@@ -20,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         checkEmptyFields();
         if (checkNoErrors()) {
             saveProductData();
-            echo $_POST['Categories'];
         }
     }
 }
@@ -62,6 +61,16 @@ function checkEmptyFields()
     $errors['title'] = ($_POST['title'] == "") ? "Vul aub een titel in voor de advertentie" : '';
     $errors['description'] = ($_POST['description'] == "") ? "Vul aub een beschrijving in." : '';
     $errors['Categories'] = ($_POST['Categories'] == "") ? "Vul een categorie in.": '';
+    $query = "select ID From [bottom level Categories]";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
+    $children = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+    if(!in_array($_POST['Categories'], $children)){
+        $errors['Categories'] = "Vul aub een geldige categorie in.";
+    }
+
+
     //$errors['foto'] = ($_POST['foto1'] == "") ? "." : '';
     if ($_POST['radio'] == 1) {
         $errors['startprice'] = ($_POST['startprice'] == "") ? "Vul aub een prijs in." : '';
@@ -230,6 +239,7 @@ SQL;
                     $children = $stmt->fetchAll();
                     ?>
                     <input list="categories" class="form-control" name="Categories">
+                    <div class="form-control-feedback"><?= $errors['Categories']??'' ?></div>
                     <datalist id="categories">
                             <?php
                             foreach ($children as $child) {
