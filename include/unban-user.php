@@ -40,7 +40,7 @@ SQL;
                 <div class="modal-body">
                     <p>Weet je zeker dat je het geselecteerde account <strong><span class="username">"Onbekend"</span></strong> wilt deblokkeren?<br></p>
                     <div class="form-group has-danger">
-                        <label for="reason" class="form-control-label">Reden voor onblokkering</label>
+                        <label for="reason" class="form-control-label">Reden voor deblokkering</label>
                         <input type="text" class="form-control form-control-danger" name="reason" required>
                     </div>
                 </div>

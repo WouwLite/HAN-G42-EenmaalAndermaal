@@ -58,9 +58,18 @@ function getHighestId()
 function checkEmptyFields()
 {
     global $errors;
-    global $_POST;
+    global $_POST, $pdo, $getchild;
     $errors['title'] = ($_POST['title'] == "") ? "Vul aub een titel in voor de advertentie" : '';
     $errors['description'] = ($_POST['description'] == "") ? "Vul aub een beschrijving in." : '';
+    $stmt = $pdo->prepare($getchild);
+    $stmt->execute();
+    $children = $stmt->fetchAll();
+    foreach($children as $child){
+        if($_POST['Categories'] != $child){
+            $errors['Categories'] = "Vul aub een bestaande categorie in.";
+        }
+    }
+    $errors['Categories'] = ($_POST['Categories'] == "") ? "Vul een categorie in.": '';
     //$errors['foto'] = ($_POST['foto1'] == "") ? "." : '';
     if ($_POST['radio'] == 1) {
         $errors['startprice'] = ($_POST['startprice'] == "") ? "Vul aub een prijs in." : '';
@@ -206,7 +215,7 @@ function saveProductData()
                         controleer en pas de rode velden aan en probeer het daarna opnieuw</div>");
             }
             ?>
-            <div class="form-group row">
+            <div <?php print((!empty($errors['Categories'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
                 <label class="col-2 col-form-label">Categorie*</label>
                 <div class="col-10">
                     <?php

@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $errors['bod'] = "Vul aub een hoger bod in dan het huidige bod";
     } else if (!empty(selectHighestBid()) && $_POST['bod'] < selectStartPrice()) {
         $errors['bod'] = "Vul aub een hoger bod in de startprijs";
-    } else if($_POST['bod'] > 9999){
+    } else if ($_POST['bod'] > 9999) {
         $errors['bod'] = "Uw account zal nu worden geblokkeerd";
     }
 }
@@ -1050,7 +1050,7 @@ function mailUser()
                                                 <tr>
                                                     <td class="status-cell">
                                                     
-                                                        U heeft <strong>€' . getAd()[0][4] . ' </strong> geboden op: <strong><a href="' . $app_url . '/views/public/productpage.php?link=' . $_GET['link'] . '">'. getAd()[0][0] . '</a></strong>
+                                                        U heeft <strong>€' . getAd()[0][4] . ' </strong> geboden op: <strong><a href="' . $app_url . '/views/public/productpage.php?link=' . $_GET['link'] . '">' . getAd()[0][0] . '</a></strong>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -1114,19 +1114,20 @@ function mailUser()
         </form>
         <div class="col-md-9">
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators"">
-                    <?php
-                    $getPhotos = getPhotos();
-                    foreach ($getPhotos as $i => $value) {
-                        ?>
-                        <li class="<?php if ($i == 0) {
-                            echo "active";
-                        } else {
-                            echo "";
-                        } ?>" data-target="#carourselExampleIndicators" data-slide-to="<?php echo $i ?>"></li>
-                        <?php
-                    }
+                <ol class="carousel-indicators"
+                ">
+                <?php
+                $getPhotos = getPhotos();
+                foreach ($getPhotos as $i => $value) {
                     ?>
+                    <li class="<?php if ($i == 0) {
+                        echo "active";
+                    } else {
+                        echo "";
+                    } ?>" data-target="#carourselExampleIndicators" data-slide-to="<?php echo $i ?>"></li>
+                    <?php
+                }
+                ?>
 
                 </ol>
                 <div class="carousel-inner" role="listbox">
@@ -1143,7 +1144,8 @@ function mailUser()
                                 $picsource = "http://iproject42.icasites.nl/uploads/";
                             }
                             ?>
-                            <img class="d-block img-fluid size mx-auto" src="<?= $picsource ?>/<?php echo $value[0] ?>" style="max-height: 400px; width: auto;">
+                            <img class="d-block img-fluid size mx-auto" src="<?= $picsource ?>/<?php echo $value[0] ?>"
+                                 style="max-height: 400px; width: auto;">
                         </div>
 
                         <?php
@@ -1182,56 +1184,61 @@ function mailUser()
                     </div>
                 </div>
             </div>
-            <div class="well">
-                <div class="text-right">
-                    <button onclick="showInput()" name="paymentBtn" id="paymentBtn"
-                            class="btn btn-success btn-lg">Bied nu!
-                    </button>
-                </div>
-            </div>
-            <form method="post">
-                <div id="showInput"
-                     style="display: none" <?php
-                if (!empty($errors['bod'])) {
-                    echo "class=\"form-group row has-danger\"";
-                } else if (isset($_POST['bod']) && $_POST['bod'] < selectHighestBid()) {
-                    echo "class=\"form-group row has-danger\"";
-                } else {
-                    echo "class=form-group row";
-                }
-                //  print((!empty($errors['bod'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                    <label class="col-2 col-form-label"></label>
-                    <div class="input-inline col-10">
 
-                        <input placeholder="€ 0,00" id="bod" name="bod" type="number"
-                               step="0.01"
-                               class="form-control">
-                        <div class="form-control-feedback"><?php global $errors;
-                            echo $errors['bod'];
-
-                            ?></div>
-
-                        <?php if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5]) {
-                            ?>
-                            <button name="submit" id="submit" class="btn btn-lg btn-secondary">Plaats bod!</button>
-                            <hr style="width: auto;">
-                            <?php echo selectHighestBid();
-                        }
-                            else if(isset($_SESSION['username']) && $_SESSION['username'] == getAd()[0][5]){
-                               ?>
-                                <h4>U kunt niet op uw eigen product bieden!</h4>
-                                <hr style="width: auto;">
-                                <?php
-
-                        } else {
-                            ?>
-                            <h4>Meld u eerst aan om een bod te plaatsen!</h4>
-                                <hr style="width: auto;">
-                            <?php
-                        } ?>
+            <?php if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5]) {
+                ?>
+                <div class="well">
+                    <div class="text-right">
+                        <button onclick="showInput()" name="paymentBtn" id="paymentBtn"
+                                class="btn btn-success btn-lg">Bied nu!
+                        </button>
                     </div>
                 </div>
-            </form>
+                <form method="post">
+            <div id="showInput"
+                 style="display: none" <?php
+            if (!empty($errors['bod'])) {
+                echo "class=\"form-group row has-danger\"";
+            } else if (isset($_POST['bod']) && $_POST['bod'] < selectHighestBid()) {
+                echo "class=\"form-group row has-danger\"";
+            } else {
+                echo "class=form-group row";
+            }
+            //  print((!empty($errors['bod'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                <label class="col-2 col-form-label"></label>
+                <div class="input-inline col-10">
+
+                <input placeholder="€ 0,00" id="bod" name="bod" type="number"
+                       step="0.01"
+                       class="form-control">
+                <div class="form-control-feedback"><?php global $errors;
+                    echo $errors['bod'];
+
+                    ?></div>
+
+                <?php if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5]) {
+                    ?>
+                    <button name="submit" id="submit" class="btn btn-lg btn-secondary">Plaats bod!</button>
+                    <hr style="width: auto;">
+
+                    </div>
+                    </div>
+                    </form>
+                    <?php
+                }
+            } else if (isset($_SESSION['username']) && $_SESSION['username'] == getAd()[0][5]) {
+                ?>
+                <h4>U kunt niet op uw eigen product bieden!</h4>
+                <hr style="width: auto;">
+                <?php
+
+            } else {
+                ?>
+                <h4>Meld u eerst aan om een bod te plaatsen!</h4>
+                <hr style="width: auto;">
+                <?php
+            } ?>
+
         </div>
 
 
