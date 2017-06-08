@@ -39,9 +39,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if (isset($_POST['submit'])) {
         checkBod();
     }
-    if (checkNoErrorBod() && $_POST['bod'] >= selectHighestBid() && $_POST['bod'] > selectStartPrice()) {
+    $startPrice = selectStartPrice();
+    if (isset($startPrice) && checkNoErrorBod() && $_POST['bod'] > selectStartPrice()) {
         saveBid();
-    } else if (!empty(selectHighestBid()) && $_POST['bod'] < selectHighestBid()) {
+    }
+    else if (!isset($startPrice) && checkNoErrorBod() && $_POST['bod'] > selectHighestBid() ){
+        saveBid();
+    }
+    else if (!empty(selectHighestBid()) && $_POST['bod'] < selectHighestBid()) {
         $errors['bod'] = "Vul aub een hoger bod in dan het huidige bod";
     } else if (!empty(selectHighestBid()) && $_POST['bod'] < selectStartPrice()) {
         $errors['bod'] = "Vul aub een hoger bod in de startprijs";
