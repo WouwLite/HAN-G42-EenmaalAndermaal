@@ -70,6 +70,7 @@ $pageTitle = 'Algemene Voorwaarden';
         <p>Wij als EenmaalAndermaal kunnen altijd wijzigingen op de website aanbrengen. Wij zullen er naar streven om wijzigingen tijdig van te voren aan te geven, zodat hier rekening
         mee gehouden kan worden door de gebruikers.</p>
 
+
                 <h5><li>Overige belangrijke voorwaarden</li></h5>
         <p>Wij, EenmaalAndermaal, kunnen de gebruikersvoorwaarden ten allen tijde veranderen. Wij zullen proberen om zo'n verandering binnen een redelijke termijn van invoering aankondigen.
         Dit wordt gedaan zodat gebruikers er tijdig van op de hoogte kunnen zijn. </p>
