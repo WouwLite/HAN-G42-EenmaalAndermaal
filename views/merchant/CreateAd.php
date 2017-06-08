@@ -58,17 +58,9 @@ function getHighestId()
 function checkEmptyFields()
 {
     global $errors;
-    global $_POST, $pdo, $getchild;
+    global $_POST, $pdo;
     $errors['title'] = ($_POST['title'] == "") ? "Vul aub een titel in voor de advertentie" : '';
     $errors['description'] = ($_POST['description'] == "") ? "Vul aub een beschrijving in." : '';
-    $stmt = $pdo->prepare($getchild);
-    $stmt->execute();
-    $children = $stmt->fetchAll();
-    foreach($children as $child){
-        if($_POST['Categories'] != $child){
-            $errors['Categories'] = "Vul aub een bestaande categorie in.";
-        }
-    }
     $errors['Categories'] = ($_POST['Categories'] == "") ? "Vul een categorie in.": '';
     //$errors['foto'] = ($_POST['foto1'] == "") ? "." : '';
     if ($_POST['radio'] == 1) {

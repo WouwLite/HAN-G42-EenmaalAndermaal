@@ -14,7 +14,7 @@ from Object o left outer join productPhoto pp on o.productid=pp.productid
 where o.productid = '$url'");
     $content = array();
     while ($row = $result->fetch()) {
-        $ad = array($row['Title'], $row['description'], $row['Categories'], $row['filename'], $row['biddingprice'], $row['seller']);
+        $ad = array($row['Title'], $row['description'], $row['Categories'], $row['filename'], $row['biddingprice'], $row['seller'], $row['productid']);
         $content[] = $ad;
     }
     return $content;
@@ -40,15 +40,15 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         checkBod();
     }
     $startPrice = selectStartPrice();
-    if (isset($startPrice) && checkNoErrorBod() && $_POST['bod'] > selectStartPrice()) {
+    if (isset($startPrice) && checkNoErrorBod() && (int)$_POST['bod'] > (int)selectStartPrice()) {
         saveBid();
     }
-    else if (!isset($startPrice) && checkNoErrorBod() && $_POST['bod'] > selectHighestBid() ){
+    else if (!isset($startPrice) && checkNoErrorBod() && (int)$_POST['bod'] > (int)selectHighestBid()){
         saveBid();
     }
-    else if (!empty(selectHighestBid()) && $_POST['bod'] < selectHighestBid()) {
+    else if (!empty(selectHighestBid()) && (int)$_POST['bod'] < (int)selectHighestBid()) {
         $errors['bod'] = "Vul aub een hoger bod in dan het huidige bod";
-    } else if (!empty(selectHighestBid()) && $_POST['bod'] < selectStartPrice()) {
+    } else if (!empty(selectHighestBid()) && (int)$_POST['bod'] < (int)selectStartPrice()) {
         $errors['bod'] = "Vul aub een hoger bod in de startprijs";
     } else if ($_POST['bod'] > 9999) {
         $errors['bod'] = "Uw account zal nu worden geblokkeerd";
