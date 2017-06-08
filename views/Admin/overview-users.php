@@ -108,40 +108,38 @@ if (isset($user['username']) && $user['admin'] == 1) {
 <!--                        <td> --><?php //echo $d['birthday']; ?><!--</td>-->
                         <td> <?php echo $d['email']; ?></td>
                         <?php
-                            if($d['merchant'] == 1){
-                                ?>
-                                <td><span class="badge badge-primary">Verkoper</span></td>
-                                <?php
+                            if($d['banned'] == 1) {
+                                echo "<td><span class=\"badge badge-danger\">Verbannen</span></td>";
+                            } else {
+                                if($d['merchant'] == 1){
+                                    echo "<td><span class=\"badge badge-primary\">Verkoper</span></td>";
+                                }
+                                else {
+                                    echo "<td><span class=\"badge badge-default\">Bezoeker</span></td>";
+                                }
                             }
-                            else {
-                                ?>
-                                <td><span class="badge badge-default">Bezoeker</span></td>
-                                <?php
+
+                            if($d['admin'] == 1){
+                                echo "<td><span class=\"badge badge-success\">Beheerder</span></td>";
+                            } else {
+                                echo "<td><span class=\"badge badge-default\">Nee</span></td>";
                             }
-                        ?>
-                        <?php
-                        if($d['admin'] == 1){
                             ?>
-                            <td><span class="badge badge-success">Beheerder</span></td>
-                            <?php
-                        }
-                        else {
-                            ?>
-                            <td><span class="badge badge-default">Nee</span></td>
-                            <?php
-                        }
-                        ?>
                         <td>
 <!--                            <a href=""><span class="badge badge-pill badge-success" style="width: 30px;"><i class="fa fa-wrench fa-sm"></i></span></a>-->
                             <form action="<?=$app_url?>/views/account/update-account.php" method="post" style="display:inline;">
-                                <button class="btn btn-success btn-sm" name="changeusername" value="<?= $d['username']?>"><i class="fa fa-wrench" style="width: 12px"></i></button>
+                                <button class="btn btn-primary btn-sm" name="changeusername" title="Bewerk account" value="<?= $d['username']?>"><i class="fa fa-wrench" style="width: 12px"></i></button>
                             </form>
 
 
 
 <!--                            <a class="btn btn-default btn-sm" href="overview-users.php?id=--><?//= $d['username']; ?><!--"><i class="fa fa-wrench" style="width: 12px"></i></a>-->
-                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" data-user="<?php echo $d['username']; ?>"><i class="fa fa-trash-o fa-sm"></i></button>
-                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#banModal" data-user="<?php echo $d['username']; ?>"><i class="fa fa-ban fa-sm"></i></button>
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" title="Verwijderen" data-user="<?php echo $d['username']; ?>"><i class="fa fa-trash-o fa-sm"></i> </button>
+                            <?php if($d['banned'] == 1): ?>
+                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#unbanModal" title="Ban verwijderen" data-user="<?php echo $d['username']; ?>"><i class="fa fa-undo fa-sm"></i> </button>
+                            <?php else: ?>
+                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#banModal" title="Bannen" data-user="<?php echo $d['username']; ?>"><i class="fa fa-ban fa-sm"></i> </button>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 </tbody>
@@ -166,6 +164,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
     include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/include/delete-user.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/include/ban-user.php');
+    include($_SERVER['DOCUMENT_ROOT'] . '/include/unban-user.php');
 }
 else {
     header ('location: ../account/login.php');
