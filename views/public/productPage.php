@@ -92,7 +92,7 @@ function getPhotos()
     return $photos;
 }
 
-function getlowerbids($prid, $pdo)
+function getlowerbid($prid, $pdo)
 {
     $sqlstmt = <<<SQL
 SELECT email FROM Users WHERE username = (SELECT [user] FROM Bidding WHERE productid = ? and biddingprice = ?)
