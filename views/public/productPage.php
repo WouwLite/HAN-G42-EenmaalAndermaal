@@ -42,11 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $startPrice = selectStartPrice();
     if (isset($startPrice) && checkNoErrorBod() && (int)$_POST['bod'] > (int)selectStartPrice()) {
         saveBid();
-    }
-    else if (!isset($startPrice) && checkNoErrorBod() && (int)$_POST['bod'] > (int)selectHighestBid()){
+    } else if (!isset($startPrice) && checkNoErrorBod() && (int)$_POST['bod'] > (int)selectHighestBid()) {
         saveBid();
-    }
-    else if (!empty(selectHighestBid()) && (int)$_POST['bod'] < (int)selectHighestBid()) {
+    } else if (!empty(selectHighestBid()) && (int)$_POST['bod'] < (int)selectHighestBid()) {
         $errors['bod'] = "Vul aub een hoger bod in dan het huidige bod";
     } else if (!empty(selectHighestBid()) && (int)$_POST['bod'] < (int)selectStartPrice()) {
         $errors['bod'] = "Vul aub een hoger bod in de startprijs";
@@ -1151,7 +1149,6 @@ function mailUser()
                     }
 
                     ?>
-
                 </div>
                 <?php if (count(getPhotos()) > 1) {
                     ?>
@@ -1185,20 +1182,25 @@ function mailUser()
             </div>
 
             <?php
-            GLOBAL $pdo;
-            $stmt = $pdo->prepare("SELECT auctionClosed FROM Object WHERE productid=?");
+            global $pdo;
+            $stmt = $pdo->prepare("SELECT auctionClosed FROM Object where productid = ?");
             $stmt->execute([getAd()[0][6]]);
-            $auctionBanned = $stmt->fetchColumn();
-            if ($auctionBanned == 1) {
-                print("<div class='alert alert-danger'><strong>Oei!</strong> Deze advertentie is al afgelopen, hierdoor
-                kan er nietmeer geboden worden.</div>");
-            }
-            else if ($auctionBanned == 0) {
+            $dataAuctionClosed = $stmt->fetchColumn();
 
+            if ($dataAuctionClosed == 1) {
+                print '<div class="alert alert-danger"><strong>Oei!</strong> Deze veiling is gesloten, hierdoor kunt u geen biedingen meer plaatsen</div>';
+            } else if ($dataAuctionClosed == 0) {
 
                 if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5]) {
                     ?>
+
                     <div class="well">
+                            <form action="<?= $app_url . '/views/account/update-advertisement.php'?>" method="post">
+                                <button class="btn btn-default btn-sm" name="changeid"
+                                        value="<?= getAd()[0][6]?>"><i
+                                            class="fa fa-wrench"
+                                            style="width: 16px; height: 16px;"></i></button>
+                            </form>
                         <div class="text-right">
                             <button onclick="showInput()" name="paymentBtn" id="paymentBtn"
                                     class="btn btn-success btn-lg">Bied nu!
@@ -1241,61 +1243,47 @@ function mailUser()
                     ?>
                     <h4>U kunt niet op uw eigen product bieden!</h4>
                     <hr style="width: auto;">
-                    <form action=<?= $app_url . '/views/account/update-advertisement.php' ?> method="post">
-                        <button class="btn btn-default btn-sm" name="changeid"
-                            <?php
-
-                            ?>
-                                value="<?= getAd()[0][6] ?>"><i
-                                    class="fa fa-wrench"
-                                    style="width: 16px; height: 16px;"></i></button>
-                    </form>
                     <?php
-
                 } else {
                     ?>
                     <h4>Meld u eerst aan om een bod te plaatsen!</h4>
                     <hr style="width: auto;">
                     <?php
-                } ?>
+                }
+            } ?>
 
-            </div>
-
-
-            <div class="list-group">
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>User</th>
-                        <th>Bod</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    $Bids = getBids();
-                    $i = 0;
-                    foreach ($Bids as $value) {
-                        $i++;
-                        echo "<tr>";
-                        echo "<td>" . $i . "</td>";
-                        echo "<td>" . $value[1] . "</td>";
-                        echo "<td>" . $value[0] . "</td>";
-                        echo "</tr>";
-                    }
-                    ?>
-
-                    </tbody>
-                </table>
-            </div>
         </div>
 
-    </div>
-</div>
-<?php
-}
 
-?>
+        <div class="list-group">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>User</th>
+                    <th>Bod</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                $Bids = getBids();
+                $i = 0;
+                foreach ($Bids as $value) {
+                    $i++;
+                    echo "<tr>";
+                    echo "<td>" . $i . "</td>";
+                    echo "<td>" . $value[1] . "</td>";
+                    echo "<td>" . $value[0] . "</td>";
+                    echo "</tr>";
+                }
+                ?>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
 
 <!-- /.container -->
 

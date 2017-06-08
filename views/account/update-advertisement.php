@@ -186,10 +186,15 @@ if (strtotime($date1) <= strtotime($date2)) {
             <div class="form-group row">
                 <label class="col-2 col-form-label">Upload tot 4 fotos:</label>
                 <div class="col-10">
-                    <input type="file" name="foto1" id="foto2" class="form-control">
-                    <input type="file" name="foto2" id="foto1" class="form-control">
-                    <input type="file" name="foto3" id="foto3" class="form-control">
-                    <input type="file" name="foto4" id="foto4" class="form-control">
+                    <?php
+                    $stmt = $pdo->prepare("SELECT filename FROM productPhoto WHERE productid = ?");
+                    $stmt->execute([$dataAd['productid']]);
+                    $dataPictures = $stmt->fetchAll();
+                    ?>
+                    <input type="file" name="foto1" id="foto2" class="form-control" value="HOIDITISEENTEST">
+                    <input type="file" name="foto2" id="foto1" class="form-control" value="<?= $dataPictures?>">
+                    <input type="file" name="foto3" id="foto3" class="form-control" value="<?= $dataPictures?>">
+                    <input type="file" name="foto4" id="foto4" class="form-control" value="<?= $dataPictures?>">
                 </div>
             </div>
             <div <?php print((!empty($errors['startprice'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
