@@ -1111,12 +1111,6 @@ function mailUser()
 
 <div class="container">
     <div class="row">
-        <form action="changeAd.php" method="post">
-            <button class="btn btn-default btn-sm" name="changeid"
-                    value="<?= $d['productid'] ?>"><i
-                        class="fa fa-wrench"
-                        style="width: 48px; height: 48px;"></i></button>
-        </form>
         <div class="col-md-9">
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators"
@@ -1235,6 +1229,15 @@ function mailUser()
                 ?>
                 <h4>U kunt niet op uw eigen product bieden!</h4>
                 <hr style="width: auto;">
+                <form action=<?= $app_url . '/views/account/update-advertisement.php'?> method="post">
+                    <button class="btn btn-default btn-sm" name="changeid"
+                            <?php
+
+                            ?>
+                            value="<?= getAd()[0][6] ?>"><i
+                                class="fa fa-wrench"
+                                style="width: 16px; height: 16px;"></i></button>
+                </form>
                 <?php
 
             } else {
