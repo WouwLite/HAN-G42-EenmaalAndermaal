@@ -7,14 +7,14 @@ function getAd()
     global $url;
     $url = $_GET['link'];
     global $pdo;
-    $result = $pdo->query("select o.productid, Title, description, durationbeginDay, durationbeginTime, durationendDay, durationendTime, Categories, pp.filename, (select max(biddingprice)
+    $result = $pdo->query("select o.productid, Title, seller, description, durationbeginDay, durationbeginTime, durationendDay, durationendTime, Categories, pp.filename, (select max(biddingprice)
 																																from Bidding b
 																																where o.productid = b.productid) as biddingprice
 from Object o left outer join productPhoto pp on o.productid=pp.productid
 where o.productid = '$url'");
     $content = array();
     while ($row = $result->fetch()) {
-        $ad = array($row['Title'], $row['description'], $row['Categories'], $row['filename'], $row['biddingprice']);
+        $ad = array($row['Title'], $row['description'], $row['Categories'], $row['filename'], $row['biddingprice'], $row['seller']);
         $content[] = $ad;
     }
     return $content;
@@ -1211,14 +1211,22 @@ function mailUser()
 
                             ?></div>
 
-                        <?php if (isset($_SESSION['username'])) {
+                        <?php if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5]) {
                             ?>
                             <button name="submit" id="submit" class="btn btn-lg btn-secondary">Plaats bod!</button>
                             <hr style="width: auto;">
                             <?php echo selectHighestBid();
+                        }
+                            else if(isset($_SESSION['username']) && $_SESSION['username'] == getAd()[0][5]){
+                               ?>
+                                <h4>U kunt niet op uw eigen product bieden!</h4>
+                                <hr style="width: auto;">
+                                <?php
+
                         } else {
                             ?>
                             <h4>Meld u eerst aan om een bod te plaatsen!</h4>
+                                <hr style="width: auto;">
                             <?php
                         } ?>
                     </div>

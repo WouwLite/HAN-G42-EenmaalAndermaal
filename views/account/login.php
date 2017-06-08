@@ -33,6 +33,7 @@ function getRealPOST()
         $vars[$name] = $value;
     }
     return $vars;
+
 }
 
 
