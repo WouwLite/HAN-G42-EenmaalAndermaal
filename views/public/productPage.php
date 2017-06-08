@@ -103,8 +103,13 @@ SQL;
     return $email;
 }
 
-$subject = "U bent overboden!";
-$message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+function saveBid()
+{
+    global $pdo, $url, $app_url;
+    $email = getlowerbid($url, $pdo);
+    if ($email) {
+        $subject = "U bent overboden!";
+        $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -530,7 +535,7 @@ $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http
                                             <table class="body-text">
                                                 <tr>
                                                     <td class="body-text-cell">
-                                                        Oh nee! Uw laatste bod op ' . getad()[0][0] . ' is overboden door ' . $_SESSION['username'] . ', klik op de link hier onder om het bod te bekijken.
+                                                        Oh nee! Uw laatste bod op <strong>' . getad()[0][0] . '</strong> is overboden door <strong>' . $_SESSION['username'] . '</strong>, klik op de link hier onder om het bod te bekijken.
                                                     </td>
                                                 </tr>
                                             </table>
@@ -541,7 +546,7 @@ $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http
                                             <table class="status" bgcolor="#fffeea" cellspacing="0">
                                                 <tr>
                                                     <td class="status-cell">
-                                                        <a href="' . $app_url . $_GET['link'] . '"></a>
+                                                        <a href="' . $app_url . '/views/public/productpage.php?link=' . $_GET['link'] . '">' . getad()[0][0] . '</a>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -584,22 +589,17 @@ $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http
 
 </body>
 </html>';
+        $headers = 'From: noreply@iproject42.icasites.nl' . "\r\n";
+        $headers .= "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        mail($email, $subject, $message, $headers);
+    }
 
-function saveBid()
-{
-    global $pdo, $url, $message, $subject;
     $stmt = "INSERT INTO Bidding(productid, biddingprice, [user], biddingday, biddingtime)
              VALUES (?, ?, ?, ?, ?)";
     $addBid = $pdo->prepare($stmt);
     if ($addBid->execute([$url, $_POST['bod'], $_SESSION['username'], date("Y-m-d"), date("H:i:s")])) {
         mailUser();
-        $email = getlowerbid($url, $pdo);
-        if ($email) {
-            $headers = 'From: noreply@iproject42.icasites.nl' . "\r\n";
-            $headers .= "MIME-Version: 1.0" . "\r\n";
-            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-            mail($email, $subject, $message, $headers);
-        }
         //header("Refresh:0");
     }
 }
