@@ -42,7 +42,7 @@ order by durationendDay, durationendTime";
                 $thumbnail = $stmt->fetchColumn();
                 ?>
                 <div class="col-md-3 col-sm-6 hero-feature">
-                    <div class="img-thumbnail">
+                    <div class="img-thumbnail ">
                         <?php
                         if (substr($thumbnail, 0, 3) === "dt_") {
                             $picsource = "http://iproject42.icasites.nl/pics/";
@@ -50,9 +50,11 @@ order by durationendDay, durationendTime";
                             $picsource = "http://iproject42.icasites.nl/uploads/";
                         }
                         ?>
-                        <img style="max-width: 80%; height: 200px;" src="<?= $picsource ?><?= $thumbnail; ?>"
+                        <div class="text-center">
+                        <img style="max-width: 100%; height: 200px;" src="<?= $picsource ?><?= $thumbnail; ?>"
                              class="img-fluid"
                              alt="<?php echo $value[3] ?>">
+                        </div>
                         <div class="figure-caption">
                             <h3>
                                 <?php echo substr($value[0], 0, 30) ?>

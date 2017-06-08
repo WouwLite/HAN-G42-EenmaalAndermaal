@@ -24,6 +24,30 @@ SQL;
     $delstmt = $pdo->prepare($delsql);
     $delstmt->execute([$_POST['banUser']]);
 }
+
+mailUsers();
+
+function mailUsers(){
+    global $pdo;
+    $stmt = $pdo->prepare("SELECT DISTINCT email
+                                    FROM Users  
+                                    WHERE username in ( SELECT [user]
+                                    FROM Bidding
+                                    WHERE productid in (SELECT productid
+                                                        FROM Object
+                                                        WHERE Seller = ?))");
+    $stmt->execute([$_POST['banUser']]);
+    $userEmails = $stmt->fetchAll();
+
+    $subject = "EenmaalAndermaal: veiling onderbroken.";
+    $message = "Uw bod op veiling: '...' is verwijderd omdat de verkoper is geblokkeerd";
+    $headers = 'From: noreply@iproject42.icasites.nl';
+
+    foreach($userEmails as $mail){
+        sendEmail();
+        mail($mail[0], $subject, $message, $headers);
+    }
+}
 ?>
 
 

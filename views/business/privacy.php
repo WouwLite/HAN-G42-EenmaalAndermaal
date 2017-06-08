@@ -4,7 +4,7 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
-$pageTitle = 'Privacybeleid';
+$pageTitle = 'Algemene Voorwaarden';
 
 ?>
 <div class="container-float">
@@ -18,14 +18,10 @@ $pageTitle = 'Privacybeleid';
     <h1><?=$pageTitle?></h1>
     <h3>EenmaalAndermaal (iConcepts)</h3>
 
-    <em>
-        Versie 1<br>
-        Deze pagina is voor het laatst aangepast op 02-06-2017<br>
-    </em>
     <br>
 
     <div>
-        Wij zijn er van bewust dat u vertrouwen stelt in ons. Wij zien het dan ook als onze verantwoordelijkheid om uw privacy te beschermen. Op deze pagina laten we u weten welke gegevens we verzamelen als u onze website gebruikt, waarom we deze gegevens verzamelen en hoe we hiermee uw gebruikservaring verbeteren. Zo snapt u precies hoe wij werken.
+
     </div>
     <br>
     <div>

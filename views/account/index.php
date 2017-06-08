@@ -31,18 +31,7 @@ $stmt = $pdo-> prepare ("update object set auctionClosed = 1
                                   where Seller IN (select username from users where banned = 1)");
 $stmt-> execute();
 
-//mailUsers();
 
-function mailUsers(){
-    global $pdo;
-    $stmt = $pdo-> prepare("SELECT email FROM users WHERE username IN(SELECT [user] FROM BIDDING WHERE  )");
-
-
-    $headers = 'From: noreply@iproject42.icasites.nl' . "\r\n";
-    $headers .= "MIME-Version: 1.0" . "\r\n";
-    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-    mail($_POST['email'], $subject, $message, $headers);
-}
 
 /*
  * Einde PHP variable-area
@@ -263,11 +252,15 @@ if (isset($_SESSION['username'])) {
                                     <td> <?php echo $d['title']; ?></td>
                                     <td> <?php echo $d['durationbeginDay']; ?></td>
                                     <?php
-                                    if ($d['sellingprice'] == NULL) {
+                                    $id = $d['productid'];
+                                    $stmt = $pdo->prepare("SELECT MAX(biddingprice) FROM Bidding WHERE productid = ?");
+                                    $stmt->execute([$d['productid']]);
+                                    $dataId = $stmt->fetchColumn();
+                                    if ($dataId == NULL) {
                                         print '<td><i>Nog geen biedingen</i></td>';
                                     } else {
                                         ?>
-                                        <td>€ <?php $d['sellingprice']; ?></td>
+                                        <td>€ <?= $dataId; ?></td>
                                         <?php
                                     }
                                     ?>

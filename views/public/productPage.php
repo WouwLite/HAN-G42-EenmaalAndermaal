@@ -606,6 +606,7 @@ function saveBid()
 
 function mailUser()
 {
+    global $app_url;
     $subject = "EenmaalAndermaal: Uw bieding is succesvol geplaatst.";
     $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -1039,14 +1040,23 @@ function mailUser()
                                         <td class="body-padding"></td>
                                         <td class="body-padded">
                                             <table class="body-text">
+                                                
+                                            </table>
+                                          <table class="status-container single">
+                                          <tr>
+                                        <td class="status-padding"></td>
+                                        <td>
+                                            <table class="status" bgcolor="#fffeea" cellspacing="0">
                                                 <tr>
-                                                    <td class="body-text-cell">
-                                                    U heeft succesvol een bod geplaatst (€ bedrag) op de volgende advertentie: <br>
-                                                    "Titel van de advertentie"
+                                                    <td class="status-cell">
+                                                    
+                                                        U heeft <strong>€' . getAd()[0][4] . ' </strong> geboden op: <strong><a href="' . $app_url . '/views/public/productpage.php?link=' . $_GET['link'] . '">'. getAd()[0][0] . '</a></strong>
                                                     </td>
                                                 </tr>
                                             </table>
-                                          <table class="status-container single">
+                                        </td>
+                                        <td class="status-padding"></td>
+                                    </tr>
                                 </table>
                         
                                             <table class="body-signature-block">
@@ -1133,8 +1143,7 @@ function mailUser()
                                 $picsource = "http://iproject42.icasites.nl/uploads/";
                             }
                             ?>
-                            <img class="d-block img-fluid size" src="<?= $picsource ?>/<?php echo $value[0] ?>" style="max-height: 400px; width:100%;">
-
+                            <img class="d-block img-fluid size mx-auto" src="<?= $picsource ?>/<?php echo $value[0] ?>" style="max-height: 400px; width: auto;">
                         </div>
 
                         <?php
