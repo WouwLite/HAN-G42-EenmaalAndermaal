@@ -79,8 +79,8 @@ if (isset($user['username']) && $user['admin'] == 1) {
             <?php
             }
             ?>
-        <div class="activeAds" style="overflow-x: auto; overflow-y: auto; height: 15em;">
-            <table class="table table-sm table-striped table-bordered" style="overflow-x: auto; overflow-y: auto; height: 15em;">
+        <div class="activeAds" style="overflow-x: auto; overflow-y: auto; height: 100%;">
+            <table class="table table-sm table-striped table-bordered" style="overflow-x: auto; overflow-y: auto; height: 50%;">
                 <tbody>
                 <thead>
                 <th>Product id</th>
@@ -101,7 +101,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
                 <th>Eind datum</th>
                 <th>Eind tijd</th>
                 <th>Status</th>
-                <th>Verkoop prijs</th>
+<!--                <th>Verkoop prijs</th>-->
                 <th>Categorie</th>
                 <th>Bewerk</th>
                 </thead>
@@ -136,15 +136,15 @@ if (isset($user['username']) && $user['admin'] == 1) {
 <!--                            <td> --><?php //echo $d['country']; ?><!--</td>-->
                             <td> <?php echo $d['duration']; ?></td>
                             <td> <?php echo $d['durationbeginDay']; ?></td>
-                            <td> <?php echo $d['durationbeginTime']; ?></td>
+<!--                            <td> --><?php //echo $d['durationbeginTime']; ?><!--</td>-->
 <!--                            <td> --><?php //echo $d['shippingcosts']; ?><!--</td>-->
 <!--                            <td> --><?php //echo $d['shippinginstructions']; ?><!--</td>-->
                             <td> <?php echo $d['Seller']; ?></td>
 <!--                            <td> --><?php //echo $d['Buyer']; ?><!--</td>-->
                             <td> <?php echo $d['durationendDay']; ?></td>
-                            <td> <?php echo $d['durationendTime']; ?></td>
+<!--                            <td> --><?php //echo $d['durationendTime']; ?><!--</td>-->
                             <td><span class="badge badge-success">Actief</span></td>
-                            <td><?php echo $d['sellingprice']; ?></td>
+<!--                            <td>--><?php //echo $d['sellingprice']; ?><!--</td>-->
                             <td><?php echo $d['Categories']; ?></td>
                             <td>
                                 <form action="../account/update-advertisement.php" method="post" style="display:inline;">
@@ -210,28 +210,28 @@ if (isset($user['username']) && $user['admin'] == 1) {
                 <?php
             }
             ?>
-        <div class="closedAds" style="overflow-x: auto; overflow-y: auto; height: 15em;">
+        <div class="closedAds" style="overflow-x: auto; overflow-y: auto; height: 100%;">
             <table class="table table-sm table-striped table-bordered"
                    style="height: 15em; overflow-x: auto; overflow-y: auto;">
                 <tbody>
                 <thead>
                 <th>Product id</th>
                 <th>Titel</th>
-                <th>Beschrijving</th>
+<!--                <th>Beschrijving</th>-->
                 <th>Start prijs</th>
-                <th>Betaal methode</th>
-                <th>Betaal instructie</th>
-                <th>Stad</th>
-                <th>Land</th>
-                <th>Lengte</th>
-                <th>Datum</th>
-                <th>Tijd</th>
-                <th>Verzendkosten</th>
-                <th>Verzend instructies</th>
+<!--                <th>Betaal methode</th>-->
+<!--                <th>Betaal instructie</th>-->
+<!--                <th>Stad</th>-->
+<!--                <th>Land</th>-->
+<!--                <th>Lengte</th>-->
+                <th>duur</th>
+<!--                <th>Tijd</th>-->
+<!--                <th>Verzendkosten</th>-->
+<!--                <th>Verzend instructies</th>-->
                 <th>Verkoper</th>
                 <th>Koper</th>
                 <th>Eind datum</th>
-                <th>Eind tijd</th>
+<!--                <th>Eind tijd</th>-->
                 <th>Status</th>
                 <th>Verkoop prijs</th>
                 <th>Categorie</th>
@@ -252,21 +252,21 @@ if (isset($user['username']) && $user['admin'] == 1) {
                         <tr>
                             <td> <?php echo $d['productid']; ?></td>
                             <td> <?php echo substr($d['title'], 0, 20) . "..."; ?></td>
-                            <td> <?php echo substr($d['description'], 0, 20) . "..."; ?></td>
+<!--                            <td> --><?php //echo substr($d['description'], 0, 20) . "..."; ?><!--</td>-->
                             <td> <?php echo $d['startprice']; ?></td>
-                            <td> <?php echo $d['paymentmethodNumber']; ?></td>
-                            <td> <?php echo $d['paymentinstruction']; ?></td>
-                            <td> <?php echo $d['city']; ?></td>
-                            <td> <?php echo $d['country']; ?></td>
+<!--                            <td> --><?php //echo $d['paymentmethodNumber']; ?><!--</td>-->
+<!--                            <td> --><?php //echo $d['paymentinstruction']; ?><!--</td>-->
+<!--                            <td> --><?php //echo $d['city']; ?><!--</td>-->
+<!--                            <td> --><?php //echo $d['country']; ?><!--</td>-->
                             <td> <?php echo $d['duration']; ?></td>
-                            <td> <?php echo $d['durationbeginDay']; ?></td>
-                            <td> <?php echo $d['durationbeginTime']; ?></td>
-                            <td> <?php echo $d['shippingcosts']; ?></td>
-                            <td> <?php echo $d['shippinginstructions']; ?></td>
+<!--                            <td> --><?php //echo $d['durationbeginDay']; ?><!--</td>-->
+<!--                            <td> --><?php //echo $d['durationbeginTime']; ?><!--</td>-->
+<!--                            <td> --><?php //echo $d['shippingcosts']; ?><!--</td>-->
+<!--                            <td> --><?php //echo $d['shippinginstructions']; ?><!--</td>-->
                             <td> <?php echo $d['Seller']; ?></td>
                             <td> <?php echo $d['Buyer']; ?></td>
                             <td> <?php echo $d['durationendDay']; ?></td>
-                            <td> <?php echo $d['durationendTime']; ?></td>
+<!--                            <td> --><?php //echo $d['durationendTime']; ?><!--</td>-->
                             <td><span class="badge badge-danger">Gesloten</span></td>
                             <td><?php echo $d['sellingprice']; ?></td>
                             <td><?php echo $d['Categories']; ?></td>
