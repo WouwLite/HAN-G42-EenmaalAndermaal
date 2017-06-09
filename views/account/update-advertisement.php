@@ -122,7 +122,7 @@ if (strtotime($date1) <= strtotime($date2)) {
         </ol>
     </div>
     <div class="col-10">
-        <a href="<?= $app_url ?>" class="btn btn-info btn-lg" role="button" aria-pressed="true">Terug</a>
+        <button class="btn btn-info btn-lg" role="button" aria-pressed="true" onclick="goBack()">Terug</button>
     </div>
 
     <div class="container main-part">
@@ -303,6 +303,12 @@ if (strtotime($date1) <= strtotime($date2)) {
             document.getElementById("minimum-bid-price").disabled = true;
             document.getElementById("radio1").checked = false;
             document.getElementById("minimum-bid-price").value = "€ 0,00";
+        }
+    </script>
+
+    <script>
+        function goBack() {
+            window.history.back();
         }
     </script>
 
