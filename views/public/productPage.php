@@ -2,19 +2,21 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/style.inc.php');
+
+global $user;
 function getAd()
 {
     global $url;
     $url = $_GET['link'];
     global $pdo;
-    $result = $pdo->query("select o.productid, Title, seller, description, durationbeginDay, durationbeginTime, durationendDay, durationendTime, Categories, pp.filename, (select max(biddingprice)
+    $result = $pdo->query("select o.productid, Title, seller, description, durationbeginDay, durationbeginTime, durationendDay, durationendTime, Categories, pp.filename,  (select max(biddingprice)
 																																from Bidding b
 																																where o.productid = b.productid) as biddingprice
 from Object o left outer join productPhoto pp on o.productid=pp.productid
 where o.productid = '$url'");
     $content = array();
     while ($row = $result->fetch()) {
-        $ad = array($row['Title'], $row['description'], $row['Categories'], $row['filename'], $row['biddingprice'], $row['seller'], $row['productid']);
+        $ad = array($row['Title'], $row['description'], $row['Categories'], $row['filename'], $row['biddingprice'], $row['seller'], $row['productid'], $row['durationendDay']);
         $content[] = $ad;
     }
     return $content;
@@ -1170,13 +1172,17 @@ function mailUser()
                     <div class="figure-caption">
                         <h4 class="pull-right"><?php
                             if (empty(selectHighestBid())) {
-                                echo selectStartPrice();
+                                echo 'Begin met bieden vanaf: € ' . selectStartPrice();
                             } else {
-                                echo selectHighestBid();
+                                echo 'Huidig bod: € ' . selectHighestBid();
                             }
                             ?></h4>
-                        <h4><?php echo getAd()[0][0] ?></h4>
-                        <p><?php echo getAd()[0][1] ?></p>
+                        <h4><?php print '<strong>Verkoper: </strong> ' . getAd()[0][5]?></h4>
+                        <h4><?php print '<strong>Titel: </strong>' . getAd()[0][0]; ?></h4>
+                        <?php print '<br><h5><strong>Beschrijving: </strong></h5>' . '<p>' .  getAd()[0][1] . '</p>' ?>
+                        <h4 class="pull-right"><?php
+                            print 'Einddatum: ' . getAd()[0][7];
+                            ?></h4>
                     </div>
                 </div>
             </div>
@@ -1188,19 +1194,25 @@ function mailUser()
             $dataAuctionClosed = $stmt->fetchColumn();
 
             if ($dataAuctionClosed == 1) {
-                print '<div class="alert alert-danger"><strong>Oei!</strong> Deze veiling is gesloten, hierdoor kunt u geen biedingen meer plaatsen</div>';
+                print '<br>
+                            <div class="alert alert-danger"><strong>Oei!</strong> Deze veiling is gesloten, hierdoor kunt u geen biedingen meer plaatsen</div>';
             } else if ($dataAuctionClosed == 0) {
+            if(isset($_SESSION['username']) AND $_SESSION['username'] == getAd()[0][5]) {
+                ?>
+                <form action="<?= $app_url ?>/views/account/update-advertisement.php" method="post">
+                    <button class="btn btn-default btn-sm" name="changeid"
+                            value="<?= getAd()[0][6] ?>"><i
+                                class="fa fa-wrench"
+                                style="width: 16px; height: 16px;"></i></button>
+                </form>
+                <?php
 
-                if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5]) {
+            }
+
+            else if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5] || $user['admin'] == 1) {
                     ?>
 
                     <div class="well">
-                            <form action="<?= $app_url . '/views/account/update-advertisement.php'?>" method="post">
-                                <button class="btn btn-default btn-sm" name="changeid"
-                                        value="<?= getAd()[0][6]?>"><i
-                                            class="fa fa-wrench"
-                                            style="width: 16px; height: 16px;"></i></button>
-                            </form>
                         <div class="text-right">
                             <button onclick="showInput()" name="paymentBtn" id="paymentBtn"
                                     class="btn btn-success btn-lg">Bied nu!
