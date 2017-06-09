@@ -200,11 +200,12 @@ if (isset($_SESSION['username'])) {
                         foreach($dataBiedingen as $d){ ?>
                             <tr>
                                 <?php
-                                $stmt = $pdo->prepare("SELECT title from Object where productid = ?");
+                                $stmt = $pdo->prepare("SELECT title,auctionClosed from Object where productid = ?");
                                 $stmt->execute([$d['productid']]);
-                                $productTitle = $stmt->fetchColumn();
+                                $productData = $stmt->fetch(PDO::FETCH_ASSOC);
+
                                 ?>
-                                <?php echo '<td><a href="' . $app_url . '/views/public/productpage.php/?link=' . $d['productid'] . '">' . $productTitle . '</a></td>'; ?>
+                                <?php echo $productData['auctionClosed'] ? '<td><strike>' . $productData['title'] . '</strike></td>' : '<td><a href="' . $app_url . '/views/public/productpage.php/?link=' . $d['productid'] . '">' . $productData['title'] . '</a></td>'; ?>
                             <?php echo '<td>' . $d['biddingday'] . '</td>'; ?>
                             <?php echo '<td> € ' . $d['biddingprice'] . '</td>'; ?>
                                 <?php echo '<td>' . substr($d['biddingtime'], 0, 8) . '</td>'; ?>
