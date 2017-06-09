@@ -6,7 +6,7 @@ require_once ($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST' and isset($_POST['deleteUser'])) {
     $vars = getRealPOST();
     $sql = <<<SQL
-SELECT email FROM Users WHERE username = ?
+SELECT email, admin FROM Users WHERE username = ?
 SQL;
 
     $stmt = $pdo->prepare($sql);
@@ -26,7 +26,6 @@ SQL;
     $delstmt->execute([$_POST['deleteUser']]);
 }
 ?>
-
 
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteAdModal" aria-hidden="true">
     <div class="modal-dialog" role="document">

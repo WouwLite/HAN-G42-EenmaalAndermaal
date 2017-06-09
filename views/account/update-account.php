@@ -119,224 +119,228 @@ function updateUserData()
     }
 }
 
+$pageTitle = 'Wijzig account';
+
 if(isset($_SESSION['username'])){
 
     ?>
-    <!DOCTYPE html>
-    <html>
+<!DOCTYPE html>
+<html>
     <head>
-        <title>Account aanpassen</title>
+        <title><?=$pageTitle?></title>
     </head>
 
     <body>
+        <div class="container-float">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="<?=$app_url?>">Thuis</a></li>
+                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                <li class="breadcrumb-item active"><?=$pageTitle?></li>
+            </ol>
+        </div>
 
-    <div class="container-float">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="<?= $app_url ?>">Thuis</a></li>
-            <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-            <li class="breadcrumb-item active">Acount wijzigen</li>
-        </ol>
-    </div>
-    <div class="col-10">
-        <a href="<?= $app_url ?>" class="btn btn-info btn-lg" role="button" aria-pressed="true">Terug</a>
-    </div>
+        <div class="col-10">
+            <button class="btn btn-info btn-lg" role="button" aria-pressed="true" onclick="goBack()">Terug</button>
+        </div>
 
-    <div class="container main-part">
-        <form action="#" method="post">
-            <div class="form-group row">
-                <label class="col-2 col-form-label"></label>
-                <div class="col-8">
-                    <h1 class="product-title-page">Wijzig account</h1>
+        <div class="container main-part">
+            <form action="#" method="post">
+                <div class="form-group row">
+                    <label class="col-2 col-form-label"></label>
+                    <div class="col-8">
+                        <h1 class="product-title-page"><?=$pageTitle?></h1>
+                    </div>
                 </div>
-            </div>
-            <?php
-            global $updateSuccess;
-            if ($_SERVER['REQUEST_METHOD'] == "POST" and checkNoErrors() and $updateSuccess == true) {
-                print("<div class='alert alert-success'><strong>Gelukt<br></strong> Uw account is succesvol bijgewerkt.</div>");
-            } else if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors() and $updateSuccess == false) {
-                print("<div class='alert alert-danger'><strong>Oei!</strong> Er ging iets mis tijdens het bijwerken van uw account, 
-                            controleer en pas de rode velden aan en probeer het daarna opnieuw</div>");
-            }
-            ?>
-            <div <?php print((!empty($errors['firstname'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                <label class="col-2 col-form-label">Voornaam:*</label>
-                <div class="col-10">
-                    <input id="title" type="text" id="firstname" name="firstname" class="form-control" placeholder="Voornaam"
-                           value="<?php echo $dataUser['firstname']; ?>"
-                           autofocus>
-                    <div class="form-control-feedback"><?php global $errors;
-                        echo $errors['firstname'] ?></div>
+                <?php
+                global $updateSuccess;
+                if ($_SERVER['REQUEST_METHOD'] == "POST" and checkNoErrors() and $updateSuccess == true) {
+                    print("<div class='alert alert-success'><strong>Gelukt<br></strong> Uw account is succesvol bijgewerkt.</div>");
+                } else if ($_SERVER['REQUEST_METHOD'] == "POST" and !checkNoErrors() and $updateSuccess == false) {
+                    print("<div class='alert alert-danger'><strong>Oei!</strong> Er ging iets mis tijdens het bijwerken van uw account, 
+                                controleer en pas de rode velden aan en probeer het daarna opnieuw</div>");
+                }
+                ?>
+                <div <?php print((!empty($errors['firstname'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <label class="col-2 col-form-label">Voornaam:*</label>
+                    <div class="col-10">
+                        <input id="title" type="text" id="firstname" name="firstname" class="form-control" placeholder="Voornaam"
+                               value="<?php echo $dataUser['firstname']; ?>"
+                               autofocus>
+                        <div class="form-control-feedback"><?php global $errors;
+                            echo $errors['firstname'] ?></div>
+                    </div>
                 </div>
-            </div>
 
-            <input type="hidden" value="<?php echo $_POST['changeusername']??$_SESSION['username']; ?>" name="changeusername"
-                   id="changeusername">
+                <input type="hidden" value="<?php echo $_POST['changeusername']??$_SESSION['username']; ?>" name="changeusername"
+                       id="changeusername">
 
-            <div <?php print((!empty($errors['lastname'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                <label class="col-2 col-form-label">Achternaam:*</label>
-                <div class="col-10">
-                    <input id="title" type="text" id="lastname" name="lastname" class="form-control" placeholder="Achternaam"
-                           value="<?php echo $dataUser['lastname']; ?>"
-                           autofocus>
-                    <div class="form-control-feedback"><?php global $errors;
-                        echo $errors['lastname'] ?></div>
+                <div <?php print((!empty($errors['lastname'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <label class="col-2 col-form-label">Achternaam:*</label>
+                    <div class="col-10">
+                        <input id="title" type="text" id="lastname" name="lastname" class="form-control" placeholder="Achternaam"
+                               value="<?php echo $dataUser['lastname']; ?>"
+                               autofocus>
+                        <div class="form-control-feedback"><?php global $errors;
+                            echo $errors['lastname'] ?></div>
+                    </div>
                 </div>
-            </div>
 
-            <div <?php print((!empty($errors['address1'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                <label class="col-2 col-form-label">Adres 1:*</label>
-                <div class="col-10">
-                    <input id="title" type="text" id="address1" name="address1" class="form-control" placeholder="Adres 1"
-                           value="<?php echo $dataUser['address1']; ?>"
-                           autofocus>
-                    <div class="form-control-feedback"><?php global $errors;
-                        echo $errors['address1'] ?></div>
+                <div <?php print((!empty($errors['address1'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <label class="col-2 col-form-label">Adres 1:*</label>
+                    <div class="col-10">
+                        <input id="title" type="text" id="address1" name="address1" class="form-control" placeholder="Adres 1"
+                               value="<?php echo $dataUser['address1']; ?>"
+                               autofocus>
+                        <div class="form-control-feedback"><?php global $errors;
+                            echo $errors['address1'] ?></div>
+                    </div>
                 </div>
-            </div>
 
-            <div <?php print((!empty($errors['address2'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                <label class="col-2 col-form-label">Adres 2:</label>
-                <div class="col-10">
-                    <input id="title" type="text" id="address2" name="address2" class="form-control" placeholder="Adres 2"
-                           value="<?php echo $dataUser['address2']; ?>"
-                           autofocus>
+                <div <?php print((!empty($errors['address2'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <label class="col-2 col-form-label">Adres 2:</label>
+                    <div class="col-10">
+                        <input id="title" type="text" id="address2" name="address2" class="form-control" placeholder="Adres 2"
+                               value="<?php echo $dataUser['address2']; ?>"
+                               autofocus>
+                    </div>
                 </div>
-            </div>
 
-            <div <?php print((!empty($errors['zipcode'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                <label class="col-2 col-form-label">Postcode:*</label>
-                <div class="col-10">
-                    <input id="title" type="text" id="zipcode" name="zipcode" class="form-control" placeholder="Postcode"
-                           value="<?php echo $dataUser['zipcode']; ?>"
-                           autofocus>
-                    <div class="form-control-feedback"><?php global $errors;
-                        echo $errors['zipcode'] ?></div>
+                <div <?php print((!empty($errors['zipcode'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <label class="col-2 col-form-label">Postcode:*</label>
+                    <div class="col-10">
+                        <input id="title" type="text" id="zipcode" name="zipcode" class="form-control" placeholder="Postcode"
+                               value="<?php echo $dataUser['zipcode']; ?>"
+                               autofocus>
+                        <div class="form-control-feedback"><?php global $errors;
+                            echo $errors['zipcode'] ?></div>
+                    </div>
                 </div>
-            </div>
 
 
-            <div <?php print((!empty($errors['city'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                <label class="col-2 col-form-label">Stad:*</label>
-                <div class="col-10">
-                    <input id="title" type="text" id="city" name="city" class="form-control" placeholder="Stad"
-                           value="<?php echo $dataUser['city']; ?>"
-                           autofocus>
-                    <div class="form-control-feedback"><?php global $errors;
-                        echo $errors['city'] ?></div>
+                <div <?php print((!empty($errors['city'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <label class="col-2 col-form-label">Stad:*</label>
+                    <div class="col-10">
+                        <input id="title" type="text" id="city" name="city" class="form-control" placeholder="Stad"
+                               value="<?php echo $dataUser['city']; ?>"
+                               autofocus>
+                        <div class="form-control-feedback"><?php global $errors;
+                            echo $errors['city'] ?></div>
+                    </div>
                 </div>
-            </div>
 
-            <div <?php print((!empty($errors['country'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                <div class="input-group inputform">
-                    <label class="col-2 col-form-label">Land:*</label>
-                    <select class="form-control" id="country" name="country">
-                        <?php
-                        $stmtForCountry = $pdo->prepare("SELECT * FROM Country");
-                        $stmtForCountry->execute();
-                        $dataCountry = $stmtForCountry->fetchAll();
-                        echo "<option>Netherlands</option>";
-                        foreach ($dataCountry as $row) { ?>
-                            <option><?php echo $row['countryname'] ?></option>
+                <div <?php print((!empty($errors['country'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <div class="input-group inputform">
+                        <label class="col-2 col-form-label">Land:*</label>
+                        <select class="form-control" id="country" name="country">
                             <?php
-                        }
-                        ?>
-                    </select>
-                </div>
-                <!-- Foutmelding -->
-                <div class="form-control-feedback"><?php global $errors;
-                    echo $errors['country'] ?>
-                </div>
-            </div>
-
-            <div <?php print((!empty($errors['birthday'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                <label class="col-2 col-form-label">Geboortedatum:*</label>
-                <div class="col-10">
-                    <input id="title" type="date" id="birthday" name="birthday" class="form-control" placeholder="Geboortedatum"
-                           value="<?php echo $dataUser['birthday']; ?>"
-                           autofocus>
+                            $stmtForCountry = $pdo->prepare("SELECT * FROM Country");
+                            $stmtForCountry->execute();
+                            $dataCountry = $stmtForCountry->fetchAll();
+                            echo "<option>Netherlands</option>";
+                            foreach ($dataCountry as $row) { ?>
+                                <option><?php echo $row['countryname'] ?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <!-- Foutmelding -->
                     <div class="form-control-feedback"><?php global $errors;
-                        echo $errors['birthday'] ?></div>
+                        echo $errors['country'] ?>
+                    </div>
                 </div>
-            </div>
 
-            <div <?php print((!empty($errors['email'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                <label class="col-2 col-form-label">Email:*</label>
-                <div class="col-10">
-                    <input id="title" type="email" id="email" name="email" class="form-control" placeholder="Email"
-                           value="<?php echo $dataUser['email']; ?>"
-                           autofocus>
-                    <div class="form-control-feedback"><?php global $errors;
-                        echo $errors['email'] ?></div>
+                <div <?php print((!empty($errors['birthday'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <label class="col-2 col-form-label">Geboortedatum:*</label>
+                    <div class="col-10">
+                        <input id="title" type="date" id="birthday" name="birthday" class="form-control" placeholder="Geboortedatum"
+                               value="<?php echo $dataUser['birthday']; ?>"
+                               autofocus>
+                        <div class="form-control-feedback"><?php global $errors;
+                            echo $errors['birthday'] ?></div>
+                    </div>
                 </div>
-            </div>
 
-            <div <?php print((!empty($errors['password'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                <label class="col-2 col-form-label">Wachtwoord:*</label>
-                <div class="col-10">
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Wachtwoord"
-                           autofocus>
-                    <div class="form-control-feedback"><?php global $errors;
-                        echo $errors['password'] ?></div>
+                <div <?php print((!empty($errors['email'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <label class="col-2 col-form-label">Email:*</label>
+                    <div class="col-10">
+                        <input id="title" type="email" id="email" name="email" class="form-control" placeholder="Email"
+                               value="<?php echo $dataUser['email']; ?>"
+                               autofocus>
+                        <div class="form-control-feedback"><?php global $errors;
+                            echo $errors['email'] ?></div>
+                    </div>
                 </div>
-            </div>
 
-            <div <?php print((!empty($errors['password2'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                <label class="col-2 col-form-label">Wachtwoord herhalen:*</label>
-                <div class="col-10">
-                    <input type="password" id="password2" name="password2" class="form-control" placeholder="Wachtwoord herhalen"
-                           autofocus>
-                    <div class="form-control-feedback"><?php global $errors;
-                        echo $errors['password2'] ?></div>
+                <div <?php print((!empty($errors['password'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <label class="col-2 col-form-label">Wachtwoord:*</label>
+                    <div class="col-10">
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Wachtwoord"
+                               autofocus>
+                        <div class="form-control-feedback"><?php global $errors;
+                            echo $errors['password'] ?></div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group row">
-                <div class="input-group inputform">
-                    <label class="col-2 col-form-label">Vraag:*</label>
-                    <select class="form-control" id="securityquestion" name="securityquestion">
-                        <?php
-                        $stmtForQuestions = $pdo->prepare("SELECT * FROM Question");
-                        $stmtForQuestions->execute();
-                        $dataQuestions = $stmtForQuestions->fetchAll();
-                        foreach ($dataQuestions as $row) {
-                            print("<option value=\"$row[0]\">$row[1]</option>");
-                        }
-                        ?>
-                    </select>
+                <div <?php print((!empty($errors['password2'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <label class="col-2 col-form-label">Wachtwoord herhalen:*</label>
+                    <div class="col-10">
+                        <input type="password" id="password2" name="password2" class="form-control" placeholder="Wachtwoord herhalen"
+                               autofocus>
+                        <div class="form-control-feedback"><?php global $errors;
+                            echo $errors['password2'] ?></div>
+                    </div>
                 </div>
-            </div>
 
-            <div <?php print((!empty($errors['answer'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
-                <label class="col-2 col-form-label">Antwoord:*</label>
-                <div class="col-10">
-                    <input id="title" type="text" id="answer" name="answer" class="form-control" placeholder="Antwoord"
-                           value="<?php echo $dataUser['answer']; ?>"
-                           autofocus>
-                    <div class="form-control-feedback"><?php global $errors;
-                        echo $errors['answer'] ?></div>
+                <div class="form-group row">
+                    <div class="input-group inputform">
+                        <label class="col-2 col-form-label">Vraag:*</label>
+                        <select class="form-control" id="securityquestion" name="securityquestion">
+                            <?php
+                            $stmtForQuestions = $pdo->prepare("SELECT * FROM Question");
+                            $stmtForQuestions->execute();
+                            $dataQuestions = $stmtForQuestions->fetchAll();
+                            foreach ($dataQuestions as $row) {
+                                print("<option value=\"$row[0]\">$row[1]</option>");
+                            }
+                            ?>
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group row">
-                <label class="col-2 col-form-label"></label>
-                <div class="form-check col-10">
-                    <input type="checkbox" required>
-                    Ik ga akkoord met de algemene voorwaarden
+                <div <?php print((!empty($errors['answer'])) ? 'class="form-group row has-danger"' : 'class="form-group row"'); ?>>
+                    <label class="col-2 col-form-label">Antwoord:*</label>
+                    <div class="col-10">
+                        <input id="title" type="text" id="answer" name="answer" class="form-control" placeholder="Antwoord"
+                               value="<?php echo $dataUser['answer']; ?>"
+                               autofocus>
+                        <div class="form-control-feedback"><?php global $errors;
+                            echo $errors['answer'] ?></div>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-10">
-                    <button class="btn btn-success btn-lg" type="submit" name="final-submit">Doorgaan</button>
+
+                <div class="form-group row">
+                    <label class="col-2 col-form-label"></label>
+                    <div class="form-check col-10">
+                        <input type="checkbox" required>
+                        Ik ga akkoord met de algemene voorwaarden
+                    </div>
                 </div>
-            </div>
+                <div class="form-group row">
+                    <div class="col-10">
+                        <button class="btn btn-success btn-lg" type="submit" name="final-submit">Doorgaan</button>
+                    </div>
+                </div>
 
-        </form>
-    </div>
-
-
+            </form>
+        </div>
     </body>
-
-    </html>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</html>
 
     <?php
 }

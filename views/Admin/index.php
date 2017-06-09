@@ -45,11 +45,10 @@ if (isset($user['username']) && $user['admin'] == 1) {
     <html>
     <head>
         <title>Admin paneel</title>
-        <link rel="stylesheet" type="text/css" href="<?= $_SERVER['DOCUMENT_ROOT'] ?>/assets/css/scrollableContent.css"
     </head>
 
     <body>
-    <h1><?php echo 'Welkom ' . $_SESSION['username']; ?></h1>
+    <h1><?php echo 'Welkom Admin' ?></h1>
     <div class="content">
         <br>
         <h3>Alle actieve advertenties</h3>
@@ -88,17 +87,17 @@ if (isset($user['username']) && $user['admin'] == 1) {
                 <th>Titel</th>
                 <th>Beschrijving</th>
                 <th>Start prijs</th>
-                <th>Betaal methode</th>
-                <th>Betaal instructie</th>
-                <th>Stad</th>
-                <th>Land</th>
+<!--                <th>Betaal methode</th>-->
+<!--                <th>Betaal instructie</th>-->
+<!--                <th>Stad</th>-->
+<!--                <th>Land</th>-->
                 <th>Lengte</th>
                 <th>Datum</th>
                 <th>Tijd</th>
-                <th>Verzendkosten</th>
-                <th>Verzend instructies</th>
+<!--                <th>Verzendkosten</th>-->
+<!--                <th>Verzend instructies</th>-->
                 <th>Verkoper</th>
-                <th>Koper</th>
+<!--                <th>Koper</th>-->
                 <th>Eind datum</th>
                 <th>Eind tijd</th>
                 <th>Status</th>
@@ -131,17 +130,17 @@ if (isset($user['username']) && $user['admin'] == 1) {
                             <td> <?php echo substr($d['title'], 0, 20) . "..."; ?></td>
                             <td> <?php echo substr($d['description'], 0, 20) . "..."; ?></td>
                             <td> <?php echo $d['startprice']; ?></td>
-                            <td> <?php echo $d['paymentmethodNumber']; ?></td>
-                            <td> <?php echo $d['paymentinstruction']; ?></td>
-                            <td> <?php echo $d['city']; ?></td>
-                            <td> <?php echo $d['country']; ?></td>
+<!--                            <td> --><?php //echo $d['paymentmethodNumber']; ?><!--</td>-->
+<!--                            <td> --><?php //echo $d['paymentinstruction']; ?><!--</td>-->
+<!--                            <td> --><?php //echo $d['city']; ?><!--</td>-->
+<!--                            <td> --><?php //echo $d['country']; ?><!--</td>-->
                             <td> <?php echo $d['duration']; ?></td>
                             <td> <?php echo $d['durationbeginDay']; ?></td>
                             <td> <?php echo $d['durationbeginTime']; ?></td>
-                            <td> <?php echo $d['shippingcosts']; ?></td>
-                            <td> <?php echo $d['shippinginstructions']; ?></td>
+<!--                            <td> --><?php //echo $d['shippingcosts']; ?><!--</td>-->
+<!--                            <td> --><?php //echo $d['shippinginstructions']; ?><!--</td>-->
                             <td> <?php echo $d['Seller']; ?></td>
-                            <td> <?php echo $d['Buyer']; ?></td>
+<!--                            <td> --><?php //echo $d['Buyer']; ?><!--</td>-->
                             <td> <?php echo $d['durationendDay']; ?></td>
                             <td> <?php echo $d['durationendTime']; ?></td>
                             <td><span class="badge badge-success">Actief</span></td>
