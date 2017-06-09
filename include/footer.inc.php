@@ -3,4 +3,4 @@
 <br><br>
 <nav class="navbar fixed-bottom navbar-light bg-faded">
     &copy 2017 - EenmaalAndermaal
-</nav>§
+</nav>
