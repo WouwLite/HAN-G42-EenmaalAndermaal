@@ -83,12 +83,12 @@
         <li><strong>Account</strong></li>
 
         <?php
-        $sql = "SELECT COUNT(productid) FROM Object WHERE Seller = ?";
+        $sql = "SELECT COUNT(productid) FROM Object WHERE Seller = ? and auctionClosed = 0";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$user['username']]);
         $ADamount = $stmt->fetchColumn();
 
-        $sql = "SELECT COUNT([user]) FROM Bidding WHERE [user] = ?";
+        $sql = "SELECT COUNT([user]) FROM Bidding WHERE [user] = ? and productid in (SELECT productid FROM Object WHERE auctionClosed = 0)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$user['username']]);
         $BIDamount = $stmt->fetchColumn();
