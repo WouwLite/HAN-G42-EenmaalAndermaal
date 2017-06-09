@@ -15,29 +15,31 @@
                 <input class="form-control sm-2" type="search" id="search" name="Search"
                        placeholder="Zoek naar veiling..."/>
         </li>
-            <?php
-            $getchild = <<<SQL
-SELECT *
-FROM [bottom level categories]
-SQL;
-            $stmt = $pdo->prepare($getchild);
-            $stmt->execute();
-            $children = $stmt->fetchAll();
-            ?>
-            <li>
-                <input class="form-control" list="categories" name="cat" value="<?= $_GET['cat']??'' ?>">
-                <datalist id="categories">
-                    <?php
-                    foreach ($children as $child) {
-                        echo <<<HTML
-                    <option value='{$child['ID']}'>{$child['Name']}</option>
-HTML;
-                    }
-                    ?>
-
-                </datalist>
-                <!--            <input type="hidden" name="cat" value="--><? //= $_GET['cat']??'' ?><!--">-->
-            </li>
+            <!--            --><?php
+            //            $getchild = <<<SQL
+            //SELECT *
+            //FROM [bottom level categories]
+            //SQL;
+            //            $stmt = $pdo->prepare($getchild);
+            //            $stmt->execute();
+            //            $children = $stmt->fetchAll();
+            //            ?>
+            <!--            <li>-->
+            <!--                <input class="form-control" list="categories" name="cat" value="-->
+            <? //= $_GET['cat']??'' ?><!--">-->
+            <!--                <datalist id="categories">-->
+            <!--                    --><?php
+            //                    foreach ($children as $child) {
+            //                        echo <<<HTML
+            //                    <option value='{$child['ID']}'>{$child['Name']}</option>
+            //HTML;
+            //                    }
+            //                    ?>
+            <!---->
+            <!--                </datalist>-->
+            <!--                <!--            <input type="hidden" name="cat" value="-->
+            <? // //= $_GET['cat']??'' ?><!--<!--">
+<!--            </li>-->
             <input type="submit" style="display: none"/>
         </form>
 

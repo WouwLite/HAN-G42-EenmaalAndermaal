@@ -184,7 +184,7 @@ if (isset($_SESSION['username'])) {
                         else if($aantalBiedingen >= 1){
                             print '<tr>
                                     <thead>
-                                        <th>ID</th>
+                                        <th>Titel</th>
                                         <th>Datum</th>
                                         <th>Bedrag</th>
                                         <th>Tijd</th>
@@ -199,10 +199,15 @@ if (isset($_SESSION['username'])) {
                         $dataBiedingen = $stmt->fetchAll();
                         foreach($dataBiedingen as $d){ ?>
                             <tr>
-                            <?php echo '<td>' . $d['productid'] . '</td>'; ?>
+                                <?php
+                                $stmt = $pdo->prepare("SELECT title from Object where productid = ?");
+                                $stmt->execute([$d['productid']]);
+                                $productTitle = $stmt->fetchColumn();
+                                ?>
+                                <?php echo '<td><a href="' . $app_url . '/views/public/productpage.php/?link=' . $d['productid'] . '">' . $productTitle . '</a></td>'; ?>
                             <?php echo '<td>' . $d['biddingday'] . '</td>'; ?>
                             <?php echo '<td> € ' . $d['biddingprice'] . '</td>'; ?>
-                            <?php echo '<td>' . $d['biddingtime'] . '</td>'; ?>
+                                <?php echo '<td>' . substr($d['biddingtime'], 0, 8) . '</td>'; ?>
                             </tr>
                         <?php
                         }
@@ -249,7 +254,9 @@ if (isset($_SESSION['username'])) {
                         if ($aantalVeilingen > 0) {
                             foreach ($data as $d) { ?>
                                 <tr>
-                                    <td> <?php echo $d['title']; ?></td>
+                                    <td>
+                                        <a href="<?= $app_url ?>/views/public/productpage.php/?link=<?= $d['productid'] ?>"><?php echo $d['title']; ?></a>
+                                    </td>
                                     <td> <?php echo $d['durationbeginDay']; ?></td>
                                     <?php
                                     $id = $d['productid'];
