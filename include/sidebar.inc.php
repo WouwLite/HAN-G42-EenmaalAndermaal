@@ -9,6 +9,20 @@
 
 <!-- Add sidebarmenu -->
 <div id="sidebar">
+    <div id="sidebar-hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#sidebar-hamburger').click(function () {
+                $('#sidebar').toggleClass('visible');
+                $('#content').toggleClass('visible');
+            });
+        });
+    </script>
     <ul>
         <form action="<?= $app_url ?>/views/public/browse.php" method="get">
             <li>
@@ -221,20 +235,4 @@ HTML;
     </ul>
 </div>
 
-</ul>
 
-<div id="sidebar-hamburger">
-    <span></span>
-    <span></span>
-    <span></span>
-</div>
-</div>
-
-<script>
-    $(document).ready(function () {
-        $('#sidebar-hamburger').click(function () {
-            $('#sidebar').toggleClass('visible');
-            $('#content').toggleClass('visible');
-        });
-    });
-</script>
