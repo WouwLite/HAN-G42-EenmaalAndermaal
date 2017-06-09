@@ -1,4 +1,4 @@
-<!-- /views/account/index.php -->
+<!-- /views/Admin/overview-users.php -->
 
 <?php
 
@@ -174,7 +174,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
     include($_SERVER['DOCUMENT_ROOT'] . '/include/unban-user.php');
 }
 else {
-    header ('location: ../account/login.php');
+    header ('location: '.$app_url.'/views/account/login.php');
 }
 
 
