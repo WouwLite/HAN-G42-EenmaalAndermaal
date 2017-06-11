@@ -2,8 +2,7 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/style.inc.php');
-function getAd()
-{
+function getAd() {
     global $url;
     $url = $_GET['link'];
     global $pdo;
@@ -21,14 +20,12 @@ where o.productid = '$url'");
 }
 
 $value = getAd();
-function checkBod()
-{
+function checkBod() {
     global $errors;
     $errors['bod'] = ($_POST['bod'] == "") && ($_POST['bod'] < selectHighestBid()) ? "Vul aub een geldig bod in" : '';
 }
 
-function checkNoErrorBod()
-{
+function checkNoErrorBod() {
     global $errors;
     if (!empty($errors['bod'])) return false;
     return true;
@@ -53,16 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
 }
 
-function selectStartPrice()
-{
+function selectStartPrice() {
     global $url, $pdo;
     $result = $pdo->query("select startprice from Object where productid like '%$url%'");
     $row = $result->fetch();
     return $row['startprice'];
 }
 
-function getBids()
-{
+function getBids() {
     global $url;
     global $pdo;
     $result = $pdo->query("select top 5 biddingprice as biddingprice, [user], productid from Bidding where productid like '%$url%' order by biddingprice DESC");
@@ -74,16 +69,14 @@ function getBids()
     return $bids;
 }
 
-function selectHighestBid()
-{
+function selectHighestBid() {
     global $url, $pdo;
     $result = $pdo->query("select max(biddingprice) as biddingprice from Bidding where productid = '$url'");
     $row = $result->fetch();
     return $row['biddingprice'];
 }
 
-function getPhotos()
-{
+function getPhotos() {
     global $url;
     global $pdo;
     $result = $pdo->query("select filename from productPhoto where productid like '%$url%'");
@@ -95,8 +88,7 @@ function getPhotos()
     return $photos;
 }
 
-function getlowerbid($prid, $pdo)
-{
+function getlowerbid($prid, $pdo) {
     $sqlstmt = <<<SQL
 SELECT email FROM Users WHERE username = (SELECT [user] FROM Bidding WHERE productid = ? and biddingprice = ?)
 SQL;
@@ -106,8 +98,7 @@ SQL;
     return $email;
 }
 
-function saveBid()
-{
+function saveBid() {
     global $pdo, $url, $app_url;
     $email = getlowerbid($url, $pdo);
     if ($email) {
@@ -607,8 +598,7 @@ function saveBid()
     }
 }
 
-function mailUser()
-{
+function mailUser() {
     global $app_url;
     $subject = "EenmaalAndermaal: Uw bieding is succesvol geplaatst.";
     $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -1195,12 +1185,12 @@ function mailUser()
                     ?>
 
                     <div class="well">
-                            <form action="<?= $app_url . '/views/account/update-advertisement.php'?>" method="post">
-                                <button class="btn btn-default btn-sm" name="changeid"
-                                        value="<?= getAd()[0][6]?>"><i
-                                            class="fa fa-wrench"
-                                            style="width: 16px; height: 16px;"></i></button>
-                            </form>
+                        <form action="<?= $app_url . '/views/account/update-advertisement.php' ?>" method="post">
+                            <button class="btn btn-default btn-sm" name="changeid"
+                                    value="<?= getAd()[0][6] ?>"><i
+                                        class="fa fa-wrench"
+                                        style="width: 16px; height: 16px;"></i></button>
+                        </form>
                         <div class="text-right">
                             <button onclick="showInput()" name="paymentBtn" id="paymentBtn"
                                     class="btn btn-success btn-lg">Bied nu!

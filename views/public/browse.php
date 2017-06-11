@@ -22,8 +22,7 @@ $hello = "Hello world!";
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . '/include/session.inc.php');
-function getAds()
-{
+function getAds() {
     global $pdo;
     if (!empty($_GET['Search']) and !empty($_GET['cat'])) {
         $sql = "select *
@@ -75,13 +74,7 @@ echo "</div>";
 <!-- Page Content -->
 
 <div class="container">
-    <header class="jumbotron hero-spacer">
-        <h1>Our Latest Items!</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non
-            incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>
-    </header>
-
-
+    <h2>Zoekresultaten</h2>
     <div class="row text-center">
         <?php
         $ads = getAds();
