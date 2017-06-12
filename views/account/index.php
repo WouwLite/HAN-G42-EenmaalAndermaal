@@ -111,9 +111,10 @@ if (isset($_SESSION['username'])) {
                                 </tbody>
                             </table>
                         </div>
-                        <a href="<?= $app_url ?>/views/account/edit" class="btn btn-default"><i class="fa fa-wrench"
-                                                                                                aria-hidden="true"></i>
-                            Adres wijzigen</a>
+                        <!--                        <a href="-->
+                        <? //= $app_url ?><!--/views/account/edit" class="btn btn-default"><i class="fa fa-wrench"-->
+                        <!--                                                                                                aria-hidden="true"></i>-->
+                        <!--                            Adres wijzigen</a>-->
                     </div>
                 </div>
             </div>
