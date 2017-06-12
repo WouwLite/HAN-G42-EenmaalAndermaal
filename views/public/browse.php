@@ -78,7 +78,7 @@ echo "</div>";
     <div class="row text-center">
         <?php
         $ads = getAds();
-        foreach ($ads as $value) {
+        foreach (array_slice($ads, (($_GET['page']??1) - 1) * 16, 16) as $value) {
             $picsql = "SELECT TOP 1 filename FROM productPhoto WHERE productid = ?";
             $stmt = $pdo->prepare($picsql);
             $stmt->execute([$value[0]]);
@@ -93,7 +93,7 @@ echo "</div>";
                         $picsource = "http://iproject42.icasites.nl/uploads/";
                     }
                     ?>
-                    <img src="<?= $picsource ?><?= $thumbnail; ?>"
+                    <img style="max-width: 100%; height: 200px;" src="<?= $picsource ?><?= $thumbnail; ?> "
                          class="img-fluid"
                          alt="<?php echo $value[1] ?>">
                     <div class="figure-caption">
@@ -116,6 +116,17 @@ echo "</div>";
         }
         ?>
     </div>
+</div>
+<br>
+<div class="text-center">
+<a class="btn btn-primary"
+   href="?Search=<?= $_GET['Search'];?>&page=<?=($_GET['page']??1) - 1 ;?>">Vorige pagina</a>
+<a class="btn btn-primary"
+   href="?Search=<?= $_GET['Search'];?>&page=<?=($_GET['page']??1) + 1 ;?>">Volgende
+    pagina</a>
+<br>
+<br>
+<br>
 </div>
 </div>
 

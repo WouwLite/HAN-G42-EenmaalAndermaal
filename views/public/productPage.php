@@ -1268,40 +1268,48 @@ function mailUser()
 
         </div>
 
+        <div class="col-md-3">
 
-        <div class="list-group">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>User</th>
-                    <th>Bod</th>
+
+
+            <div class="list-group">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Bod</th>
+                        <?php
+                        if(getAd()[0][5] == $_SESSION['username']){
+                            print '<th>Email</th>';
+                        }
+                        ?>
+                    </tr>
+                    </thead>
+                    <tbody>
                     <?php
-                    if(getAd()[0][5] == $_SESSION['username']){
-                        print '<th>Email</th>';
+                    $Bids = getBids();
+                    $i = 0;
+                    foreach ($Bids as $value) {
+                        $i++;
+                        echo "<tr>";
+                        echo "<td>" . $i . "</td>";
+                        echo "<td>" . $value[1] . "</td>";
+                        echo "<td>" . $value[0] . "</td>";
+                        if(getAd()[0][5] == $_SESSION['username']){
+                            echo "<td>". $value[2]."</td>";
+                        }
+                        echo "</tr>";
                     }
                     ?>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                $Bids = getBids();
-                $i = 0;
-                foreach ($Bids as $value) {
-                    $i++;
-                    echo "<tr>";
-                    echo "<td>" . $i . "</td>";
-                    echo "<td>" . $value[1] . "</td>";
-                    echo "<td>" . $value[0] . "</td>";
-                    if(getAd()[0][5] == $_SESSION['username']){
-                        echo "<td>". $value[2]."</td>";
-                    }
-                    echo "</tr>";
-                }
-                ?>
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
         </div>
     </div>
 </div>
