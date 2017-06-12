@@ -2,30 +2,35 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/include/style.inc.php');
-function getAd() {
+
+global $user;
+function getAd()
+{
     global $url;
     $url = $_GET['link'];
     global $pdo;
-    $result = $pdo->query("select o.productid, Title, seller, description, durationbeginDay, durationbeginTime, durationendDay, durationendTime, Categories, pp.filename, (select max(biddingprice)
+    $result = $pdo->query("select o.productid, Title, seller, description, durationbeginDay, durationbeginTime, durationendDay, durationendTime, Categories, pp.filename,  (select max(biddingprice)
 																																from Bidding b
 																																where o.productid = b.productid) as biddingprice
 from Object o left outer join productPhoto pp on o.productid=pp.productid
 where o.productid = '$url'");
     $content = array();
     while ($row = $result->fetch()) {
-        $ad = array($row['Title'], $row['description'], $row['Categories'], $row['filename'], $row['biddingprice'], $row['seller'], $row['productid']);
+        $ad = array($row['Title'], $row['description'], $row['Categories'], $row['filename'], $row['biddingprice'], $row['seller'], $row['productid'], $row['durationendDay']);
         $content[] = $ad;
     }
     return $content;
 }
 
 $value = getAd();
-function checkBod() {
+function checkBod()
+{
     global $errors;
     $errors['bod'] = ($_POST['bod'] == "") && ($_POST['bod'] < selectHighestBid()) ? "Vul aub een geldig bod in" : '';
 }
 
-function checkNoErrorBod() {
+function checkNoErrorBod()
+{
     global $errors;
     if (!empty($errors['bod'])) return false;
     return true;
@@ -50,14 +55,16 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
 }
 
-function selectStartPrice() {
+function selectStartPrice()
+{
     global $url, $pdo;
     $result = $pdo->query("select startprice from Object where productid like '%$url%'");
     $row = $result->fetch();
     return $row['startprice'];
 }
 
-function getBids() {
+function getBids()
+{
     global $url;
     global $pdo;
     $result = $pdo->query("select top 5 biddingprice as biddingprice, [user], productid from Bidding where productid like '%$url%' order by biddingprice DESC");
@@ -69,14 +76,16 @@ function getBids() {
     return $bids;
 }
 
-function selectHighestBid() {
+function selectHighestBid()
+{
     global $url, $pdo;
     $result = $pdo->query("select max(biddingprice) as biddingprice from Bidding where productid = '$url'");
     $row = $result->fetch();
     return $row['biddingprice'];
 }
 
-function getPhotos() {
+function getPhotos()
+{
     global $url;
     global $pdo;
     $result = $pdo->query("select filename from productPhoto where productid like '%$url%'");
@@ -88,7 +97,8 @@ function getPhotos() {
     return $photos;
 }
 
-function getlowerbid($prid, $pdo) {
+function getlowerbid($prid, $pdo)
+{
     $sqlstmt = <<<SQL
 SELECT email FROM Users WHERE username = (SELECT [user] FROM Bidding WHERE productid = ? and biddingprice = ?)
 SQL;
@@ -98,7 +108,8 @@ SQL;
     return $email;
 }
 
-function saveBid() {
+function saveBid()
+{
     global $pdo, $url, $app_url;
     $email = getlowerbid($url, $pdo);
     if ($email) {
@@ -598,7 +609,8 @@ function saveBid() {
     }
 }
 
-function mailUser() {
+function mailUser()
+{
     global $app_url;
     $subject = "EenmaalAndermaal: Uw bieding is succesvol geplaatst.";
     $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -1160,13 +1172,19 @@ function mailUser() {
                     <div class="figure-caption">
                         <h4 class="pull-right"><?php
                             if (empty(selectHighestBid())) {
-                                echo selectStartPrice();
+                                echo 'Begin met bieden vanaf: € ' . selectStartPrice();
                             } else {
-                                echo selectHighestBid();
+                                echo 'Huidig bod: € ' . selectHighestBid();
                             }
                             ?></h4>
-                        <h4><?php echo getAd()[0][0] ?></h4>
-                        <p><?php echo getAd()[0][1] ?></p>
+                        <h4><?php print '<strong>Verkoper: </strong> ' . getAd()[0][5]?></h4>
+                        <h4><?php print '<strong>Titel: </strong></h4><h5>' . getAd()[0][0]. '</h5>'; ?>
+                        <?php print '<br><h5><strong>Beschrijving: </strong></h5>' . '<h8>' .  getAd()[0][1] . '</h8>' ?>
+                        <h4>
+                            <?php
+                            print 'Einddatum: ' . getAd()[0][7];
+                            ?>
+                        </h4>
                     </div>
                 </div>
             </div>
@@ -1178,19 +1196,25 @@ function mailUser() {
             $dataAuctionClosed = $stmt->fetchColumn();
 
             if ($dataAuctionClosed == 1) {
-                print '<div class="alert alert-danger"><strong>Oei!</strong> Deze veiling is gesloten, hierdoor kunt u geen biedingen meer plaatsen</div>';
+                print '<br>
+                            <div class="alert alert-danger"><strong>Oei!</strong> Deze veiling is gesloten, hierdoor kunt u geen biedingen meer plaatsen</div>';
             } else if ($dataAuctionClosed == 0) {
+                if(isset($_SESSION['username']) AND $_SESSION['username'] == getAd()[0][5]) {
+                    ?>
+                    <form action="<?= $app_url ?>/views/account/update-advertisement.php" method="post">
+                        <button class="btn btn-default btn-sm" name="changeid"
+                                value="<?= getAd()[0][6] ?>"><i
+                                    class="fa fa-wrench"
+                                    style="width: 16px; height: 16px;"></i></button>
+                    </form>
+                    <?php
 
-                if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5]) {
+                }
+
+                else if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5] || $user['admin'] == 1) {
                     ?>
 
                     <div class="well">
-                        <form action="<?= $app_url . '/views/account/update-advertisement.php' ?>" method="post">
-                            <button class="btn btn-default btn-sm" name="changeid"
-                                    value="<?= getAd()[0][6] ?>"><i
-                                        class="fa fa-wrench"
-                                        style="width: 16px; height: 16px;"></i></button>
-                        </form>
                         <div class="text-right">
                             <button onclick="showInput()" name="paymentBtn" id="paymentBtn"
                                     class="btn btn-success btn-lg">Bied nu!
@@ -1252,6 +1276,11 @@ function mailUser() {
                     <th>#</th>
                     <th>User</th>
                     <th>Bod</th>
+                    <?php
+                    if(getAd()[0][5] == $_SESSION['username']){
+                        print '<th>Email</th>';
+                    }
+                    ?>
                 </tr>
                 </thead>
                 <tbody>
@@ -1264,6 +1293,9 @@ function mailUser() {
                     echo "<td>" . $i . "</td>";
                     echo "<td>" . $value[1] . "</td>";
                     echo "<td>" . $value[0] . "</td>";
+                    if(getAd()[0][5] == $_SESSION['username']){
+                        echo "<td> Hier komt email</td>";
+                    }
                     echo "</tr>";
                 }
                 ?>
@@ -1272,7 +1304,6 @@ function mailUser() {
             </table>
         </div>
     </div>
-
 </div>
 
 <!-- /.container -->
