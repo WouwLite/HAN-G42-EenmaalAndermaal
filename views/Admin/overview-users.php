@@ -168,7 +168,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
     <?php
 
     include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
-    include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
+    //include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/include/delete-user.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/include/ban-user.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/include/unban-user.php');

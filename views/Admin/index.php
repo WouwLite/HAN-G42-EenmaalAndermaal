@@ -283,7 +283,7 @@ else {
     header ('location: '.$app_url.'/views/account/login.php');
 }
     include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
-    include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
+    //include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
     include($_SERVER['DOCUMENT_ROOT'] . '/include/delete-modal.php');
 
 

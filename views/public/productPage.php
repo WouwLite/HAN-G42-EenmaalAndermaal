@@ -1182,6 +1182,7 @@ function mailUser()
                     </a>
                     <?php
                 }
+
                 ?>
 
                 <div class="img-thumbnail">
@@ -1198,7 +1199,7 @@ function mailUser()
                         <?php print '<br><h5><strong>Beschrijving: </strong></h5>' . '<h8>' .  getAd()[0][1] . '</h8>' ?>
                         <h4>
                             <?php
-                            print 'Einddatum: ' . getAd()[0][7];
+                            print '<h5>Einddatum: ' . getAd()[0][7] . '</h5>';
                             ?>
                         </h4>
                     </div>
@@ -1340,7 +1341,7 @@ function mailUser()
 
 <?php
 include($_SERVER['DOCUMENT_ROOT'] . '/include/sidebar.inc.php');
-include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
+//include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
 ?>
 
 <script>

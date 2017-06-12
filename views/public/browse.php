@@ -118,12 +118,12 @@ echo "</div>";
     </div>
 </div>
 <br>
+<br>
 <div class="text-center">
-<a class="btn btn-primary"
-   href="?Search=<?= $_GET['Search'];?>&page=<?=($_GET['page']??1) - 1 ;?>">Vorige pagina</a>
-<a class="btn btn-primary"
-   href="?Search=<?= $_GET['Search'];?>&page=<?=($_GET['page']??1) + 1 ;?>">Volgende
-    pagina</a>
+    <a class="btn btn-primary"
+       href="<?= key_exists('Search',$_GET)?"?Search=".$_GET['Search']:"?cat=".$_GET['cat'];?>&page=<?=($_GET['page']??1) - 1 ;?>">Vorige pagina</a>
+    <a class="btn btn-primary"
+       href="<?= key_exists('Search',$_GET)?"?Search=".$_GET['Search']:'?cat='.$_GET['cat'];?>&page=<?=($_GET['page']??1) + 1 ;?>">Volgende pagina</a>
 <br>
 <br>
 <br>

@@ -757,7 +757,7 @@ function checkNoErrors()
                 <!-- WTF is het probleem? Ergens glitcht er een stijlding... ^JW -->
                 <div class="form-group">
                     <span class="input-group-addon fa fa-calendar" id="basicaddon1"></span>
-                        <input class="form-control" type="date" placeholder="Wat is uw geboortedatum" name="birthday"
+                        <input class="form-group-row" type="date" placeholder="Wat is uw geboortedatum" name="birthday"
                                value="<?php if (isset($_POST['birthday'])) {
                                    echo $_POST['birthday'];
                                } ?>" id="example-date-input">

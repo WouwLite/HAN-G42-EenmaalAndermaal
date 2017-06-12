@@ -71,7 +71,10 @@
 
         <!-- Add admin menu when user is admin -->
         <?php
-
+        if($user['banned'] == 1){
+            session_destroy();
+//            header('location: http://iproject42.icasites.nl/views/account/logout.php');
+        }
 
         global $user;
         if ($user['admin'] == 1) {
