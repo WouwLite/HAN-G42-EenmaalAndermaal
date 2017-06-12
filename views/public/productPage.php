@@ -67,10 +67,10 @@ function getBids()
 {
     global $url;
     global $pdo;
-    $result = $pdo->query("select top 5 biddingprice as biddingprice, [user], productid from Bidding where productid like '%$url%' order by biddingprice DESC");
+    $result = $pdo->query("select top 5 biddingprice as biddingprice, [user], productid, email from Bidding inner join Users on bidding.[user] = Users.username where productid like '%$url%' order by biddingprice DESC");
     $bids = array();
     while ($row = $result->fetch()) {
-        $bid = array($row['biddingprice'], $row['user']);
+        $bid = array($row['biddingprice'], $row['user'], $row['email']);
         $bids[] = $bid;
     }
     return $bids;
@@ -1294,7 +1294,7 @@ function mailUser()
                     echo "<td>" . $value[1] . "</td>";
                     echo "<td>" . $value[0] . "</td>";
                     if(getAd()[0][5] == $_SESSION['username']){
-                        echo "<td> Hier komt email</td>";
+                        echo "<td>". $value[2]."</td>";
                     }
                     echo "</tr>";
                 }
