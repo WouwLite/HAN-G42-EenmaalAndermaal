@@ -117,12 +117,10 @@ function saveProductData()
         $destdir = SITE_ROOT . "\\uploads\\";
         $allowedtypes = array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP);
 
-        if (empty($_FILES)) {
-            $foto1['name'] = 'http://www.fertiplus.nl/img/Geen-foto-beschikbaar.jpg';
-            $ext = pathinfo($foto1['name'], PATHINFO_EXTENSION);
-            $uniquefilename = uniqid('EAIMG') . "." . $ext;
+        if (!$foto1 && !$foto2 && !$foto3 && !$foto4) {
+            $uniquefilename = uniqid('EAImg') . "." . "png";
             $photoInfo->execute(array($productid, $uniquefilename));
-            move_uploaded_file($foto1['tmp_name'], $destdir . $uniquefilename);
+            copy($destdir."geen-afbeelding-beschikbaar.png", $destdir.$uniquefilename);
         }
         if ($foto1) {
             if (in_array(exif_imagetype($foto1['tmp_name']), $allowedtypes)) {
