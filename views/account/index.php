@@ -152,7 +152,7 @@ if (isset($_SESSION['username'])) {
                             </table>
                         </div>
                         <?php if ($user['merchant'] == 1) {
-                            echo "<a href='" . $app_url . "/views/merchant/changeData.php' class='btn btn-default'><i class='fa fa-wrench' aria-hidden='true'></i> Gegevens wijzigen</a>";
+                            echo "<a href='" . $app_url . "/views/merchant/update-account.php' class='btn btn-default'><i class='fa fa-wrench' aria-hidden='true'></i> Gegevens wijzigen</a>";
                         } else {
                             echo "<a href='" . $app_url . "/views/merchant/API.php' class='btn btn-success'>Upgraden</a>";
                         }
