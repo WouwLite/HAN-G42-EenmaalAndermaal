@@ -29,6 +29,22 @@ function checkBod()
     $errors['bod'] = ($_POST['bod'] == "") && ($_POST['bod'] < selectHighestBid()) ? "Vul aub een geldig bod in" : '';
 }
 
+
+$stmt = $pdo->prepare("SELECT durationendTime, durationendDay FROM Object WHERE productid = ?");
+$stmt->execute([$_GET['link']]);
+$dataAd = $stmt->fetch(PDO::FETCH_ASSOC);
+$currentDate = date("Y-m-d H:i:s");
+$dateAuction = $dataAd['durationendDay'] . ' ' . $dataAd['durationendTime'];
+if(strtotime($currentDate) <= strtotime($dateAuction)){
+    $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 0 WHERE productid = ?");
+    $stmt->execute([$_GET['link']]);
+}
+else {
+    $stmt = $pdo->prepare("UPDATE OBject SET auctionClosed = 1 WHERE productid = ?");
+    $stmt->execute([$_GET['link']]);
+}
+
+
 function checkNoErrorBod()
 {
     global $errors;
@@ -47,11 +63,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     } else if (!isset($startPrice) && checkNoErrorBod() && (int)$_POST['bod'] > (int)selectHighestBid()) {
         saveBid();
     } else if (!empty(selectHighestBid()) && (int)$_POST['bod'] < (int)selectHighestBid()) {
-        $errors['bod'] = "Vul aub een hoger bod in dan het huidige bod";
-    } else if (!empty(selectHighestBid()) && (int)$_POST['bod'] < (int)selectStartPrice()) {
-        $errors['bod'] = "Vul aub een hoger bod in de startprijs";
-    } else if ($_POST['bod'] > 9999) {
-        $errors['bod'] = "Uw account zal nu worden geblokkeerd";
+        $errors['bod'] = "Vul aub een hoger bod in dan het huidige bod.";
+    }  else if ((int)$_POST['bod'] > 9999) {
+        $errors['bod'] = "Het bod wat u heeft geplaatst is te hoog. Het bod mag maximaal € 9999,99 zijn.";
+    } else if(empty(selectHighestBid()) && (int)$_POST['bod'] < (int)selectStartPrice()){
+        $errors['bod'] = "Bod moet hoger zijn dan de startprijs.";
     }
 }
 
@@ -1339,5 +1355,11 @@ include($_SERVER['DOCUMENT_ROOT'] . '/include/footer.inc.php');
             document.getElementById("showInput").style.display = 'none';
             x = 1;
         }
+
     }
+    <?php if($_SERVER['REQUEST_METHOD'] == "POST" && !checkNoErrorBod()){
+    ?>
+    document.getElementById("showInput").style.display = 'block';
+    <?php
+    }?>
 </script>

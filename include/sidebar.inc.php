@@ -71,6 +71,8 @@
 
         <!-- Add admin menu when user is admin -->
         <?php
+
+
         global $user;
         if ($user['admin'] == 1) {
             print('<li><strong>Admin</strong></li>

@@ -10,29 +10,6 @@ if ($debug == false) {
 
 include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
-//Zorgt voor alle advertenties die verlopen zijn dit ook wordt geregistreerd.
-$stmt = $pdo->prepare("SELECT * FROM Object WHERE auctionClosed = 0");
-$stmt->execute();
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$date1 = date("Y-m-d H:i:s");
-foreach($data as $d) {
-    $date2 = $d['durationendDay'] . ' ' . $d['durationendTime'];
-    if (strtotime($date1) <= strtotime($date2)) {
-        $productidActive = $d['productid'];
-        $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 0 WHERE productid = ?");
-        $stmt->execute([$productidActive]);
-    }
-    else {
-        $productidClosed = $d['productid'];
-        $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 1 WHERE productid = ?");
-        $stmt->execute([$productidClosed]);
-    }
-}
-
-
-
-
 /*
  * Voer hieronder eventuele extra PHP variables toe
  */

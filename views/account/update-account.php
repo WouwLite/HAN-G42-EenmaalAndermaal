@@ -322,8 +322,11 @@ if(isset($_SESSION['username'])){
                 <div class="form-group row">
                     <label class="col-2 col-form-label"></label>
                     <div class="form-check col-10">
-                        <input type="checkbox" required>
-                        Ik ga akkoord met de algemene voorwaarden
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" required>
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">Ik ga akkoord met de algemene voorwaarden</span>
+                        </label>
                     </div>
                 </div>
                 <div class="form-group row">
