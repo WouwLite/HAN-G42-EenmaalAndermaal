@@ -63,9 +63,6 @@
         <li class="nav-item">
             <a class="nav-link active" href="/views/public/"><i class="fa fa-home" aria-hidden="true"></i> Thuis</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link disabled" href="#"><i class="fa fa-star" aria-hidden="true"></i> Populair</a>
-        </li>
         <li><span class="sidebar-span"></span></li>
 
         <!-- View account -->

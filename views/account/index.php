@@ -135,14 +135,12 @@ if (isset($_SESSION['username'])) {
                                         }
                                         ?></td>
                                 </tr>
+                                <?php if($user['merchant'] == 1): ?>
                                 <tr>
-                                    <td>Soort rekening:</td>
-                                    <td>Creditcard</td>
+                                    <td>Geverifieerd via:</td>
+                                    <td>iDEAL</td>
                                 </tr>
-                                <tr>
-                                    <td>Rekeningnummer:</td>
-                                    <td>1234567890</td>
-                                </tr>
+                                <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
