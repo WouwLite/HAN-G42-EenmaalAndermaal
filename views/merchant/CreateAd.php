@@ -356,7 +356,7 @@ HTML;
                 <label class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" required>
                     <span class="custom-control-indicator"></span>
-                    <span class="custom-control-description">Ik ga akkoord met de algemene voorwaarden</span>
+                    <span class="custom-control-description">Ik ga akkoord met de <a href="../business/terms.php">algemene voorwaarden</a></span>
                 </label>
             </div>
             <div class="form-group row">

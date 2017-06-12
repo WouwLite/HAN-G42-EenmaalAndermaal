@@ -248,7 +248,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
                             <td><?php echo $d['sellingprice']; ?></td>
                             <td><?php echo $d['Categories']; ?></td>
                             <td>
-                                <form action="update-advertisement.php" method="post" style="display: inline;">
+                                <form action="../account/update-advertisement.php" method="post" style="display: inline;">
                                     <button class="btn btn-default btn-sm" name="changeid"
                                             value="<?= $d['productid'] ?>"><i
                                                 class="fa fa-wrench"
