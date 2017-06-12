@@ -29,31 +29,6 @@
                 <input class="form-control sm-2" type="search" id="search" name="Search"
                        placeholder="Zoek naar veiling..."/>
         </li>
-            <!--            --><?php
-            //            $getchild = <<<SQL
-            //SELECT *
-            //FROM [bottom level categories]
-            //SQL;
-            //            $stmt = $pdo->prepare($getchild);
-            //            $stmt->execute();
-            //            $children = $stmt->fetchAll();
-            //            ?>
-            <!--            <li>-->
-            <!--                <input class="form-control" list="categories" name="cat" value="-->
-            <? //= $_GET['cat']??'' ?><!--">-->
-            <!--                <datalist id="categories">-->
-            <!--                    --><?php
-            //                    foreach ($children as $child) {
-            //                        echo <<<HTML
-            //                    <option value='{$child['ID']}'>{$child['Name']}</option>
-            //HTML;
-            //                    }
-            //                    ?>
-            <!---->
-            <!--                </datalist>-->
-            <!--                <!--            <input type="hidden" name="cat" value="-->
-            <? // //= $_GET['cat']??'' ?><!--<!--">
-<!--            </li>-->
             <input type="submit" style="display: none"/>
         </form>
 
@@ -71,21 +46,16 @@
 
         <!-- Add admin menu when user is admin -->
         <?php
-        if($user['banned'] == 1){
-            session_destroy();
-//            header('location: http://iproject42.icasites.nl/views/account/logout.php');
-        }
-
-        global $user;
-        if ($user['admin'] == 1) {
-            print('<li><strong>Admin</strong></li>
-            <li class="nav-item">
-                    <a class="nav-link" href="' . $app_url . '/views/admin/"><i class="fa fa-handshake-o" aria-hidden="true"></i> Alle advertenties</a>
-            </li>
-            <li class="nav-item">
-                    <a class="nav-link" href="' . $app_url . '/views/admin/overview-users.php"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Alle gebruikers</a>
-            </li>');
-        }
+            global $user;
+            if ($user['admin'] == 1) {
+                print('<li><strong>Admin</strong></li>
+                <li class="nav-item">
+                        <a class="nav-link" href="' . $app_url . '/views/admin/"><i class="fa fa-handshake-o" aria-hidden="true"></i> Alle advertenties</a>
+                </li>
+                <li class="nav-item">
+                        <a class="nav-link" href="' . $app_url . '/views/admin/overview-users.php"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Alle gebruikers</a>
+                </li>');
+            }
         ?>
 
         <!-- View dashboard -->
@@ -113,15 +83,11 @@
         $BIDamount = $stmt->fetchColumn();
         ?>
         <li class="nav-item">
-            <a class="nav-link" href="<?= $app_url ?>/views/account/index.php"><i class="fa fa-gavel"
-                                                                                  aria-hidden="true"></i> Mijn biedingen
-                <span class="badge badge-default"><?= $BIDamount ?></span></a>
+            <a class="nav-link" href="<?= $app_url ?>/views/account/index.php"><i class="fa fa-gavel" aria-hidden="true"></i> Mijn biedingen</a>
         </li>
         <!-- Create IF statement. If user is merchant, show this link, else hide -->
         <li class="nav-item">
-            <a class="nav-link" href="<?= $app_url ?>/views/account/index.php"><i class="fa fa-shopping-cart"
-                                                                                  aria-hidden="true"></i> Mijn
-                advertenties <span class="badge badge-default"><?= $ADamount ?></span></a>
+            <a class="nav-link" href="<?= $app_url ?>/views/account/index.php"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Mijn advertenties</a>
         </li>
 
         <!-- View business info -->

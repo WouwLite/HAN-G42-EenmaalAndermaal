@@ -56,6 +56,15 @@ if (isset($user['username']) && $user['admin'] == 1) {
             <?php
             }
             ?>
+
+        <!-- jQuery Live Searchform -->
+        <form id="live-search" action="" class="styled" method="post">
+            <fieldset>
+                <input type="search" id="filter" name="Search" placeholder="Zoek naar advertenties" style="width: 250px;"/>
+                <span id="filter-count"></span>
+            </fieldset>
+        </form>
+
         <div class="activeAds" style="overflow-x: auto; overflow-y: auto; height: 100%;">
             <table class="table table-sm table-striped table-bordered" style="overflow-x: auto; overflow-y: auto; height: 50%;">
                 <tbody>
@@ -68,9 +77,9 @@ if (isset($user['username']) && $user['admin'] == 1) {
 <!--                <th>Betaal instructie</th>-->
 <!--                <th>Stad</th>-->
 <!--                <th>Land</th>-->
-                <th>Lengte</th>
+<!--                <th>Lengte</th>-->
                 <th>Datum</th>
-                <th>Tijd</th>
+<!--                <th>Tijd</th>-->
 <!--                <th>Verzendkosten</th>-->
 <!--                <th>Verzend instructies</th>-->
                 <th>Verkoper</th>
@@ -187,6 +196,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
                 <?php
             }
             ?>
+
         <div class="closedAds" style="overflow-x: auto; overflow-y: auto; height: 100%;">
             <table class="table table-sm table-striped table-bordered"
                    style="height: 15em; overflow-x: auto; overflow-y: auto;">
@@ -273,8 +283,13 @@ if (isset($user['username']) && $user['admin'] == 1) {
             pagina</a>
 
     </div>
-
+    <br>
+    <br>
     </body>
+
+    <!-- Add Livesearch.js -->
+    <script src="<?=$cdn_url?>/assets/js/livesearch_ads.js"></script>
+
     </html>
 
     <?php

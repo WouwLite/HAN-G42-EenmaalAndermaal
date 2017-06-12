@@ -73,7 +73,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
             <!-- jQuery Live Searchform -->
             <form id="live-search" action="" class="styled" method="post">
                 <fieldset>
-                    <input type="text" class="text-input" id="filter" value="" placeholder="Zoek naar gebruiker(s)" />
+                    <input type="search" id="filter" name="Search" placeholder="Zoek naar gebruikers" style="width: 250px;"/>
                     <span id="filter-count"></span>
                 </fieldset>
             </form>

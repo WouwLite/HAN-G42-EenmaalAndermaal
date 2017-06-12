@@ -13,7 +13,7 @@ $(document).ready(function(){
             if ($(this).text().search(new RegExp(filter, "i")) < 0) {
                 $(this).fadeOut();
 
-            // Show the list item if the phrase matches and increase the count by 1
+                // Show the list item if the phrase matches and increase the count by 1
             } else {
                 $(this).show();
                 count++;
@@ -22,6 +22,6 @@ $(document).ready(function(){
 
         // Update the count
         var numberItems = count;
-        $("#filter-count").text("Aantal gebruikers: "+count);
+        $("#filter-count").text("Aantal gevonden advertenties: "+count);
     });
 });

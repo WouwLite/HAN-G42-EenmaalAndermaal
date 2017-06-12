@@ -17,7 +17,7 @@ $pageTitle = 'Over ons';
 <div class="container">
     <h1><?=$pageTitle?></h1>
     <p>
-        Test
+        Sorry, deze pagina is nog niet beschikbaar!
     </p>
 </div>
 <br>
