@@ -20,6 +20,7 @@ where o.productid = '$url'");
         $content[] = $ad;
     }
     return $content;
+    checkAd();
 }
 
 $value = getAd();
@@ -29,18 +30,21 @@ function checkBod()
     $errors['bod'] = ($_POST['bod'] == "") && ($_POST['bod'] < selectHighestBid()) ? "Vul aub een geldig bod in" : '';
 }
 
+function checkAd(){
+    global $pdo;
 
-$stmt = $pdo->prepare("SELECT durationendTime, durationendDay FROM Object WHERE productid = ?");
-$stmt->execute([$_GET['link']]);
-$dataAd = $stmt->fetch(PDO::FETCH_ASSOC);
-$currentDate = date("Y-m-d H:i:s");
-$dateAuction = $dataAd['durationendDay'] . ' ' . $dataAd['durationendTime'];
-if (strtotime($currentDate) <= strtotime($dateAuction)) {
-    $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 0 WHERE productid = ?");
+    $stmt = $pdo->prepare("SELECT durationendTime, durationendDay FROM Object WHERE productid = ?");
     $stmt->execute([$_GET['link']]);
-} else {
-    $stmt = $pdo->prepare("UPDATE OBject SET auctionClosed = 1 WHERE productid = ?");
-    $stmt->execute([$_GET['link']]);
+    $dataAd = $stmt->fetch(PDO::FETCH_ASSOC);
+    $currentDate = date("Y-m-d H:i:s");
+    $dateAuction = $dataAd['durationendDay'] . ' ' . $dataAd['durationendTime'];
+    if (strtotime($currentDate) <= strtotime($dateAuction)) {
+        $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 0 WHERE productid = ?");
+        $stmt->execute([$_GET['link']]);
+    } else {
+        $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 1 WHERE productid = ?");
+        $stmt->execute([$_GET['link']]);
+    }
 }
 
 
@@ -1240,14 +1244,14 @@ function mailUser()
 
             <?php
             global $pdo;
-            $stmt = $pdo->prepare("SELECT auctionClosed FROM Object where productid = ?");
-            $stmt->execute([getAd()[0][6]]);
-            $dataAuctionClosed = $stmt->fetchColumn();
+            $stmt = $pdo->prepare("SELECT auctionClosed FROM Object WHERE productid = ?");
+            $stmt->execute([$_GET['link']]);
+            $dataAdClosed = $stmt->fetchColumn();
 
-            if ($dataAuctionClosed == 1) {
+            if ($dataAdClosed == 1) {
                 print '<br>
                             <div class="alert alert-danger"><strong>Oei!</strong> Deze veiling is gesloten, hierdoor kunt u geen biedingen meer plaatsen</div>';
-            } else if ($dataAuctionClosed == 0) {
+            } else if ($dataAdClosed == 0) {
                 if (isset($_SESSION['username']) AND $_SESSION['username'] == getAd()[0][5]) {
                     ?>
                     <form action="<?= $app_url ?>/views/account/update-advertisement.php" method="post">
