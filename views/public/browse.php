@@ -120,8 +120,13 @@ echo "</div>";
 <br>
 <br>
 <div class="text-center">
-    <a class="btn btn-primary"
-       href="<?= key_exists('Search',$_GET)?"?Search=".$_GET['Search']:"?cat=".$_GET['cat'];?>&page=<?=($_GET['page']??1) - 1 ;?>">Vorige pagina</a>
+    <?php if (key_exists('page', $_GET) and $_GET['page']??0 > 0): ?>
+        <a class="btn btn-primary"
+           href="<?= key_exists('Search',$_GET)?"?Search=".$_GET['Search']:"?cat=".$_GET['cat'];?>&page=<?=($_GET['page']??1) - 1 ;?>">Vorige pagina</a>
+    <?php else: ?>
+        <a class="btn btn-primary disabled">Vorige pagina</a>
+    <?php endif ?>
+
     <a class="btn btn-primary"
        href="<?= key_exists('Search',$_GET)?"?Search=".$_GET['Search']:'?cat='.$_GET['cat'];?>&page=<?=($_GET['page']??1) + 1 ;?>">Volgende pagina</a>
 <br>
