@@ -38,7 +38,7 @@ $app_url                      = 'http://iproject42.icasites.nl';
 | different types of environment are: 'Development' and 'Production'
 */
 
-$debug                      = true;
+$debug                      = false;
 $environment                = 'Production';
 
 /*
@@ -78,6 +78,5 @@ $cdn_remote_url             = '//cdn.wouwlite.eu/icasites.nl/';
  * Includes
  */
 
-require($_SERVER['DOCUMENT_ROOT'] . '/config/mail.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/config/cdn.php');
 require($_SERVER['DOCUMENT_ROOT'] . '/config/database.php');

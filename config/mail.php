@@ -1,3 +1,0 @@
-<!-- /config/mail.php -->
-
-<?php

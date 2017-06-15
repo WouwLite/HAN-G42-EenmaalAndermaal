@@ -10,7 +10,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 <link type="text/css" rel="stylesheet" href="<?= $cdn_url ?>/assets/css/account.css">
 <link type="text/css" rel="stylesheet" href="<?= $cdn_url ?>/assets/css/vendor/bootstrap.min.css">
 <link type="text/css" rel="stylesheet" href="<?= $cdn_url ?>/assets/css/shop-homepage.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/68afb4fb20.css">
+<link rel="stylesheet" href="http://use.fontawesome.com/68afb4fb20.css">
 
 
 <!-- Scripts -->
@@ -19,6 +19,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/config/app.php');
 <script src="<?= $app_url ?>/assets/js/vendor/bootstrap.min.js"></script>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<script src="https://use.fontawesome.com/f3a599c392.js"></script>
 
 
 <!-- External Fonts -->
