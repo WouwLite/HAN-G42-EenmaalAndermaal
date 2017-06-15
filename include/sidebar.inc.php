@@ -114,6 +114,11 @@ function handleBannedUser(){
                         <a class="nav-link" href="' . $app_url . '/views/admin/overview-users.php"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Alle gebruikers</a>
                 </li>');
             }
+
+            else if($user['banned'] == 1){
+                handleBannedUser();
+                header('location: http://iproject42.icasites.nl/views/account/logout.php');
+            }
         ?>
 
         <!-- View dashboard -->
