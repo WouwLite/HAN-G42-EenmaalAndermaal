@@ -35,11 +35,10 @@ $stmt->execute([$_GET['link']]);
 $dataAd = $stmt->fetch(PDO::FETCH_ASSOC);
 $currentDate = date("Y-m-d H:i:s");
 $dateAuction = $dataAd['durationendDay'] . ' ' . $dataAd['durationendTime'];
-if(strtotime($currentDate) <= strtotime($dateAuction)){
+if (strtotime($currentDate) <= strtotime($dateAuction)) {
     $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 0 WHERE productid = ?");
     $stmt->execute([$_GET['link']]);
-}
-else {
+} else {
     $stmt = $pdo->prepare("UPDATE OBject SET auctionClosed = 1 WHERE productid = ?");
     $stmt->execute([$_GET['link']]);
 }
@@ -52,21 +51,54 @@ function checkNoErrorBod()
     return true;
 }
 
+function checkIfBetweenPriceRange()
+{
+    if (!empty(selectHighestBid())) {
+        if ((float)selectHighestBid() >= 1.00 && (float)selectHighestBid() <= 49.99 && (float)$_POST['bod'] >= (float)selectHighestBid() + 0.50) {
+            return array(true, 1.00, 49.99, 0.50);
+        } elseif ((float)selectHighestBid() >= 50 && (float)selectHighestBid() <= 499.99 && (float)$_POST['bod'] >= (float)selectHighestBid() + 1.00) {
+            return array(true, 49.99, 499.99, 1.00);
+        } elseif ((float)selectHighestBid() >= 500 && (float)selectHighestBid() <= 999.99 && (float)$_POST['bod'] >= (float)selectHighestBid() + 5.00) {
+            return array(true, 500, 999.99, 5.00);
+        } elseif ((float)selectHighestBid() >= 1000 && (float)selectHighestBid() <= 4999.99 && (float)$_POST['bod'] >= (float)selectHighestBid() + 10.00) {
+            return array(true, 1000, 4999.99, 10.00);
+        } elseif ((float)selectHighestBid() >= 5000 && (float)$_POST['bod'] > (float)selectHighestBid() + 50.00) {
+            return array(true, 5000, 9999, 50.0);
+        } else {
+            return false;
+        }
+    }
+    return true;
+}
+
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     global $errors;
     if (isset($_POST['submit'])) {
         checkBod();
     }
     $startPrice = selectStartPrice();
-    if (isset($startPrice) && checkNoErrorBod() && (int)$_POST['bod'] > (int)selectStartPrice()) {
+    if (isset($startPrice) && checkNoErrorBod() && (int)$_POST['bod'] > (int)selectStartPrice() && checkIfBetweenPriceRange()) {
         saveBid();
-    } else if (!isset($startPrice) && checkNoErrorBod() && (int)$_POST['bod'] > (int)selectHighestBid()) {
+    } else if (!isset($startPrice) && checkNoErrorBod() && (int)$_POST['bod'] > (int)selectHighestBid() && checkIfBetweenPriceRange()) {
         saveBid();
+    } elseif (!checkIfBetweenPriceRange()) {
+        if ((float)selectHighestBid() >= 1.00 && (float)selectHighestBid() <= 49.99) {
+            $errors['bod'] = "Uw bod moet hoger € 0.50 hoger zijn dan bod nummer 1.";
+        } elseif ((float)selectHighestBid() >= 49.99 && (float)selectHighestBid() <= 499.99) {
+            $errors['bod'] = "Uw bod moet hoger € 1.00 hoger zijn dan bod nummer 1.";
+        } elseif ((float)selectHighestBid() >= 500 && (float)selectHighestBid() <= 999.99) {
+            $errors['bod'] = "Uw bod moet hoger € 5.00 hoger zijn dan bod nummer 1.";
+        } elseif ((float)selectHighestBid() >= 1000 && (float)selectHighestBid() <= 4999.99) {
+            $errors['bod'] = "Uw bod moet hoger € 10.00 hoger zijn dan bod nummer 1.";
+        } elseif ((float)selectHighestBid() >= 5000) {
+            $errors['bod'] = "Uw bod moet hoger € 50.00 hoger zijn dan bod nummer 1.";
+        }
+
     } else if (!empty(selectHighestBid()) && (int)$_POST['bod'] < (int)selectHighestBid()) {
         $errors['bod'] = "Vul aub een hoger bod in dan het huidige bod.";
-    }  else if ((int)$_POST['bod'] > 9999) {
+    } else if ((int)$_POST['bod'] > 9999.99) {
         $errors['bod'] = "Het bod wat u heeft geplaatst is te hoog. Het bod mag maximaal € 9999,99 zijn.";
-    } else if(empty(selectHighestBid()) && (int)$_POST['bod'] < (int)selectStartPrice()){
+    } else if (empty(selectHighestBid()) && (int)$_POST['bod'] < (int)selectStartPrice()) {
         $errors['bod'] = "Bod moet hoger zijn dan de startprijs.";
     }
 }
@@ -1194,14 +1226,14 @@ function mailUser()
                                 echo 'Huidig bod: € ' . selectHighestBid();
                             }
                             ?></h4>
-                        <h4><?php print '<strong>Verkoper: </strong> ' . getAd()[0][5]?></h4>
-                        <h4><?php print '<strong>Titel: </strong></h4><h5>' . getAd()[0][0]. '</h5>'; ?>
-                        <?php print '<br><h5><strong>Beschrijving: </strong></h5>' . '<h8>' .  getAd()[0][1] . '</h8>' ?>
-                        <h4>
-                            <?php
-                            print '<h5>Einddatum: ' . getAd()[0][7] . '</h5>';
-                            ?>
-                        </h4>
+                        <h4><?php print '<strong>Verkoper: </strong> ' . getAd()[0][5] ?></h4>
+                        <h4><?php print '<strong>Titel: </strong></h4><h5>' . getAd()[0][0] . '</h5>'; ?>
+                            <?php print '<br><h5><strong>Beschrijving: </strong></h5>' . '<h8>' . getAd()[0][1] . '</h8>' ?>
+                            <h4>
+                                <?php
+                                print '<h5>Einddatum: ' . getAd()[0][7] . '</h5>';
+                                ?>
+                            </h4>
                     </div>
                 </div>
             </div>
@@ -1216,7 +1248,7 @@ function mailUser()
                 print '<br>
                             <div class="alert alert-danger"><strong>Oei!</strong> Deze veiling is gesloten, hierdoor kunt u geen biedingen meer plaatsen</div>';
             } else if ($dataAuctionClosed == 0) {
-                if(isset($_SESSION['username']) AND $_SESSION['username'] == getAd()[0][5]) {
+                if (isset($_SESSION['username']) AND $_SESSION['username'] == getAd()[0][5]) {
                     ?>
                     <form action="<?= $app_url ?>/views/account/update-advertisement.php" method="post">
                         <button class="btn btn-default btn-sm" name="changeid"
@@ -1226,9 +1258,7 @@ function mailUser()
                     </form>
                     <?php
 
-                }
-
-                else if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5] || $user['admin'] == 1) {
+                } else if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5] || $user['admin'] == 1) {
                     ?>
 
                     <div class="well">
@@ -1254,7 +1284,8 @@ function mailUser()
 
                     <input placeholder="€ 0,00" id="bod" name="bod" type="number"
                            step="0.01"
-                           class="form-control">
+                    "
+                    class="form-control">
                     <div class="form-control-feedback"><?php global $errors;
                         echo $errors['bod'];
 
@@ -1263,9 +1294,25 @@ function mailUser()
                     <?php if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5]) {
                         ?>
                         <button name="submit" id="submit" class="btn btn-lg btn-secondary">Plaats bod!</button>
+                        <?php
+                        if (!empty(selectHighestBid())) {
+                            if ((float)selectHighestBid() >= 1.00 && (float)selectHighestBid() <= 49.99) {
+                                echo "Uw bod moet minimaal € 0.50 hoger zijn dan bod nummer 1.";
+                            } elseif ((float)selectHighestBid() >= 49.99 && (float)selectHighestBid() <= 499.99) {
+                                echo "Uw bod moet minimaal € 1.00 hoger zijn dan bod nummer 1.";
+                            } elseif ((float)selectHighestBid() >= 500 && (float)selectHighestBid() <= 999.99) {
+                                echo "Uw bod moet minimaal € 5.00 hoger zijn dan bod nummer 1.";
+                            } elseif ((float)selectHighestBid() >= 1000 && (float)selectHighestBid() <= 4999.99) {
+                                echo "Uw bod moet minimaal € 10.00 hoger zijn dan bod nummer 1.";
+                            } elseif ((float)selectHighestBid() >= 5000) {
+                                echo "Uw bod moet minimaal € 50.00 hoger zijn dan bod nummer 1.";
+                            }
+                        }
+                        ?>
                         <hr style="width: auto;">
 
                         </div>
+
                         </div>
                         </form>
                         <?php
@@ -1288,7 +1335,6 @@ function mailUser()
         <div class="col-md-3">
 
 
-
             <div class="list-group">
                 <table class="table table-hover">
                     <thead>
@@ -1297,7 +1343,7 @@ function mailUser()
                         <th>User</th>
                         <th>Bod</th>
                         <?php
-                        if(getAd()[0][5] == $_SESSION['username']){
+                        if (getAd()[0][5] == $_SESSION['username']) {
                             print '<th>Email</th>';
                         }
                         ?>
@@ -1313,8 +1359,8 @@ function mailUser()
                         echo "<td>" . $i . "</td>";
                         echo "<td>" . $value[1] . "</td>";
                         echo "<td>" . $value[0] . "</td>";
-                        if(getAd()[0][5] == $_SESSION['username']){
-                            echo "<td>". $value[2]."</td>";
+                        if (getAd()[0][5] == $_SESSION['username']) {
+                            echo "<td>" . $value[2] . "</td>";
                         }
                         echo "</tr>";
                     }
@@ -1326,9 +1372,8 @@ function mailUser()
         </div>
 
 
-
-        </div>
     </div>
+</div>
 </div>
 
 <!-- /.container -->
