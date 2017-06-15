@@ -39,7 +39,7 @@ function checkEmptyFields()
     global $errors;
     $errors['firstname'] = ($_POST['firstname'] == "") ? "Vul aub uw voornaam in." : '';
     $errors['lastname'] = ($_POST['lastname'] == "") ? "Vul aub uw achternaam in." : '';
-    $errors['address1'] = ($_POST['address1'] == "") ? "Vul aubuw adres  in." : '';
+    $errors['address1'] = ($_POST['address1'] == "") ? "Vul aub uw adres  in." : '';
     $errors['zipcode'] = ($_POST['zipcode'] == "") ? "Vul aub uw postcode in." : '';
     $errors['city'] = ($_POST['city'] == "") ? "Vul aub uw woonplaats in." : '';
     $errors['country'] = ($_POST['country'] == "") ? "Vul aub uw land van herkomst in." : '';
