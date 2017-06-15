@@ -24,7 +24,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/include/main.inc.php');
 
 $merchantStatus = false;
 
-GLOBAL $User;
+GLOBAL $user;
 
 
 
@@ -41,7 +41,14 @@ if (isset($_SESSION['username'])) {
             <li class="breadcrumb-item active">Mijn Account</li>
         </ol>
     </div>
+    <?php
+    if (key_exists('edit', $_GET) and $_GET['edit']??"failure" == "success") {
+        print("<div class='alert alert-success alert-dismissible fade show' role='alert'>
 
+<strong>Gelukt<br></strong> Uw account is succesvol bijgewerkt.
+</div>");
+    }
+    ?>
     <div class="container-float"><h1>Mijn account</h1>
         <div class="row">
             <div class="col-md-4">

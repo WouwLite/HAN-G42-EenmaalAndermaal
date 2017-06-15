@@ -111,6 +111,7 @@ function updateUserData()
             $_POST['securityquestion'], $_POST['answer'], $userChange))) {
             global $updateSuccess;
             $updateSuccess = true;
+            header('location: http://iproject42.icasites.nl/views/account/?edit=success');
         }
         else {
             global $updateSucces;
