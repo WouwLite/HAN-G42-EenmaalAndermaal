@@ -78,7 +78,11 @@ echo "</div>";
     <div class="row text-center">
         <?php
         $ads = getAds();
+        $lastValue = end($ads);
+        reset($ads);
         foreach (array_slice($ads, (($_GET['page']??1) - 1) * 16, 16) as $value) {
+            global $lastPage;
+            if ($value === $lastValue) $lastPage = true;
             $picsql = "SELECT TOP 1 filename FROM productPhoto WHERE productid = ?";
             $stmt = $pdo->prepare($picsql);
             $stmt->execute([$value[0]]);
@@ -120,10 +124,20 @@ echo "</div>";
 <br>
 <br>
 <div class="text-center">
-    <a class="btn btn-primary"
-       href="<?= key_exists('Search',$_GET)?"?Search=".$_GET['Search']:"?cat=".$_GET['cat'];?>&page=<?=($_GET['page']??1) - 1 ;?>">Vorige pagina</a>
-    <a class="btn btn-primary"
-       href="<?= key_exists('Search',$_GET)?"?Search=".$_GET['Search']:'?cat='.$_GET['cat'];?>&page=<?=($_GET['page']??1) + 1 ;?>">Volgende pagina</a>
+    <?php if (key_exists('page', $_GET) and $_GET['page']??0 > 0): ?>
+        <a class="btn btn-primary"
+           href="<?= key_exists('Search',$_GET)?"?Search=".$_GET['Search']:"?cat=".$_GET['cat'];?>&page=<?=($_GET['page']??1) - 1 ;?>">Vorige pagina</a>
+    <?php else: ?>
+        <a class="btn btn-primary disabled">Vorige pagina</a>
+    <?php endif ?>
+    <?php global $lastPage;
+    if (!$lastPage): ?>
+        <a class="btn btn-primary"
+           href="<?= key_exists('Search', $_GET) ? "?Search=" . $_GET['Search'] : '?cat=' . $_GET['cat']; ?>&page=<?= ($_GET['page']??1) + 1; ?>">Volgende
+            pagina</a>
+    <?php else: ?>
+        <a class="btn btn-primary disabled">Volgende pagina</a>
+    <?php endif ?>
 <br>
 <br>
 <br>

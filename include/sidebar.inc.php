@@ -30,6 +30,32 @@
                        placeholder="Zoek naar veiling..."/>
         </li>
             <input type="submit" style="display: none"/>
+            <?php if (key_exists('cat', $_GET)): ?>
+                <input type="hidden" id="catForm" name="cat" value="<?= $_GET['cat'] ?>">
+                <li>
+                    <div class="alert alert-info show" style="margin-top: 16px; ;">
+                        <button type="button" id="catRemoveButton" class="close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <script>
+                            $('#catRemoveButton').click(function () {
+                                $('#catForm').remove();
+                                $(this).parent('div').remove();
+                            });
+                        </script>
+                        Zoekresultaten zijn gefilterd op:
+                        <strong>
+                            <?php
+                            global $pdo;
+                            $stmt = $pdo->prepare("SELECT Name FROM [bottom level categories] WHERE ID = ?");
+                            $stmt->execute([$_GET['cat']]);
+                            $catName = $stmt->fetchColumn();
+                            print($catName);
+                            ?>
+                        </strong>
+                    </div>
+                </li>
+            <?php endif ?>
         </form>
 
         <!-- Add debug alert when debugging is enabled -->
