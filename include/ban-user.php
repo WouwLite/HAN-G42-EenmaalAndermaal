@@ -26,6 +26,7 @@ SQL;
 }
 
 mailUsers();
+handleBannedUser();
 
 function mailUsers(){
     global $pdo;
@@ -45,8 +46,15 @@ function mailUsers(){
 
     foreach($userEmails as $mail){
         sendEmail();
-        mail($mail[0], $subject, $message, $headers);
+        mail($mail, $subject, $message, $headers);
     }
+}
+
+function handleBannedUser(){
+    global $pdo;
+
+    $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 1 WHERE seller = ?");
+    $stmt->execute([$_POST['banUser']]);
 }
 ?>
 

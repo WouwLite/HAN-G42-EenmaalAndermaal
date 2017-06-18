@@ -1256,7 +1256,7 @@ function mailUser()
                                 }
                             ?>
                             <?php
-                                if(!empty($dataAuction['shippingcosts'])){
+                                if(!empty($dataAuction['shippinginstructions'])){
                                     print '<h6><strong>Betaalinstructies: </strong>' . $dataAuction['shippinginstructions'] . '</h6>';
                                 }
                             ?>
