@@ -1230,14 +1230,36 @@ function mailUser()
                                 echo 'Huidig bod: € ' . selectHighestBid();
                             }
                             ?></h4>
-                        <h4><?php print '<strong>Verkoper: </strong> ' . getAd()[0][5] ?></h4>
-                        <h4><?php print '<strong>Titel: </strong></h4><h5>' . getAd()[0][0] . '</h5>'; ?>
-                            <?php print '<br><h5><strong>Beschrijving: </strong></h5>' . '<h8>' . getAd()[0][1] . '</h8>' ?>
+
+                        <?php
+                        global $pdo;
+                            $stmt = $pdo->prepare("SELECT title, description, startprice, paymentinstruction, city, country, durationbeginDay, shippingcosts, shippinginstructions, Seller, durationendDay
+                                                            FROM Object
+                                                            WHERE productid = ?");
+                            $stmt->execute([$_GET['link']]);
+                            $dataAuction = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                        ?>
+                        <h4><?php print '<strong>Verkoper: </strong> ' . $dataAuction['Seller'] ?></h4>
+                        <h4><?php print '<strong>Titel: </strong></h4><h5>' . $dataAuction['title'] . '</h5>'; ?>
+                            <?php print '<br><h5><strong>Beschrijving: </strong></h5>' . '<h8>' . $dataAuction['description'] . '</h8>' ?>
                             <h4>
                                 <?php
-                                print '<h5>Einddatum: ' . getAd()[0][7] . '</h5>';
+                                print '<br><h6><strong>Einddatum:</strong> ' . $dataAuction['durationendDay'] . '</h6>';
                                 ?>
                             </h4>
+                            <?php print '<h6><strong>Stad: </strong>' . $dataAuction['city']  . ' (' . $dataAuction['country'] . ')</h6>'?>
+                            <?php print '<h6><strong>Advertentie geplaatst op:</strong> ' . $dataAuction['durationbeginDay'] . '</h6>'?>
+                            <?php
+                                if($dataAuction['shippingcosts'] !=null){
+                                    print '<h6><strong>Verzendkosten: € </strong>' . $dataAuction['shippingcosts'] . '</h6>';
+                                }
+                            ?>
+                            <?php
+                                if($dataAuction['shippingcosts'] !=null){
+                                    print '<h6><strong>Betaalinstructies: </strong>' . $dataAuction['shippinginstructions'] . '</h6>';
+                                }
+                            ?>
                     </div>
                 </div>
             </div>
@@ -1254,12 +1276,13 @@ function mailUser()
             } else if ($dataAdClosed == 0) {
                 if (isset($_SESSION['username']) AND $_SESSION['username'] == getAd()[0][5]) {
                     ?>
-                    <form action="<?= $app_url ?>/views/account/update-advertisement.php" method="post">
-                        <button class="btn btn-default btn-sm" name="changeid"
-                                value="<?= getAd()[0][6] ?>"><i
-                                    class="fa fa-wrench"
-                                    style="width: 16px; height: 16px;"></i></button>
-                    </form>
+                    <br>
+                        <form action="<?= $app_url ?>/views/account/update-advertisement.php" method="post">
+                            <button class="btn btn-outline-info" name="changeid"
+                                    value="<?= getAd()[0][6] ?>"><i
+                                        class="fa fa-wrench"
+                                        style="width: 16px; height: 16px;"></i> Bewerk mijn advertentie</button>
+                        </form>
                     <?php
 
                 } else if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5] || $user['admin'] == 1) {
