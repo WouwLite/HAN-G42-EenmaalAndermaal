@@ -1245,18 +1245,18 @@ function mailUser()
                             <?php print '<br><h5><strong>Beschrijving: </strong></h5>' . '<h8>' . $dataAuction['description'] . '</h8>' ?>
                             <h4>
                                 <?php
-                                print '<br><h6><strong>Einddatum:</strong> ' . $dataAuction['durationendDay'] . '</h6>';
+                                print '<br><h6><strong>Advertentie verloopt op:</strong> ' . date("d-m-Y",strtotime($dataAuction['durationendDay'])) . '</h6>';
                                 ?>
                             </h4>
-                            <?php print '<h6><strong>Stad: </strong>' . $dataAuction['city']  . ' (' . $dataAuction['country'] . ')</h6>'?>
-                            <?php print '<h6><strong>Advertentie geplaatst op:</strong> ' . $dataAuction['durationbeginDay'] . '</h6>'?>
+                            <?php print '<h6><strong>Plaats: </strong>' . $dataAuction['city']  . ' (' . $dataAuction['country'] . ')</h6>'?>
+                            <?php print '<h6><strong>Advertentie geplaatst op:</strong> ' . date("d-m-Y", strtotime($dataAuction['durationbeginDay'])) . '</h6>'?>
                             <?php
-                                if($dataAuction['shippingcosts'] !=null){
+                                if(!empty($dataAuction['shippingcosts'])){
                                     print '<h6><strong>Verzendkosten: € </strong>' . $dataAuction['shippingcosts'] . '</h6>';
                                 }
                             ?>
                             <?php
-                                if($dataAuction['shippingcosts'] !=null){
+                                if(!empty($dataAuction['shippingcosts'])){
                                     print '<h6><strong>Betaalinstructies: </strong>' . $dataAuction['shippinginstructions'] . '</h6>';
                                 }
                             ?>
