@@ -20,7 +20,6 @@ where o.productid = '$url'");
         $content[] = $ad;
     }
     return $content;
-    checkAd();
 }
 
 $value = getAd();
@@ -30,9 +29,10 @@ function checkBod()
     $errors['bod'] = ($_POST['bod'] == "") && ($_POST['bod'] < selectHighestBid()) ? "Vul aub een geldig bod in" : '';
 }
 
+checkAd();
+
 function checkAd(){
     global $pdo;
-
     $stmt = $pdo->prepare("SELECT durationendTime, durationendDay FROM Object WHERE productid = ?");
     $stmt->execute([$_GET['link']]);
     $dataAd = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -58,21 +58,21 @@ function checkNoErrorBod()
 function checkIfBetweenPriceRange()
 {
     if (!empty(selectHighestBid())) {
-        if ((float)selectHighestBid() >= 1.00 && (float)selectHighestBid() <= 49.99 && (float)$_POST['bod'] >= (float)selectHighestBid() + 0.50) {
-            return array(true, 1.00, 49.99, 0.50);
+        if ((float)selectHighestBid() >= 0 && (float)selectHighestBid() <= 49.99 && (float)$_POST['bod'] >= (float)selectHighestBid() + 0.50) {
+            return true;
         } elseif ((float)selectHighestBid() >= 50 && (float)selectHighestBid() <= 499.99 && (float)$_POST['bod'] >= (float)selectHighestBid() + 1.00) {
-            return array(true, 49.99, 499.99, 1.00);
+            return true;
         } elseif ((float)selectHighestBid() >= 500 && (float)selectHighestBid() <= 999.99 && (float)$_POST['bod'] >= (float)selectHighestBid() + 5.00) {
-            return array(true, 500, 999.99, 5.00);
+            return true;
         } elseif ((float)selectHighestBid() >= 1000 && (float)selectHighestBid() <= 4999.99 && (float)$_POST['bod'] >= (float)selectHighestBid() + 10.00) {
-            return array(true, 1000, 4999.99, 10.00);
+            return true;
         } elseif ((float)selectHighestBid() >= 5000 && (float)$_POST['bod'] > (float)selectHighestBid() + 50.00) {
-            return array(true, 5000, 9999, 50.0);
+            return true;
         } else {
             return false;
         }
     }
-    return true;
+    return false;
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -81,21 +81,30 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         checkBod();
     }
     $startPrice = selectStartPrice();
-    if (isset($startPrice) && checkNoErrorBod() && (int)$_POST['bod'] > (int)selectStartPrice() && checkIfBetweenPriceRange()) {
+    if(empty((float)selectHighestBid()) && checkNoErrorBod() && (float)$_POST['bod'] > (float)selectStartPrice() && checkIfBetweenPriceRange()){
         saveBid();
-    } else if (!isset($startPrice) && checkNoErrorBod() && (int)$_POST['bod'] > (int)selectHighestBid() && checkIfBetweenPriceRange()) {
+    }
+    elseif(!empty((float)selectHighestBid()) && checkNoErrorBod() && (float)$_POST['bod'] > (float)selectStartPrice() && checkIfBetweenPriceRange()){
         saveBid();
-    } elseif (!checkIfBetweenPriceRange()) {
+    }
+//    if (isset($startPrice) && checkNoErrorBod() && (float)$_POST['bod'] > (float)selectStartPrice() && checkIfBetweenPriceRange()) {
+//        saveBid();
+//        echo "Geslaagd";
+//    } else if (isset($startPrice) && checkNoErrorBod() && (float)$_POST['bod'] > (float)selectHighestBid() && checkIfBetweenPriceRange()) {
+//        saveBid();
+//        echo "Bijna geslaagd";
+//    }
+    elseif (!checkIfBetweenPriceRange()) {
         if ((float)selectHighestBid() >= 1.00 && (float)selectHighestBid() <= 49.99) {
-            $errors['bod'] = "Uw bod moet hoger € 0.50 hoger zijn dan bod nummer 1.";
+            $errors['bod'] = "Uw bod moet € 0.50 hoger zijn dan bod nummer 1.";
         } elseif ((float)selectHighestBid() >= 49.99 && (float)selectHighestBid() <= 499.99) {
-            $errors['bod'] = "Uw bod moet hoger € 1.00 hoger zijn dan bod nummer 1.";
+            $errors['bod'] = "Uw bod moet € 1.00 hoger zijn dan bod nummer 1.";
         } elseif ((float)selectHighestBid() >= 500 && (float)selectHighestBid() <= 999.99) {
-            $errors['bod'] = "Uw bod moet hoger € 5.00 hoger zijn dan bod nummer 1.";
+            $errors['bod'] = "Uw bod moet € 5.00 hoger zijn dan bod nummer 1.";
         } elseif ((float)selectHighestBid() >= 1000 && (float)selectHighestBid() <= 4999.99) {
-            $errors['bod'] = "Uw bod moet hoger € 10.00 hoger zijn dan bod nummer 1.";
+            $errors['bod'] = "Uw bod moet € 10.00 hoger zijn dan bod nummer 1.";
         } elseif ((float)selectHighestBid() >= 5000) {
-            $errors['bod'] = "Uw bod moet hoger € 50.00 hoger zijn dan bod nummer 1.";
+            $errors['bod'] = "Uw bod moet € 50.00 hoger zijn dan bod nummer 1.";
         }
 
     } else if (!empty(selectHighestBid()) && (int)$_POST['bod'] < (int)selectHighestBid()) {
@@ -155,14 +164,18 @@ function getlowerbid($prid, $pdo)
 SELECT email FROM Users WHERE username = (SELECT [user] FROM Bidding WHERE productid = ? and biddingprice = ?)
 SQL;
     $getmail = $pdo->prepare($sqlstmt);
-    $getmail->execute([$prid, selectHighestBid()]);
+    if(!empty(selectHighestBid())){
+        $getmail->execute([$prid, selectStartPrice()]);
+    } else{
+        $getmail->execute([$prid, selectHighestBid()]);
+    }
     $email = $getmail->fetchColumn();
     return $email;
 }
 
 function saveBid()
 {
-    global $pdo, $url, $app_url;
+    global $pdo, $url, $app_url, $user;
     $email = getlowerbid($url, $pdo);
     if ($email) {
         $subject = "U bent overboden!";
@@ -583,7 +596,7 @@ function saveBid()
                                     <tr>
                                         <td class="soapbox-title">U bent overboden!</td>
                                     </tr>
-                                </table>                     
+                                </table>
                                 <table class="body">
                                     <tr>
                                         <td class="body-padding"></td>
@@ -611,7 +624,7 @@ function saveBid()
                                         <td class="status-padding"></td>
                                     </tr>
                                 </table>
-                        
+
                                             <table class="body-signature-block">
                                                 <tr>
                                                     <td class="body-signature-cell">
@@ -651,13 +664,11 @@ function saveBid()
         $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
         mail($email, $subject, $message, $headers);
     }
-
     $stmt = "INSERT INTO Bidding(productid, biddingprice, [user], biddingday, biddingtime)
              VALUES (?, ?, ?, ?, ?)";
     $addBid = $pdo->prepare($stmt);
-    if ($addBid->execute([$url, $_POST['bod'], $_SESSION['username'], date("Y-m-d"), date("H:i:s")])) {
+    if ($addBid->execute([$url, (float)$_POST['bod'], $user['username'], date("Y-m-d"), date("H:i:s")])) {
         mailUser();
-        //header("Refresh:0");
     }
 }
 
@@ -1233,11 +1244,11 @@ function mailUser()
 
                         <?php
                         global $pdo;
-                            $stmt = $pdo->prepare("SELECT title, description, startprice, paymentinstruction, city, country, durationbeginDay, shippingcosts, shippinginstructions, Seller, durationendDay
+                        $stmt = $pdo->prepare("SELECT title, description, startprice, paymentinstruction, city, country, durationbeginDay, shippingcosts, shippinginstructions, Seller, durationendDay
                                                             FROM Object
                                                             WHERE productid = ?");
-                            $stmt->execute([$_GET['link']]);
-                            $dataAuction = $stmt->fetch(PDO::FETCH_ASSOC);
+                        $stmt->execute([$_GET['link']]);
+                        $dataAuction = $stmt->fetch(PDO::FETCH_ASSOC);
 
                         ?>
                         <h4><?php print '<strong>Verkoper: </strong> ' . $dataAuction['Seller'] ?></h4>
@@ -1251,14 +1262,14 @@ function mailUser()
                             <?php print '<h6><strong>Plaats: </strong>' . $dataAuction['city']  . ' (' . $dataAuction['country'] . ')</h6>'?>
                             <?php print '<h6><strong>Advertentie geplaatst op:</strong> ' . date("d-m-Y", strtotime($dataAuction['durationbeginDay'])) . '</h6>'?>
                             <?php
-                                if(!empty($dataAuction['shippingcosts'])){
-                                    print '<h6><strong>Verzendkosten: € </strong>' . $dataAuction['shippingcosts'] . '</h6>';
-                                }
+                            if(!empty($dataAuction['shippingcosts'])){
+                                print '<h6><strong>Verzendkosten: € </strong>' . $dataAuction['shippingcosts'] . '</h6>';
+                            }
                             ?>
                             <?php
-                                if(!empty($dataAuction['shippinginstructions'])){
-                                    print '<h6><strong>Betaalinstructies: </strong>' . $dataAuction['shippinginstructions'] . '</h6>';
-                                }
+                            if(!empty($dataAuction['shippinginstructions'])){
+                                print '<h6><strong>Betaalinstructies: </strong>' . $dataAuction['shippinginstructions'] . '</h6>';
+                            }
                             ?>
                     </div>
                 </div>
@@ -1277,12 +1288,12 @@ function mailUser()
                 if (isset($_SESSION['username']) AND $_SESSION['username'] == getAd()[0][5]) {
                     ?>
                     <br>
-                        <form action="<?= $app_url ?>/views/account/update-advertisement.php" method="post">
-                            <button class="btn btn-outline-info" name="changeid"
-                                    value="<?= getAd()[0][6] ?>"><i
-                                        class="fa fa-wrench"
-                                        style="width: 16px; height: 16px;"></i> Bewerk mijn advertentie</button>
-                        </form>
+                    <form action="<?= $app_url ?>/views/account/update-advertisement.php" method="post">
+                        <button class="btn btn-outline-info" name="changeid"
+                                value="<?= getAd()[0][6] ?>"><i
+                                    class="fa fa-wrench"
+                                    style="width: 16px; height: 16px;"></i> Bewerk mijn advertentie</button>
+                    </form>
                     <?php
 
                 } else if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5] || $user['admin'] == 1) {
