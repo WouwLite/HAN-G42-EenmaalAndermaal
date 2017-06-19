@@ -33,15 +33,20 @@ checkAd();
 
 function checkAd(){
     global $pdo;
-    $stmt = $pdo->prepare("SELECT durationendTime, durationendDay FROM Object WHERE productid = ?");
+    $stmt = $pdo->prepare("SELECT durationendTime, durationendDay, auctionClosed FROM Object WHERE productid = ?");
     $stmt->execute([$_GET['link']]);
     $dataAd = $stmt->fetch(PDO::FETCH_ASSOC);
     $currentDate = date("Y-m-d H:i:s");
     $dateAuction = $dataAd['durationendDay'] . ' ' . $dataAd['durationendTime'];
-    if (strtotime($currentDate) <= strtotime($dateAuction)) {
-        $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 0 WHERE productid = ?");
+    if($dataAd['auctionClosed'] == 1){
+        $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 1 WHERE productid = ?");
         $stmt->execute([$_GET['link']]);
-    } else {
+    }
+//    if (strtotime($currentDate) <= strtotime($dateAuction)) {
+//        $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 0 WHERE productid = ?");
+//        $stmt->execute([$_GET['link']]);
+//    }
+    if (strtotime($currentDate) >= strtotime($dateAuction)) {
         $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 1 WHERE productid = ?");
         $stmt->execute([$_GET['link']]);
     }
