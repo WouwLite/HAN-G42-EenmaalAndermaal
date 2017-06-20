@@ -1299,9 +1299,35 @@ function mailUser()
                                     class="fa fa-wrench"
                                     style="width: 16px; height: 16px;"></i> Bewerk mijn advertentie</button>
                     </form>
-                    <?php
+                    <button class="btn btn-outline-danger" name="delete" type="button" data-toggle="modal" data-target="#deleteModal" data-ad="<?php echo $_GET['link']; ?>"
+                            value="<?= getAd()[0][6] ?>"><i
+                                class="fa fa-trash"
+                                style="width: 16px; height: 16px;"></i> Verwijder deze advertentie</button>
 
-                } else if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5] || $user['admin'] == 1) {
+
+                    <?php
+                    include($_SERVER['DOCUMENT_ROOT'] . '/include/delete-modal.php');
+                }
+                else if($user['admin'] == 1){
+                    ?>
+                    <br>
+                        <form action="<?= $app_url ?>/views/account/update-advertisement.php" method="post">
+                            <button class="btn btn-outline-primary" name="changeid"
+                                    value="<?= getAd()[0][6] ?>"><i
+                                        class="fa fa-wrench"
+                                        style="width: 16px; height: 16px;"></i> Bewerk deze advertentie</button>
+                        </form>
+                                <button class="btn btn-outline-danger" name="delete" type="button" data-toggle="modal" data-target="#deleteModal" data-ad="<?php echo $_GET['link']; ?>"
+                                        value="<?= getAd()[0][6] ?>"><i
+                                            class="fa fa-trash"
+                                            style="width: 16px; height: 16px;"></i> Verwijder deze advertentie</button>
+
+
+                    <?php
+                    include($_SERVER['DOCUMENT_ROOT'] . '/include/delete-modal.php');
+                }
+
+                else if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5]) {
                     ?>
 
                     <div class="well">
