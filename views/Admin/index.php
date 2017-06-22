@@ -65,6 +65,12 @@ if (isset($user['username']) && $user['admin'] == 1) {
             </fieldset>
         </form>
 
+        <a class="btn btn-primary"
+           href="<?= $app_url ?>/views/Admin/index.php?page=<?php echo ($_GET['page']??1) - 1 ?>">Vorige pagina</a>
+        <a class="btn btn-primary"
+           href="<?= $app_url ?>/views/Admin/index.php?page=<?php echo ($_GET['page']??1) + 1 ?>">Volgende
+            pagina</a>
+
         <div class="activeAds" style="overflow-x: auto; overflow-y: auto; height: 100%;">
             <table class="table table-sm table-striped table-bordered" style="overflow-x: auto; overflow-y: auto; height: 50%;">
                 <tbody>
@@ -104,7 +110,7 @@ if (isset($user['username']) && $user['admin'] == 1) {
                 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if ($activeAuctions > 0) {
 
-                    foreach (array_slice($data, (($_GET['page']??1) - 1) * 10, 10) as $d) {
+                    foreach (array_slice($data, (($_GET['page']??1) - 1) * 500, 500) as $d) {
                         ?>
 
          <!-- Regel hierboven veroorzaakt een bug waarbij er alleen maar bij de eerste 10 advertenties wordt
@@ -152,11 +158,6 @@ if (isset($user['username']) && $user['admin'] == 1) {
                 </tbody>
             </table>
         </div>
-        <a class="btn btn-primary"
-           href="<?= $app_url ?>/views/Admin/index.php?page=<?php echo ($_GET['page']??1) - 1 ?>">Vorige pagina</a>
-        <a class="btn btn-primary"
-           href="<?= $app_url ?>/views/Admin/index.php?page=<?php echo ($_GET['page']??1) + 1 ?>">Volgende
-            pagina</a>
 
 
         <!-- =========================================================== !-->
