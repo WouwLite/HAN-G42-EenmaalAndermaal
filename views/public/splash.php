@@ -9,6 +9,7 @@ if (isset($_SESSION['username'])) {
     header("Location: index.php");
 }
 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -75,11 +76,22 @@ if (isset($_SESSION['username'])) {
                 <h1 class="cover-heading"><?= $title ?></h1>
                 <p class="lead"><?= $slogan ?></p>
                 <p class="lead">
-                    <input class="form-control input-lg" id="homeSearchBox" placeholder="Zoek naar biedingen..."
-                           type="text" style="margin:auto;text-align:center;">
+<!--                    <form action="--><?php //$app_url ?><!--/views/public/browse.php?Search=--><?//=$_POST['search']?><!--">-->
+<!--                        <input type="text" name="search" id="homeSearchBox" placeholder="Zoek naar biedingen..."-->
+<!--                           style="margin:auto;text-align:center;">-->
+<!--                        <br>-->
+<!--                        <input type="submit" name="zoeken">-->
+<!--                    </form>-->
+
+                <form action="<?= $app_url ?>/views/public/browse.php" method="get">
+                    <input type="text" class="form-control input-lg" type="search" id="homeSearchBox" name="Search"
+                               placeholder="Zoek naar veiling..." style="margin:auto; text-align: center;"/>
+                    <p class="lead">
+                    <br>
+                    <input type="submit" class="btn btn-lg btn-primary" <i class="fa fa-magnifier fa-lg"></i>
                 </p>
-                <p class="lead">
-                    <a class="btn btn-lg btn-primary" href="#"><i class="fa fa-magnifier fa-lg"></i> Zoeken</a>
+                </form>
+
                 </p>
             </div>
 

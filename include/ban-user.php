@@ -19,13 +19,14 @@ SQL;
     mail($useremail, $subject, $message, $headers);
 
     $delsql = <<<SQL
-UPDATE Users SET banned = 1 WHERE username = ?
+UPDATE Users SET banned = 1 WHERE username = ? 
 SQL;
     $delstmt = $pdo->prepare($delsql);
     $delstmt->execute([$_POST['banUser']]);
 }
 
 mailUsers();
+handleBannedUser();
 
 function mailUsers(){
     global $pdo;
@@ -37,16 +38,22 @@ function mailUsers(){
                                                         FROM Object
                                                         WHERE Seller = ?))");
     $stmt->execute([$_POST['banUser']]);
-    $userEmails = $stmt->fetchAll();
+    $userEmails = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     $subject = "EenmaalAndermaal: veiling onderbroken.";
-    $message = "Uw bod op veiling: '...' is verwijderd omdat de verkoper is geblokkeerd";
+    $message = "Uw bod op veiling:  is verwijderd omdat de verkoper is geblokkeerd";
     $headers = 'From: noreply@iproject42.icasites.nl';
 
     foreach($userEmails as $mail){
-        sendEmail();
-        mail($mail[0], $subject, $message, $headers);
+        mail($mail, $subject, $message, $headers);
     }
+}
+
+function handleBannedUser(){
+    global $pdo;
+
+    $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 1 WHERE seller = ?");
+    $stmt->execute([$_POST['banUser']]);
 }
 ?>
 

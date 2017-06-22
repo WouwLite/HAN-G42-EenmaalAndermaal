@@ -20,7 +20,6 @@ where o.productid = '$url'");
         $content[] = $ad;
     }
     return $content;
-    checkAd();
 }
 
 $value = getAd();
@@ -30,18 +29,24 @@ function checkBod()
     $errors['bod'] = ($_POST['bod'] == "") && ($_POST['bod'] < selectHighestBid()) ? "Vul aub een geldig bod in" : '';
 }
 
+checkAd();
+
 function checkAd(){
     global $pdo;
-
-    $stmt = $pdo->prepare("SELECT durationendTime, durationendDay FROM Object WHERE productid = ?");
+    $stmt = $pdo->prepare("SELECT durationendTime, durationendDay, auctionClosed FROM Object WHERE productid = ?");
     $stmt->execute([$_GET['link']]);
     $dataAd = $stmt->fetch(PDO::FETCH_ASSOC);
     $currentDate = date("Y-m-d H:i:s");
     $dateAuction = $dataAd['durationendDay'] . ' ' . $dataAd['durationendTime'];
-    if (strtotime($currentDate) <= strtotime($dateAuction)) {
-        $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 0 WHERE productid = ?");
+    if($dataAd['auctionClosed'] == 1){
+        $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 1 WHERE productid = ?");
         $stmt->execute([$_GET['link']]);
-    } else {
+    }
+//    if (strtotime($currentDate) <= strtotime($dateAuction)) {
+//        $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 0 WHERE productid = ?");
+//        $stmt->execute([$_GET['link']]);
+//    }
+    if (strtotime($currentDate) >= strtotime($dateAuction)) {
         $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 1 WHERE productid = ?");
         $stmt->execute([$_GET['link']]);
     }
@@ -58,21 +63,21 @@ function checkNoErrorBod()
 function checkIfBetweenPriceRange()
 {
     if (!empty(selectHighestBid())) {
-        if ((float)selectHighestBid() >= 1.00 && (float)selectHighestBid() <= 49.99 && (float)$_POST['bod'] >= (float)selectHighestBid() + 0.50) {
-            return array(true, 1.00, 49.99, 0.50);
+        if ((float)selectHighestBid() >= 0 && (float)selectHighestBid() <= 49.99 && (float)$_POST['bod'] >= (float)selectHighestBid() + 0.50) {
+            return true;
         } elseif ((float)selectHighestBid() >= 50 && (float)selectHighestBid() <= 499.99 && (float)$_POST['bod'] >= (float)selectHighestBid() + 1.00) {
-            return array(true, 49.99, 499.99, 1.00);
+            return true;
         } elseif ((float)selectHighestBid() >= 500 && (float)selectHighestBid() <= 999.99 && (float)$_POST['bod'] >= (float)selectHighestBid() + 5.00) {
-            return array(true, 500, 999.99, 5.00);
+            return true;
         } elseif ((float)selectHighestBid() >= 1000 && (float)selectHighestBid() <= 4999.99 && (float)$_POST['bod'] >= (float)selectHighestBid() + 10.00) {
-            return array(true, 1000, 4999.99, 10.00);
+            return true;
         } elseif ((float)selectHighestBid() >= 5000 && (float)$_POST['bod'] > (float)selectHighestBid() + 50.00) {
-            return array(true, 5000, 9999, 50.0);
+            return true;
         } else {
             return false;
         }
     }
-    return true;
+    return false;
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -81,21 +86,30 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         checkBod();
     }
     $startPrice = selectStartPrice();
-    if (isset($startPrice) && checkNoErrorBod() && (int)$_POST['bod'] > (int)selectStartPrice() && checkIfBetweenPriceRange()) {
+    if((float)selectHighestBid() == null && checkNoErrorBod() && (float)$_POST['bod'] > (float)selectStartPrice()){
         saveBid();
-    } else if (!isset($startPrice) && checkNoErrorBod() && (int)$_POST['bod'] > (int)selectHighestBid() && checkIfBetweenPriceRange()) {
+    }
+    elseif(((float)selectHighestBid()) != null && checkNoErrorBod() && (float)$_POST['bod'] > (float)selectHighestBid() && checkIfBetweenPriceRange()){
         saveBid();
-    } elseif (!checkIfBetweenPriceRange()) {
+    }
+//    if (isset($startPrice) && checkNoErrorBod() && (float)$_POST['bod'] > (float)selectStartPrice() && checkIfBetweenPriceRange()) {
+//        saveBid();
+//        echo "Geslaagd";
+//    } else if (isset($startPrice) && checkNoErrorBod() && (float)$_POST['bod'] > (float)selectHighestBid() && checkIfBetweenPriceRange()) {
+//        saveBid();
+//        echo "Bijna geslaagd";
+//    }
+    elseif (!checkIfBetweenPriceRange()) {
         if ((float)selectHighestBid() >= 1.00 && (float)selectHighestBid() <= 49.99) {
-            $errors['bod'] = "Uw bod moet hoger € 0.50 hoger zijn dan bod nummer 1.";
+            $errors['bod'] = "Uw bod moet € 0.50 hoger zijn dan bod nummer 1.";
         } elseif ((float)selectHighestBid() >= 49.99 && (float)selectHighestBid() <= 499.99) {
-            $errors['bod'] = "Uw bod moet hoger € 1.00 hoger zijn dan bod nummer 1.";
+            $errors['bod'] = "Uw bod moet € 1.00 hoger zijn dan bod nummer 1.";
         } elseif ((float)selectHighestBid() >= 500 && (float)selectHighestBid() <= 999.99) {
-            $errors['bod'] = "Uw bod moet hoger € 5.00 hoger zijn dan bod nummer 1.";
+            $errors['bod'] = "Uw bod moet € 5.00 hoger zijn dan bod nummer 1.";
         } elseif ((float)selectHighestBid() >= 1000 && (float)selectHighestBid() <= 4999.99) {
-            $errors['bod'] = "Uw bod moet hoger € 10.00 hoger zijn dan bod nummer 1.";
+            $errors['bod'] = "Uw bod moet € 10.00 hoger zijn dan bod nummer 1.";
         } elseif ((float)selectHighestBid() >= 5000) {
-            $errors['bod'] = "Uw bod moet hoger € 50.00 hoger zijn dan bod nummer 1.";
+            $errors['bod'] = "Uw bod moet € 50.00 hoger zijn dan bod nummer 1.";
         }
 
     } else if (!empty(selectHighestBid()) && (int)$_POST['bod'] < (int)selectHighestBid()) {
@@ -110,9 +124,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 function selectStartPrice()
 {
     global $url, $pdo;
-    $result = $pdo->query("select startprice from Object where productid like '%$url%'");
-    $row = $result->fetch();
-    return $row['startprice'];
+    $result = $pdo->prepare("select startprice from Object where productid = ?");
+    $result->execute([$url]);
+    $row = $result->fetchColumn();
+    return $row;
 }
 
 function getBids()
@@ -155,14 +170,18 @@ function getlowerbid($prid, $pdo)
 SELECT email FROM Users WHERE username = (SELECT [user] FROM Bidding WHERE productid = ? and biddingprice = ?)
 SQL;
     $getmail = $pdo->prepare($sqlstmt);
-    $getmail->execute([$prid, selectHighestBid()]);
+    if(!empty(selectHighestBid())){
+        $getmail->execute([$prid, selectStartPrice()]);
+    } else{
+        $getmail->execute([$prid, selectHighestBid()]);
+    }
     $email = $getmail->fetchColumn();
     return $email;
 }
 
 function saveBid()
 {
-    global $pdo, $url, $app_url;
+    global $pdo, $url, $app_url, $user;
     $email = getlowerbid($url, $pdo);
     if ($email) {
         $subject = "U bent overboden!";
@@ -583,7 +602,7 @@ function saveBid()
                                     <tr>
                                         <td class="soapbox-title">U bent overboden!</td>
                                     </tr>
-                                </table>                     
+                                </table>
                                 <table class="body">
                                     <tr>
                                         <td class="body-padding"></td>
@@ -611,7 +630,7 @@ function saveBid()
                                         <td class="status-padding"></td>
                                     </tr>
                                 </table>
-                        
+
                                             <table class="body-signature-block">
                                                 <tr>
                                                     <td class="body-signature-cell">
@@ -651,13 +670,11 @@ function saveBid()
         $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
         mail($email, $subject, $message, $headers);
     }
-
     $stmt = "INSERT INTO Bidding(productid, biddingprice, [user], biddingday, biddingtime)
              VALUES (?, ?, ?, ?, ?)";
     $addBid = $pdo->prepare($stmt);
-    if ($addBid->execute([$url, $_POST['bod'], $_SESSION['username'], date("Y-m-d"), date("H:i:s")])) {
+    if ($addBid->execute([$url, (float)$_POST['bod'], $user['username'], date("Y-m-d"), date("H:i:s")])) {
         mailUser();
-        //header("Refresh:0");
     }
 }
 
@@ -1230,14 +1247,36 @@ function mailUser()
                                 echo 'Huidig bod: € ' . selectHighestBid();
                             }
                             ?></h4>
-                        <h4><?php print '<strong>Verkoper: </strong> ' . getAd()[0][5] ?></h4>
-                        <h4><?php print '<strong>Titel: </strong></h4><h5>' . getAd()[0][0] . '</h5>'; ?>
-                            <?php print '<br><h5><strong>Beschrijving: </strong></h5>' . '<h8>' . getAd()[0][1] . '</h8>' ?>
+
+                        <?php
+                        global $pdo;
+                        $stmt = $pdo->prepare("SELECT title, description, startprice, paymentinstruction, city, country, durationbeginDay, shippingcosts, shippinginstructions, Seller, durationendDay
+                                                            FROM Object
+                                                            WHERE productid = ?");
+                        $stmt->execute([$_GET['link']]);
+                        $dataAuction = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                        ?>
+                        <h4><?php print '<strong>Verkoper: </strong> ' . $dataAuction['Seller'] ?></h4>
+                        <h4><?php print '<strong>Titel: </strong></h4><h5>' . $dataAuction['title'] . '</h5>'; ?>
+                            <?php print '<br><h5><strong>Beschrijving: </strong></h5>' . '<h8>' . $dataAuction['description'] . '</h8>' ?>
                             <h4>
                                 <?php
-                                print '<h5>Einddatum: ' . getAd()[0][7] . '</h5>';
+                                print '<br><h6><strong>Advertentie verloopt op:</strong> ' . date("d-m-Y",strtotime($dataAuction['durationendDay'])) . '</h6>';
                                 ?>
                             </h4>
+                            <?php print '<h6><strong>Plaats: </strong>' . $dataAuction['city']  . ' (' . $dataAuction['country'] . ')</h6>'?>
+                            <?php print '<h6><strong>Advertentie geplaatst op:</strong> ' . date("d-m-Y", strtotime($dataAuction['durationbeginDay'])) . '</h6>'?>
+                            <?php
+                            if(!empty($dataAuction['shippingcosts'])){
+                                print '<h6><strong>Verzendkosten: € </strong>' . $dataAuction['shippingcosts'] . '</h6>';
+                            }
+                            ?>
+                            <?php
+                            if(!empty($dataAuction['shippinginstructions'])){
+                                print '<h6><strong>Betaalinstructies: </strong>' . $dataAuction['shippinginstructions'] . '</h6>';
+                            }
+                            ?>
                     </div>
                 </div>
             </div>
@@ -1254,15 +1293,61 @@ function mailUser()
             } else if ($dataAdClosed == 0) {
                 if (isset($_SESSION['username']) AND $_SESSION['username'] == getAd()[0][5]) {
                     ?>
+                    <br>
                     <form action="<?= $app_url ?>/views/account/update-advertisement.php" method="post">
-                        <button class="btn btn-default btn-sm" name="changeid"
+                        <button class="btn btn-outline-info" name="changeid"
                                 value="<?= getAd()[0][6] ?>"><i
                                     class="fa fa-wrench"
-                                    style="width: 16px; height: 16px;"></i></button>
+                                    style="width: 16px; height: 16px;"></i> Bewerk mijn advertentie</button>
+                    </form>
+                    <button class="btn btn-outline-danger" name="delete" type="button" data-toggle="modal" data-target="#deleteModal" data-ad="<?php echo $_GET['link']; ?>"
+                            value="<?= getAd()[0][6] ?>"><i
+                                class="fa fa-trash"
+                                style="width: 16px; height: 16px;"></i> Verwijder deze advertentie</button>
+
+                    <form action="#" method="post">
+                        <button class="btn btn-outline-warning" style="margin-top: 2%;" name="close"><i
+                                class="fa fa-lock"
+                                style="width: 16px; height: 16px;"></i> Sluit deze advertentie</button>
                     </form>
                     <?php
+                    if(isset($_POST['close'])){
+                        global $pdo;
+                        $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 1 WHERE productid = ?");
+                        $stmt->execute([$_GET['link']]);
+                        header('location: http://iproject42.icasites.nl/views/public/');
+                    }
+                    ?>
 
-                } else if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5] || $user['admin'] == 1) {
+                    <?php
+                    include($_SERVER['DOCUMENT_ROOT'] . '/include/delete-modal.php');
+                }
+                else if($user['admin'] == 1){
+                    ?>
+                    <br>
+                        <form action="<?= $app_url ?>/views/account/update-advertisement.php" method="post">
+                            <button class="btn btn-outline-primary" name="changeid"
+                                    value="<?= getAd()[0][6] ?>"><i
+                                        class="fa fa-wrench"
+                                        style="width: 16px; height: 16px;"></i> Bewerk deze advertentie</button>
+                        </form>
+                                <button class="btn btn-outline-danger" name="delete" type="button" data-toggle="modal" data-target="#deleteModal" data-ad="<?php echo $_GET['link']; ?>"
+                                        value="<?= getAd()[0][6] ?>"><i
+                                            class="fa fa-trash"
+                                            style="width: 16px; height: 16px;"></i> Verwijder deze advertentie</button>
+
+                    <form action="#" method="post">
+                        <button class="btn btn-outline-warning" style="margin-top: 2%;" name="close"><i
+                                    class="fa fa-lock"
+                                    style="width: 16px; height: 16px;"></i> Sluit deze advertentie</button>
+                    </form>
+
+
+                    <?php
+                    include($_SERVER['DOCUMENT_ROOT'] . '/include/delete-modal.php');
+                }
+
+                else if (isset($_SESSION['username']) && $_SESSION['username'] != getAd()[0][5]) {
                     ?>
 
                     <div class="well">
