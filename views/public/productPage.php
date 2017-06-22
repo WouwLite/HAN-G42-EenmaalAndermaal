@@ -86,10 +86,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         checkBod();
     }
     $startPrice = selectStartPrice();
-    if(empty((float)selectHighestBid()) && checkNoErrorBod() && (float)$_POST['bod'] > (float)selectStartPrice() && checkIfBetweenPriceRange()){
+    if((float)selectHighestBid() == null && checkNoErrorBod() && (float)$_POST['bod'] > (float)selectStartPrice()){
         saveBid();
     }
-    elseif(!empty((float)selectHighestBid()) && checkNoErrorBod() && (float)$_POST['bod'] > (float)selectStartPrice() && checkIfBetweenPriceRange()){
+    elseif(((float)selectHighestBid()) != null && checkNoErrorBod() && (float)$_POST['bod'] > (float)selectHighestBid() && checkIfBetweenPriceRange()){
         saveBid();
     }
 //    if (isset($startPrice) && checkNoErrorBod() && (float)$_POST['bod'] > (float)selectStartPrice() && checkIfBetweenPriceRange()) {
@@ -124,9 +124,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 function selectStartPrice()
 {
     global $url, $pdo;
-    $result = $pdo->query("select startprice from Object where productid like '%$url%'");
-    $row = $result->fetch();
-    return $row['startprice'];
+    $result = $pdo->prepare("select startprice from Object where productid = ?");
+    $result->execute([$url]);
+    $row = $result->fetchColumn();
+    return $row;
 }
 
 function getBids()
@@ -1304,6 +1305,19 @@ function mailUser()
                                 class="fa fa-trash"
                                 style="width: 16px; height: 16px;"></i> Verwijder deze advertentie</button>
 
+                    <form action="#" method="post">
+                        <button class="btn btn-outline-warning" style="margin-top: 2%;" name="close"><i
+                                class="fa fa-lock"
+                                style="width: 16px; height: 16px;"></i> Sluit deze advertentie</button>
+                    </form>
+                    <?php
+                    if(isset($_POST['close'])){
+                        global $pdo;
+                        $stmt = $pdo->prepare("UPDATE Object SET auctionClosed = 1 WHERE productid = ?");
+                        $stmt->execute([$_GET['link']]);
+                        header('location: http://iproject42.icasites.nl/views/public/');
+                    }
+                    ?>
 
                     <?php
                     include($_SERVER['DOCUMENT_ROOT'] . '/include/delete-modal.php');
@@ -1321,6 +1335,12 @@ function mailUser()
                                         value="<?= getAd()[0][6] ?>"><i
                                             class="fa fa-trash"
                                             style="width: 16px; height: 16px;"></i> Verwijder deze advertentie</button>
+
+                    <form action="#" method="post">
+                        <button class="btn btn-outline-warning" style="margin-top: 2%;" name="close"><i
+                                    class="fa fa-lock"
+                                    style="width: 16px; height: 16px;"></i> Sluit deze advertentie</button>
+                    </form>
 
 
                     <?php
