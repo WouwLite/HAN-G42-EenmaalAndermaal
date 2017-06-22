@@ -9,32 +9,32 @@
 
 <?php
 
-function handleBannedUser(){
-    global $pdo;
-    $stmt = $pdo->prepare("SELECT DISTINCT email
-                    FROM Users
-                     WHERE username in ( SELECT [user]
-                                        FROM Bidding
-                                        WHERE productid in (
-                                        SELECT productid
-                                        FROM Object
-                                        WHERE Seller = '?')
-                                       )
-                    ");
-    $stmt->execute([$_SESSION['username']]);
-    $dataEmails = $stmt->fetchColumn();
-
-    $headers = 'From: noreply@iproject42.icasites.nl' . "\r\n";
-    $headers .= "MIME-Version: 1.0" . "\r\n";
-    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-
-    $subject = 'test';
-    $message = 'Kijken of iedereen deze mail krijgt';
-
-    foreach($dataEmails as $email){
-        mail($email, $subject, $message, $headers);
-    }
-}
+//function handleBannedUser(){
+//    global $pdo;
+//    $stmt = $pdo->prepare("SELECT DISTINCT email
+//                    FROM Users
+//                     WHERE username in ( SELECT [user]
+//                                        FROM Bidding
+//                                        WHERE productid in (
+//                                        SELECT productid
+//                                        FROM Object
+//                                        WHERE Seller = '?')
+//                                       )
+//                    ");
+//    $stmt->execute([$_SESSION['username']]);
+//    $dataEmails = $stmt->fetchColumn();
+//
+//    $headers = 'From: noreply@iproject42.icasites.nl' . "\r\n";
+//    $headers .= "MIME-Version: 1.0" . "\r\n";
+//    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+//
+//    $subject = 'test';
+//    $message = 'Kijken of iedereen deze mail krijgt';
+//
+//    foreach($dataEmails as $email){
+//        mail($email, $subject, $message, $headers);
+//    }
+//}
 
 
 ?>
