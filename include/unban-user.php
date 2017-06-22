@@ -14,7 +14,7 @@ SQL;
     print("<!-- " . $useremail . " -->");
 
     $subject = "Je account is gedeblokkeerd";
-    $message = "Om de volgende reden is je account gedeblokkeerd: " . $_POST['reason'];
+    $message = "Uw account is gedeblokkeerd";
     $headers = 'From: noreply@iproject42.icasites.nl';
     mail($useremail, $subject, $message, $headers);
 
