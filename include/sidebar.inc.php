@@ -116,7 +116,6 @@
             }
 
             else if($user['banned'] == 1){
-                handleBannedUser();
                 header('location: http://iproject42.icasites.nl/views/account/logout.php');
             }
         ?>

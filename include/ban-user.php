@@ -41,7 +41,7 @@ function mailUsers(){
     $userEmails = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     $subject = "EenmaalAndermaal: veiling onderbroken.";
-    $message = "Uw bod op veiling: '...' is verwijderd omdat de verkoper is geblokkeerd";
+    $message = "Uw bod op veiling:  is verwijderd omdat de verkoper is geblokkeerd";
     $headers = 'From: noreply@iproject42.icasites.nl';
 
     foreach($userEmails as $mail){
